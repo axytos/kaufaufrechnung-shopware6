@@ -1,0 +1,10 @@
+{
+  "credentials-validation-notification": {
+      "title": "API-Verbindung",
+      "success-text": "API-Verbindung wurde erfolgreich getestet.",
+      "error-text": "API-Verbindung konnte nicht hergestellt werden. Bitte prüfe die Zugangsdaten."
+  },
+  "credentials-validation-button": {
+      "text": "API-Verbindung testen"
+  }
+}

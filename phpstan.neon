@@ -1,0 +1,35 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+
+parameters:
+    level: max
+
+    reportUnmatchedIgnoredErrors: false
+    inferPrivatePropertyTypeFromConstructor: false
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    treatPhpDocTypesAsCertain: false
+    tipsOfTheDay: false
+
+    bootstrapFiles:
+        - ../../../vendor/autoload.php
+    paths:
+        - src
+        - tests
+        - packages/ecommerce-sdk/src
+        - packages/ecommerce-sdk/tests
+        - packages/shopware-sdk/src
+        - packages/shopware-sdk/tests
+    excludePaths:
+        - vendor
+        - coverage
+
+    ignoreErrors:
+        - '#apcu_#'
+        - '#ioncube_#'
+        - '#opcache_#'
+        - '#imagettftext#'
+        - '#class Redis#'
+        - '#Constant STARTTIME#'
+
+    editorUrl: 'vscode://file/%%file%%:%%line%%'

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit colors="true" bootstrap="phpunit_autoload.php" cacheResult="false">
+    <testsuites>
+        <testsuite name="Tests">
+            <directory>tests</directory>
+        </testsuite>
+        <testsuite name="ECommerce-SDK-Tests">
+            <directory>packages/ecommerce-sdk/tests</directory>
+        </testsuite>
+        <testsuite name="Shopware-SDK-Tests">
+            <directory>packages/shopware-sdk/tests</directory>
+        </testsuite>
+    </testsuites>
+    <coverage>
+        <include>
+            <directory>src</directory>
+            <directory>packages/ecommerce-sdk/src</directory>
+            <directory>packages/shopware-sdk/src</directory>
+        </include>
+    </coverage>
+</phpunit>

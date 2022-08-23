@@ -1,0 +1,185 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services" 
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- Installer Integration-->
+        <service id="Axytos\KaufAufRechnung\Shopware\AxytosKaufAufRechnung">
+            <call method="setErrorHandler">
+                <argument type="service" id="Axytos\Shopware\ErrorReporting\ErrorHandler"/>
+            </call>
+        </service>
+
+        <!-- Logger Configuration -->
+
+        <service id="axytos.kauf_auf_rechnung.plugin.logger" class="Monolog\Logger">
+            <factory service="Shopware\Core\Framework\Log\LoggerFactory" method="createRotating"/>
+            <argument type="string">axytos.kauf_auf_rechnung.plugin</argument>
+        </service>
+
+        <service id="Axytos\Shopware\Logging\LoggerAdapter">
+            <argument type="service" id="axytos.kauf_auf_rechnung.plugin.logger"/>
+        </service>
+
+        <service id="Axytos\ECommerce\Logging\LoggerAdapterInterface" alias="Axytos\Shopware\Logging\LoggerAdapter"/>
+
+        <!-- Configuration Integration ================================================================================================== -->
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration"/>
+
+
+        <!-- ECommerce Client Integration =============================================================================================== -->
+
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Client\ApiHostProvider"/>
+        <service id="Axytos\ECommerce\Abstractions\ApiHostProviderInterface" alias="Axytos\KaufAufRechnung\Shopware\Client\ApiHostProvider"/>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Client\ApiKeyProvider"/>
+        <service id="Axytos\ECommerce\Abstractions\ApiKeyProviderInterface" alias="Axytos\KaufAufRechnung\Shopware\Client\ApiKeyProvider"/>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Client\PaymentMethodConfiguration"/>
+        <service id="Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface" alias="Axytos\KaufAufRechnung\Shopware\Client\PaymentMethodConfiguration"/>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Client\FallbackModeConfiguration"/>
+        <service id="Axytos\ECommerce\Abstractions\FallbackModeConfigurationInterface" alias="Axytos\KaufAufRechnung\Shopware\Client\FallbackModeConfiguration"/>
+
+        <service autowire="true" id="Axytos\ECommerce\PackageInfo\ComposerPackageInfoProvider"/>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Client\UserAgentInfoProvider"/>
+        <service id="Axytos\ECommerce\Abstractions\UserAgentInfoProviderInterface" alias="Axytos\KaufAufRechnung\Shopware\Client\UserAgentInfoProvider"/>
+        
+        <service autowire="true" id="Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator"/>
+
+        <service autowire="true" id="Axytos\ECommerce\AxytosECommerceClient"/>
+        <service id="Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface" alias="Axytos\ECommerce\AxytosECommerceClient"/>
+        <service id="Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface" alias="Axytos\ECommerce\AxytosECommerceClient"/>
+        <service id="Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface" alias="Axytos\ECommerce\AxytosECommerceClient"/>
+        <service id="Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface" alias="Axytos\ECommerce\AxytosECommerceClient"/>
+
+        <service autowire="true" id="Axytos\ECommerce\DataMapping\DtoToDtoMapper"/>
+
+        <!-- Common Integration ========================================================================================================== -->
+        
+        <service autowire="true" id="Axytos\Shopware\PaymentMethod\PaymentMethodPredicates"/>
+
+        <service autowire="true" id="Axytos\Shopware\PaymentMethod\PaymentMethodCollectionFilter"/>
+
+        <service autowire="true" id="Axytos\Shopware\Routing\Router"/>
+
+        <service autowire="true" id="Axytos\Shopware\ErrorReporting\ErrorHandler"/>
+
+        <!-- Core Integration ========================================================================================================== -->
+
+        <service autowire="true" id="Axytos\Shopware\Order\OrderStateMachine"/>
+
+        <service autowire="true" id="Axytos\Shopware\Order\OrderCheckProcessStateMachine"/>
+
+        <service autowire="true" id="Axytos\Shopware\ValueCalculation\PositionNetPriceCalculator"/>
+        <service autowire="true" id="Axytos\Shopware\ValueCalculation\PositionTaxPercentCalculator"/>
+        <service autowire="true" id="Axytos\Shopware\ValueCalculation\PositionNetPricePerUnitCalculator"/>
+        <service autowire="true" id="Axytos\Shopware\ValueCalculation\PositionGrossPricePerUnitCalculator"/>
+        <service autowire="true" id="Axytos\Shopware\ValueCalculation\PromotionIdentifierCalculator"/>
+        <service autowire="true" id="Axytos\Shopware\ValueCalculation\PositionProductIdCalculator"/>
+        <service autowire="true" id="Axytos\Shopware\ValueCalculation\PositionProductNameCalculator"/>
+        
+        <service autowire="true" id="Axytos\Shopware\DataMapping\BasketDtoFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\BasketPositionDtoFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\BasketPositionDtoCollectionFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\CustomerDataDtoFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\DeliveryAddressDtoFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\InvoiceAddressDtoFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\PaymentControlBasketDtoFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\PaymentControlBasketPositionDtoFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\PaymentControlBasketPositionDtoCollectionFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\CreateInvoiceBasketDtoFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\CreateInvoiceBasketPositionDtoFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\CreateInvoiceBasketPositionDtoCollectionFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\CreateInvoiceTaxGroupDtoFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\CreateInvoiceTaxGroupDtoCollectionFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\RefundBasketDtoFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\RefundBasketPositionDtoCollectionFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\RefundBasketPositionDtoFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\RefundBasketTaxGroupDtoCollectionFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\RefundBasketTaxGroupDtoFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\ReturnPositionModelDtoFactory"/>
+        <service autowire="true" id="Axytos\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory"/>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Core\PaymentServiceDecorator" 
+                 decorates="Shopware\Core\Checkout\Payment\PaymentService">
+            <argument type="service" id=".inner"/>
+        </service>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Core\AxytosInvoicePaymentHandler">
+            <tag name="shopware.payment.method.sync"/>
+        </service>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory"/>
+
+        <!-- DataAbstractionLayer ========================================================================================================== -->
+
+        <service autowire="true" id="Axytos\Shopware\DataAbstractionLayer\OrderEntityRepository"/>
+
+        <service autowire="true" id="Axytos\Shopware\DataAbstractionLayer\DocumentEntityRepository"/>
+
+        <service autowire="true" id="Axytos\Shopware\DataAbstractionLayer\PaymentMethodEntityRepository"/>
+
+        <!-- Storefront =============================================================================================================== -->
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage\CheckoutConfirmPageLoadedEventHandler"/>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage\CheckoutConfirmPageLoadedEventSubscriber">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Storefront\Controller\StorefrontViewRenderer">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Storefront\Controller\CheckoutFailedController" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+        
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Storefront\AccountEditOrderPage\AccountEditOrderPageLoadedEventHandler"/>
+        
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Storefront\AccountEditOrderPage\AccountEditOrderPageLoadedEventSubscriber">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Core\CancelOrderEventSubscriber">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Core\CreateInvoiceEventSubscriber">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Core\ShippingOrderEventsSubscriber">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Core\RefundOrderEventsSubscriber">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Core\ReturnOrderEventsSubscriber">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Storefront\Controller\PaymentController" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+
+        <!-- Administration =========================================================================================================== -->
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Administration\Controller\Api\CredentialValidationController" public="true"/>
+
+    </services>
+
+</container>

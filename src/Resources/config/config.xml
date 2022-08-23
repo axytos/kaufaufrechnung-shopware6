@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+
+    <card>
+        <title>API settings</title>
+        <title lang="de-DE">API Einstellungen</title>
+
+        <input-field>
+            <name>apiHost</name>
+            <label>API Host</label>
+            <defaultValue>https://api-sandbox.axytos.com/</defaultValue>
+        </input-field>
+
+        <input-field type="password">
+            <name>apiKey</name>
+            <label>API Key</label>
+        </input-field>
+
+        <input-field type="password">
+            <name>clientSecret</name>
+            <label>Client Secret</label>
+        </input-field>
+
+        <component name="credentials-validation-button">
+            <name>CredentialsValidationButton</name>
+        </component>
+    </card>
+
+</config>

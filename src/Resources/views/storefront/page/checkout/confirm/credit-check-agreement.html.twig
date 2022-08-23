@@ -1,0 +1,37 @@
+{% block axytos_credit_check %}
+    <div class="custom-control custom-checkbox axytos-control">
+        <input type="checkbox"
+                class="checkout-confirm-tos-checkbox custom-control-input{% if formViolations.getViolations('/tos') is not empty %} is-invalid{% endif %}"
+                required="required"
+                id="axytos-credit-check"
+                form="confirmOrderForm"
+                name="axytos-credit-check"/>
+
+        <label for="axytos-credit-check"
+                class="checkout-confirm-tos-label custom-control-label">
+            <p>
+                {{ 'axytos.kauf_auf_rechnung.credit_check_agreement_text' | trans }}
+            </p>
+            <p>
+                <a href="#" data-toggle="modal" data-target="#axytosCreditCheck">
+                    {{ 'axytos.kauf_auf_rechnung.credit_check_agreement_info_link_text' | trans }}
+                </a>
+            </p> 
+        </label>
+    </div>
+    <div class="modal fade" id="axytosCreditCheck" tabindex="-1" role="dialog" aria-labelledby="axytosCreditCheckLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="axytosCreditCheckLabel">Bonitätsprüfung Hinweistext</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{ page.extensions.axytos_kauf_auf_rechnung_checkout_confirm_page.creditCheckAgreementInfo | raw }}
+                </div>
+            </div>
+        </div>
+    </div> 
+{% endblock %}

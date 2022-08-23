@@ -19,7 +19,7 @@
         },
         {
             "type": "path",
-            "url": "./packages/openapi-client-sdk"
+            "url": "./packages/financial-services-api-sdk"
         },
         {
             "type": "path",
@@ -27,7 +27,7 @@
         }
     ],
     "require": {
-        "php": "7.4.*",
+        "php": ">=7.4.0",
         "axytos/ecommerce-sdk": "^1.0.0",
         "axytos/shopware6-sdk": "^1.0.0"
     },
@@ -56,7 +56,7 @@
         ],
         "clean": [
             "rm -rf ./packages/ecommerce-sdk/vendor",
-            "rm -rf ./packages/openapi-client-sdk/vendor",
+            "rm -rf ./packages/financial-services-api-sdk/vendor",
             "rm -rf ./packages/shopware-sdk/vendor",
             "rm -rf ./vendor"
         ],
