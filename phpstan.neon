@@ -18,8 +18,8 @@ parameters:
         - tests
         - packages/ecommerce-sdk/src
         - packages/ecommerce-sdk/tests
-        - packages/shopware-sdk/src
-        - packages/shopware-sdk/tests
+        - packages/shopware6-sdk/src
+        - packages/shopware6-sdk/tests
     excludePaths:
         - vendor
         - coverage

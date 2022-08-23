@@ -23,7 +23,7 @@
         },
         {
             "type": "path",
-            "url": "./packages/shopware-sdk"
+            "url": "./packages/shopware6-sdk"
         }
     ],
     "require": {
@@ -57,7 +57,7 @@
         "clean": [
             "rm -rf ./packages/ecommerce-sdk/vendor",
             "rm -rf ./packages/financial-services-api-sdk/vendor",
-            "rm -rf ./packages/shopware-sdk/vendor",
+            "rm -rf ./packages/shopware6-sdk/vendor",
             "rm -rf ./vendor"
         ],
         "phpunit": "./vendor/bin/phpunit --colors=always",

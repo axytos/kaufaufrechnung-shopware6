@@ -113,7 +113,7 @@
             "version": "1.0.0",
             "dist": {
                 "type": "path",
-                "url": "./packages/shopware-sdk",
+                "url": "./packages/shopware6-sdk",
                 "reference": "70df2cda67f33aaf2f9eacc9d884999b2945950e"
             },
             "require": {
