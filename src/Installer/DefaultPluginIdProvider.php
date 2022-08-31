@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Installer;
 
@@ -13,8 +15,8 @@ class DefaultPluginIdProvider implements PluginIdProviderInterface
 
     public function __construct(
         ContainerInterface $container,
-        string $pluginClassName)
-    {
+        string $pluginClassName
+    ) {
         $this->container = $container;
         $this->pluginClassName = $pluginClassName;
     }

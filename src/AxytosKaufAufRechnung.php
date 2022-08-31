@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware;
 
@@ -11,8 +13,7 @@ use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\DeactivateContext;
 
-if (file_exists(__DIR__ . '/../vendor/autoload.php'))
-{
+if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once(__DIR__ . '/../vendor/autoload.php');
 }
 
@@ -62,7 +63,7 @@ class AxytosKaufAufRechnung extends Plugin
             $installer->deactivate($deactivateContext);
         } catch (\Throwable $th) {
             $this->errorHandler->handle($th);
-        }   
+        }
     }
 
     private function createPluginInstaller(): PluginInstaller

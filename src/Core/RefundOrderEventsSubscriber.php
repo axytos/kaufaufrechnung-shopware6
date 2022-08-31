@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Core;
 
@@ -22,15 +24,15 @@ class RefundOrderEventsSubscriber implements EventSubscriberInterface
     private OrderCheckProcessStateMachine $orderCheckProcessStateMachine;
     private DocumentEntityRepository $documentEntityRepository;
     private PluginConfigurationValidator $pluginConfigurationValidator;
-    
+
     public function __construct(
         ErrorHandler $errorHandler,
         InvoiceClientInterface $invoiceClient,
         InvoiceOrderContextFactory $invoiceOrderContextFactory,
         OrderCheckProcessStateMachine $orderCheckProcessStateMachine,
         DocumentEntityRepository $documentEntityRepository,
-        PluginConfigurationValidator $pluginConfigurationValidator)
-    {
+        PluginConfigurationValidator $pluginConfigurationValidator
+    ) {
         $this->errorHandler = $errorHandler;
         $this->invoiceClient = $invoiceClient;
         $this->invoiceOrderContextFactory = $invoiceOrderContextFactory;
@@ -48,30 +50,24 @@ class RefundOrderEventsSubscriber implements EventSubscriberInterface
 
     public function onDocumentWritten(EntityWrittenEvent $event): void
     {
-        try 
-        {
-            if ($this->pluginConfigurationValidator->isInvalid())
-            {
+        try {
+            if ($this->pluginConfigurationValidator->isInvalid()) {
                 return;
             }
 
             $document = $this->findDocument($event);
 
-            if($this->isNotCreditNote($document))
-            {
+            if ($this->isNotCreditNote($document)) {
                 return;
             }
 
-            if ($this->isNotConfirmed($document, $event))
-            {
+            if ($this->isNotConfirmed($document, $event)) {
                 return;
             }
 
             $orderContext = $this->getInvoiceOrderContext($document, $event);
             $this->invoiceClient->refund($orderContext);
-        }
-        catch (Throwable $t)
-        {
+        } catch (Throwable $t) {
             $this->errorHandler->handle($t);
         }
     }
@@ -79,9 +75,9 @@ class RefundOrderEventsSubscriber implements EventSubscriberInterface
     private function getInvoiceOrderContext(DocumentEntity $document, EntityWrittenEvent $event): InvoiceOrderContextInterface
     {
         $orderId = $document->getOrderId();
-        $context = $event->getContext();        
+        $context = $event->getContext();
         $orderContext = $this->invoiceOrderContextFactory->getInvoiceOrderContext($orderId, $context);
-        
+
         $invoiceNumber = $this->extractInvoiceNumber($document);
         $orderContext->setOrderInvoiceNumber($invoiceNumber);
 
@@ -107,7 +103,7 @@ class RefundOrderEventsSubscriber implements EventSubscriberInterface
     {
         $documentType = $document->getDocumentType();
 
-        return !is_null($documentType) 
+        return !is_null($documentType)
             && $documentType->getTechnicalName() !== 'credit_note';
     }
 

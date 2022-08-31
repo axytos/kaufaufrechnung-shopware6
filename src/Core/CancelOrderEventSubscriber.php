@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Core;
 
@@ -18,14 +20,14 @@ class CancelOrderEventSubscriber implements EventSubscriberInterface
     private PluginConfigurationValidator $pluginConfigurationValidator;
     private OrderCheckProcessStateMachine $orderCheckProcessStateMachine;
     private InvoiceOrderContextFactory $invoiceOrderContextFactory;
-    
+
     public function __construct(
         InvoiceClientInterface $invoiceClient,
         ErrorHandler $errorHandler,
         PluginConfigurationValidator $pluginConfigurationValidator,
         OrderCheckProcessStateMachine $orderCheckProcessStateMachine,
-        InvoiceOrderContextFactory $invoiceOrderContextFactory)
-    {
+        InvoiceOrderContextFactory $invoiceOrderContextFactory
+    ) {
         $this->invoiceClient = $invoiceClient;
         $this->errorHandler = $errorHandler;
         $this->pluginConfigurationValidator = $pluginConfigurationValidator;
@@ -42,26 +44,21 @@ class CancelOrderEventSubscriber implements EventSubscriberInterface
 
     public function onOrderStateCancelled(OrderStateMachineStateChangeEvent $event): void
     {
-        try
-        {
-            if ($this->pluginConfigurationValidator->isInvalid())
-            {
+        try {
+            if ($this->pluginConfigurationValidator->isInvalid()) {
                 return;
             }
-    
+
             $orderId = $event->getOrderId();
             $context = $event->getContext();
 
             $orderState = $this->orderCheckProcessStateMachine->getState($orderId, $context);
 
-            if ($orderState === OrderCheckProcessStates::CONFIRMED)
-            {
+            if ($orderState === OrderCheckProcessStates::CONFIRMED) {
                 $orderContext = $this->invoiceOrderContextFactory->getInvoiceOrderContext($orderId, $context);
                 $this->invoiceClient->cancelOrder($orderContext);
             }
-        }
-        catch (Throwable $t)
-        {
+        } catch (Throwable $t) {
             $this->errorHandler->handle($t);
         }
     }

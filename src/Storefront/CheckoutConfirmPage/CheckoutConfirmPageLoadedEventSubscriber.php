@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage;
 
@@ -12,12 +14,12 @@ class CheckoutConfirmPageLoadedEventSubscriber implements EventSubscriberInterfa
     private PluginConfigurationValidator $pluginConfigurationValidator;
     private CheckoutConfirmPageLoadedEventHandler $checkoutConfirmPageLoadedEventHandler;
     private ErrorHandler $errorHandler;
-    
+
     public function __construct(
         PluginConfigurationValidator $pluginConfigurationValidator,
         CheckoutConfirmPageLoadedEventHandler $checkoutConfirmPageLoadedEventHandler,
-        ErrorHandler $errorHandler)
-    {
+        ErrorHandler $errorHandler
+    ) {
         $this->pluginConfigurationValidator = $pluginConfigurationValidator;
         $this->checkoutConfirmPageLoadedEventHandler = $checkoutConfirmPageLoadedEventHandler;
         $this->errorHandler = $errorHandler;
@@ -32,16 +34,12 @@ class CheckoutConfirmPageLoadedEventSubscriber implements EventSubscriberInterfa
 
     public function onCheckoutConfirmPageLoaded(CheckoutConfirmPageLoadedEvent $event): void
     {
-        try 
-        {    
-            if ($this->pluginConfigurationValidator->isInvalid())
-            {
+        try {
+            if ($this->pluginConfigurationValidator->isInvalid()) {
                 return;
             }
             $this->checkoutConfirmPageLoadedEventHandler->handle($event);
-        } 
-        catch (\Throwable $th) 
-        {
+        } catch (\Throwable $th) {
             $this->errorHandler->handle($th);
         }
     }

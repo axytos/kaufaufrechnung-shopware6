@@ -18,8 +18,8 @@ class CredentialValidationController
 
     public function __construct(
         CredentialValidationClientInterface $CredentialValidationClient,
-        ErrorHandler $errorHandler)
-    {
+        ErrorHandler $errorHandler
+    ) {
         $this->CredentialValidationClient = $CredentialValidationClient;
         $this->errorHandler = $errorHandler;
     }
@@ -29,16 +29,13 @@ class CredentialValidationController
      */
     public function validateCredentials(): JsonResponse
     {
-        try
-        {
+        try {
             $success = $this->CredentialValidationClient->validateApiKey();
 
             return new JsonResponse(['success' => $success]);
-        }
-        catch (\Throwable $th)
-        {
+        } catch (\Throwable $th) {
             $this->errorHandler->handle($th);
-            
+
             return new JsonResponse(['success' => false]);
         }
     }

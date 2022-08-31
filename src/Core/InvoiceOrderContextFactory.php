@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Core;
 
@@ -35,8 +37,8 @@ class InvoiceOrderContextFactory
         CreateInvoiceBasketDtoFactory $createInvoiceBasketDtoFactory,
         RefundBasketDtoFactory $refundBasketDtoFactory,
         DtoToDtoMapper $dtoToDtoMapper,
-        ReturnPositionModelDtoCollectionFactory $returnPositionModelDtoCollectionFactory)
-    {
+        ReturnPositionModelDtoCollectionFactory $returnPositionModelDtoCollectionFactory
+    ) {
         $this->orderEntityRepository = $orderEntityRepository;
         $this->customerDataDtoFactory = $customerDataDtoFactory;
         $this->deliveryAddressDtoFactory = $deliveryAddressDtoFactory;
@@ -51,8 +53,8 @@ class InvoiceOrderContextFactory
     public function getInvoiceOrderContext(string $orderId, Context $context): InvoiceOrderContextInterface
     {
         return new InvoiceOrderContext(
-            $orderId, 
-            $context, 
+            $orderId,
+            $context,
             $this->orderEntityRepository,
             $this->customerDataDtoFactory,
             $this->deliveryAddressDtoFactory,
@@ -62,6 +64,6 @@ class InvoiceOrderContextFactory
             $this->refundBasketDtoFactory,
             $this->dtoToDtoMapper,
             $this->returnPositionModelDtoCollectionFactory
-        );    
+        );
     }
 }

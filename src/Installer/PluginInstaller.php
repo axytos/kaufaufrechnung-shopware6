@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Installer;
 
@@ -11,15 +13,15 @@ use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\DeactivateContext;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class PluginInstaller 
+class PluginInstaller
 {
     private PaymentMethodEntityRepository $paymentMethodRepository;
     private PluginIdProviderInterface $pluginIdProvider;
 
     public function __construct(
         PaymentMethodEntityRepository $paymentMethodRepository,
-        PluginIdProviderInterface $pluginIdProvider)
-    {
+        PluginIdProviderInterface $pluginIdProvider
+    ) {
         $this->paymentMethodRepository = $paymentMethodRepository;
         $this->pluginIdProvider = $pluginIdProvider;
     }
@@ -41,13 +43,13 @@ class PluginInstaller
 
     public function deactivate(DeactivateContext $deactivateContext): void
     {
-        $this->deactivatePaymentMethod($deactivateContext->getContext());;
+        $this->deactivatePaymentMethod($deactivateContext->getContext());
+        ;
     }
 
     public function addPaymentMethod(Context $context): void
     {
-        if ($this->paymentMethodRepository->containsByHandlerIdentifier(AxytosInvoicePaymentHandler::class, $context))
-        {
+        if ($this->paymentMethodRepository->containsByHandlerIdentifier(AxytosInvoicePaymentHandler::class, $context)) {
             return;
         }
 
@@ -58,7 +60,8 @@ class PluginInstaller
             AxytosInvoicePaymentHandler::NAME,
             AxytosInvoicePaymentHandler::DESCRIPTION,
             $pluginId,
-            $context);
+            $context
+        );
     }
 
     public function activatePaymentMethod(Context $context): void
@@ -68,7 +71,7 @@ class PluginInstaller
 
     public function deactivatePaymentMethod(Context $context): void
     {
-        
+
         $this->paymentMethodRepository->updateAllActiveStatesByHandlerIdentifer(AxytosInvoicePaymentHandler::class, false, $context);
     }
 }

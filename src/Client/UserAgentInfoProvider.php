@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Client;
 
@@ -27,12 +29,12 @@ class UserAgentInfoProvider implements UserAgentInfoProviderInterface
          */
         return $this->composerPackageInfoProvider->getVersion("axytos/kaufaufrechnung-shopware6");
     }
-    
+
     public function getShopSystemName(): string
     {
         return "Shopware";
     }
-    
+
     public function getShopSystemVersion(): string
     {
         /**

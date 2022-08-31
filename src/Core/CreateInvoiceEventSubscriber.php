@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Core;
 
@@ -20,15 +22,15 @@ class CreateInvoiceEventSubscriber implements EventSubscriberInterface
     private OrderCheckProcessStateMachine $orderCheckProcessStateMachine;
     private DocumentEntityRepository $documentEntityRepository;
     private InvoiceOrderContextFactory $invoiceOrderContextFactory;
-    
+
     public function __construct(
         InvoiceClientInterface $invoiceClient,
         ErrorHandler $errorHandler,
         PluginConfigurationValidator $pluginConfigurationValidator,
         OrderCheckProcessStateMachine $orderCheckProcessStateMachine,
         DocumentEntityRepository $documentEntityRepository,
-        InvoiceOrderContextFactory $invoiceOrderContextFactory)
-    {
+        InvoiceOrderContextFactory $invoiceOrderContextFactory
+    ) {
         $this->invoiceClient = $invoiceClient;
         $this->errorHandler = $errorHandler;
         $this->pluginConfigurationValidator = $pluginConfigurationValidator;
@@ -46,42 +48,36 @@ class CreateInvoiceEventSubscriber implements EventSubscriberInterface
 
     public function onEntityWritten(EntityWrittenEvent $event): void
     {
-        try 
-        {
-            if ($this->pluginConfigurationValidator->isInvalid())
-            {
+        try {
+            if ($this->pluginConfigurationValidator->isInvalid()) {
                 return;
             }
-    
+
             $writeResults = $event->getWriteResults();
             $context = $event->getContext();
-    
+
             $documentId = $writeResults[0]->getProperty('id');
             $document = $this->documentEntityRepository->findDocument(strval($documentId), $context);
-            
+
             $documentType = $document->getDocumentType();
-            if ($documentType === null)
-            {
+            if ($documentType === null) {
                 return;
             }
 
             $technicalName = $documentType->getTechnicalName();
-            if ($technicalName !== 'invoice')
-            {
+            if ($technicalName !== 'invoice') {
                 return;
             }
 
             $order = $document->getOrder();
-            if ($order === null)
-            {
+            if ($order === null) {
                 return;
             }
 
             $orderId = $order->getId();
 
             $paymentControlOrderState = $this->orderCheckProcessStateMachine->getState($orderId, $context);
-            if ($paymentControlOrderState !== OrderCheckProcessStates::CONFIRMED)
-            {
+            if ($paymentControlOrderState !== OrderCheckProcessStates::CONFIRMED) {
                 return;
             }
 
@@ -92,9 +88,7 @@ class CreateInvoiceEventSubscriber implements EventSubscriberInterface
             $invoiceOrderContext->setOrderInvoiceNumber($documentNumber);
 
             $this->invoiceClient->createInvoice($invoiceOrderContext);
-        }
-        catch (Throwable $t)
-        {
+        } catch (Throwable $t) {
             $this->errorHandler->handle($t);
         }
     }

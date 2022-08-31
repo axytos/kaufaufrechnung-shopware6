@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 var_dump($argv);
 
@@ -9,4 +11,4 @@ $composerJson = json_decode(file_get_contents($composerJsonPath), true);
 
 $composerJson['version'] = $version;
 
-file_put_contents($composerJsonPath, json_encode($composerJson, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT));
+file_put_contents($composerJsonPath, json_encode($composerJson, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));

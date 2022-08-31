@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Core;
 
@@ -18,14 +20,14 @@ class ShippingOrderEventsSubscriber implements EventSubscriberInterface
     private InvoiceOrderContextFactory $invoiceOrderContextFactory;
     private OrderCheckProcessStateMachine $orderCheckProcessStateMachine;
     private PluginConfigurationValidator $pluginConfigurationValidator;
-    
+
     public function __construct(
         ErrorHandler $errorHandler,
         InvoiceClientInterface $invoiceClient,
         InvoiceOrderContextFactory $invoiceOrderContextFactory,
         OrderCheckProcessStateMachine $orderCheckProcessStateMachine,
-        PluginConfigurationValidator $pluginConfigurationValidator)
-    {
+        PluginConfigurationValidator $pluginConfigurationValidator
+    ) {
         $this->errorHandler = $errorHandler;
         $this->invoiceClient = $invoiceClient;
         $this->invoiceOrderContextFactory = $invoiceOrderContextFactory;
@@ -40,27 +42,22 @@ class ShippingOrderEventsSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onShipped(OrderStateMachineStateChangeEvent $event): void 
+    public function onShipped(OrderStateMachineStateChangeEvent $event): void
     {
-        try 
-        {
-            if ($this->pluginConfigurationValidator->isInvalid())
-            {
+        try {
+            if ($this->pluginConfigurationValidator->isInvalid()) {
                 return;
             }
-            
+
             $orderId = $event->getOrderId();
             $context = $event->getContext();
-            
+
             $orderState = $this->orderCheckProcessStateMachine->getState($orderId, $context);
-            if ($orderState === OrderCheckProcessStates::CONFIRMED)
-            {
+            if ($orderState === OrderCheckProcessStates::CONFIRMED) {
                 $orderContext = $this->invoiceOrderContextFactory->getInvoiceOrderContext($orderId, $context);
                 $this->invoiceClient->reportShipping($orderContext);
             }
-        }
-        catch (Throwable $t)
-        {
+        } catch (Throwable $t) {
             $this->errorHandler->handle($t);
         }
     }

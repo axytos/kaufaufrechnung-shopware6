@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Core;
 
@@ -52,8 +54,8 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
         CreateInvoiceBasketDtoFactory $createInvoiceBasketDtoFactory,
         RefundBasketDtoFactory $refundBasketDtoFactory,
         DtoToDtoMapper $dtoToDtoMapper,
-        ReturnPositionModelDtoCollectionFactory $returnPositionModelDtoCollectionFactory)
-    {
+        ReturnPositionModelDtoCollectionFactory $returnPositionModelDtoCollectionFactory
+    ) {
         $this->orderId = $orderId;
         $this->context = $context;
         $this->orderEntityRepository = $orderEntityRepository;
@@ -77,8 +79,7 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
         $orderEntity = $this->getOrder();
         $orderNumber = $orderEntity->getOrderNumber();
 
-        if (is_null($orderNumber))
-        {
+        if (is_null($orderNumber)) {
             throw new Exception("OrderNumber not defined for order with id '{$orderEntity->getId()}'.");
         }
 
@@ -118,7 +119,7 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
         $orderEntity = $this->getOrder();
         return $this->deliveryAddressDtoFactory->create($orderEntity);
     }
-    
+
     public function getBasket(): BasketDto
     {
         $orderEntity = $this->getOrder();
@@ -140,9 +141,8 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
     public function getPreCheckResponseData(): array
     {
         $customFields = $this->orderEntityRepository->getCustomFields($this->orderId, $this->context);
-        
-        if (!array_key_exists('axytos_invoice_order_check_response', $customFields))
-        {
+
+        if (!array_key_exists('axytos_invoice_order_check_response', $customFields)) {
             return [];
         }
 
@@ -151,7 +151,7 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
 
     public function setPreCheckResponseData(array $data): void
     {
-        $customFields = ['axytos_invoice_order_check_response' => $data]; 
+        $customFields = ['axytos_invoice_order_check_response' => $data];
         $this->orderEntityRepository->updateCustomFields($this->orderId, $customFields, $this->context);
     }
 

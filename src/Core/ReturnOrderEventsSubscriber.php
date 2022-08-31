@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Core;
 
@@ -19,14 +21,14 @@ class ReturnOrderEventsSubscriber implements EventSubscriberInterface
     private InvoiceOrderContextFactory $invoiceOrderContextFactory;
     private OrderCheckProcessStateMachine $orderCheckProcessStateMachine;
     private PluginConfigurationValidator $pluginConfigurationValidator;
-    
+
     public function __construct(
         ErrorHandler $errorHandler,
         InvoiceClientInterface $invoiceClient,
         InvoiceOrderContextFactory $invoiceOrderContextFactory,
         OrderCheckProcessStateMachine $orderCheckProcessStateMachine,
-        PluginConfigurationValidator $pluginConfigurationValidator)
-    {
+        PluginConfigurationValidator $pluginConfigurationValidator
+    ) {
         $this->errorHandler = $errorHandler;
         $this->invoiceClient = $invoiceClient;
         $this->invoiceOrderContextFactory = $invoiceOrderContextFactory;
@@ -41,25 +43,20 @@ class ReturnOrderEventsSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onReturned(OrderStateMachineStateChangeEvent $event): void 
+    public function onReturned(OrderStateMachineStateChangeEvent $event): void
     {
-        try
-        {
-            if ($this->pluginConfigurationValidator->isInvalid())
-            {
+        try {
+            if ($this->pluginConfigurationValidator->isInvalid()) {
                 return;
             }
 
-            if ($this->isNotConfirmedOrder($event))
-            {
+            if ($this->isNotConfirmedOrder($event)) {
                 return;
             }
 
             $invoiceOrderContext = $this->getInvoiceOrderContext($event);
             $this->invoiceClient->return($invoiceOrderContext);
-        }
-        catch (Throwable $throwable)
-        {
+        } catch (Throwable $throwable) {
             $this->errorHandler->handle($throwable);
         }
     }

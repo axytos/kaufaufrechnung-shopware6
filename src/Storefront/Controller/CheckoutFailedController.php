@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Storefront\Controller;
 
@@ -28,8 +30,8 @@ class CheckoutFailedController extends StorefrontController
         GenericPageLoader $genericPageLoader,
         StorefrontViewRenderer $storefrontViewRenderer,
         ErrorController $errorController,
-        ErrorHandler $errorHandler)
-    {
+        ErrorHandler $errorHandler
+    ) {
         $this->genericPageLoader = $genericPageLoader;
         $this->storefrontViewRenderer = $storefrontViewRenderer;
         $this->errorController = $errorController;
@@ -41,8 +43,7 @@ class CheckoutFailedController extends StorefrontController
      */
     public function failed(Request $request, SalesChannelContext $context): Response
     {
-        try 
-        {
+        try {
             $page = $this->genericPageLoader->load($request, $context);
 
             return $this->storefrontViewRenderer->renderStorefrontView(
@@ -51,9 +52,7 @@ class CheckoutFailedController extends StorefrontController
                     'page' => $page
                 ]
             );
-        }
-        catch (\Throwable $th)
-        {
+        } catch (\Throwable $th) {
             $this->errorHandler->handle($th);
             return $this->errorController->error($th, $request, $context);
         }

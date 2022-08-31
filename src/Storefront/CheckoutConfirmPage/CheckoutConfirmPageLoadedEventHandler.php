@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage;
 
@@ -17,12 +19,12 @@ class CheckoutConfirmPageLoadedEventHandler
     private CheckoutClientInterface $checkoutClient;
     private PaymentMethodCollectionFilter $paymentMethodCollectionFilter;
     private PaymentMethodPredicates $paymentMethodPredicates;
-    
+
     public function __construct(
         CheckoutClientInterface $checkoutClient,
         PaymentMethodCollectionFilter $paymentMethodCollectionFilter,
-        PaymentMethodPredicates $paymentMethodPredicates)
-    {
+        PaymentMethodPredicates $paymentMethodPredicates
+    ) {
         $this->checkoutClient = $checkoutClient;
         $this->paymentMethodCollectionFilter = $paymentMethodCollectionFilter;
         $this->paymentMethodPredicates = $paymentMethodPredicates;
@@ -30,12 +32,9 @@ class CheckoutConfirmPageLoadedEventHandler
 
     public function handle(CheckoutConfirmPageLoadedEvent $event): void
     {
-        try 
-        {
+        try {
             $this->showCreditCheckAgreement($event);
-        } 
-        catch (CreditCheckAgreementLoadFailedException $e) 
-        {
+        } catch (CreditCheckAgreementLoadFailedException $e) {
             $this->showFallbackPaymentMethods($event);
         }
     }
@@ -83,12 +82,12 @@ class CheckoutConfirmPageLoadedEventHandler
     private function extendPage(
         CheckoutConfirmPage $page,
         bool $showCreditCheckAgreement,
-        string $creditCheckAgreementInfo): void
-    {
+        string $creditCheckAgreementInfo
+    ): void {
         $extension = new CheckoutConfirmPageExtension();
         $extension->showCreditCheckAgreement = $showCreditCheckAgreement;
         $extension->creditCheckAgreementInfo = $creditCheckAgreementInfo;
-        
+
         $page->addExtension(self::EXTENSION_NAME, $extension);
     }
 }

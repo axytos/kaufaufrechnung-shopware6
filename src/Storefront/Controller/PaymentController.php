@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Storefront\Controller;
 
@@ -31,8 +33,8 @@ class PaymentController extends StorefrontController
         InvoiceClientInterface $invoiceClient,
         PluginConfigurationValidator $pluginConfigurationValidator,
         PluginConfiguration $pluginConfiguration,
-        OrderStateMachine $orderStateMachine)
-    {
+        OrderStateMachine $orderStateMachine
+    ) {
         $this->errorHandler = $errorHandler;
         $this->invoiceClient = $invoiceClient;
         $this->pluginConfigurationValidator = $pluginConfigurationValidator;
@@ -45,24 +47,19 @@ class PaymentController extends StorefrontController
      */
     public function payment(string $paymentId, Request $request, SalesChannelContext $context): Response
     {
-        try
-        {
-            if ($this->pluginConfigurationValidator->isInvalid())
-            {
+        try {
+            if ($this->pluginConfigurationValidator->isInvalid()) {
                 return new Response('', 500);
             }
-    
-            if($this->isClientSecretInvalid($request))
-            {
+
+            if ($this->isClientSecretInvalid($request)) {
                 return new Response('', 401);
             }
 
             $this->updatePaymentStatus($paymentId, $context);
 
             return new Response();
-        }
-        catch (\Throwable $th)
-        {
+        } catch (\Throwable $th) {
             $this->errorHandler->handle($th);
             return new Response('', 500);
         }
@@ -75,14 +72,12 @@ class PaymentController extends StorefrontController
         $paymentStatus = $invoiceOrderPaymentUpdate->paymentStatus;
 
         /** @phpstan-ignore-next-line */
-        if ($paymentStatus === PaymentStatus::PAID || $paymentStatus === PaymentStatus::OVERPAID)
-        {
+        if ($paymentStatus === PaymentStatus::PAID || $paymentStatus === PaymentStatus::OVERPAID) {
             $this->orderStateMachine->payOrder($orderId, $context);
         }
 
         /** @phpstan-ignore-next-line */
-        if ($paymentStatus === PaymentStatus::PARTIALLY_PAID)
-        {
+        if ($paymentStatus === PaymentStatus::PARTIALLY_PAID) {
             $this->orderStateMachine->payOrderPartially($orderId, $context);
         }
     }
@@ -90,7 +85,7 @@ class PaymentController extends StorefrontController
     private function isClientSecretInvalid(Request $request): bool
     {
         $configClientSecret = $this->pluginConfiguration->getClientSecret();
-        
+
         $headerClientSecret = $request->headers->get("X-secret");
 
         return is_null($configClientSecret) || $configClientSecret !== $headerClientSecret;

@@ -2,15 +2,17 @@ const ApiService = Shopware.Classes.ApiService;
 const { Application } = Shopware;
 
 class AxytosCredentalsValidatior extends ApiService {
-    constructor(httpClient, loginService, apiEndpoint = 'AxytosKaufAufRechnung') {
+    constructor(httpClient, loginService, apiEndpoint = 'AxytosKaufAufRechnung')
+    {
         super(httpClient, loginService, apiEndpoint);
     }
 
-    check(values) {
+    check(values)
+    {
         const headers = this.getBasicHeaders({});
 
         return this.httpClient
-            .post(`/v1/${this.getApiBasePath()}/Credentials/validate`, values,{
+            .post(` / v1 / ${this.getApiBasePath()} / Credentials / validate`, values,{
                 headers
             })
             .then((response) => {

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Storefront\AccountEditOrderPage;
 
@@ -8,7 +10,7 @@ use Shopware\Storefront\Page\Account\Order\AccountEditOrderPageLoadedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class AccountEditOrderPageLoadedEventSubscriber implements EventSubscriberInterface
-{   
+{
     private PluginConfigurationValidator $pluginConfigurationValidator;
     private AccountEditOrderPageLoadedEventHandler $accountEditOrderPageLoadedEventHandler;
     private ErrorHandler $errorHandler;
@@ -16,8 +18,8 @@ class AccountEditOrderPageLoadedEventSubscriber implements EventSubscriberInterf
     public function __construct(
         PluginConfigurationValidator $pluginConfigurationValidator,
         AccountEditOrderPageLoadedEventHandler $accountEditOrderPageLoadedEventHandler,
-        ErrorHandler $errorHandler)
-    {
+        ErrorHandler $errorHandler
+    ) {
         $this->pluginConfigurationValidator = $pluginConfigurationValidator;
         $this->accountEditOrderPageLoadedEventHandler = $accountEditOrderPageLoadedEventHandler;
         $this->errorHandler = $errorHandler;
@@ -32,16 +34,12 @@ class AccountEditOrderPageLoadedEventSubscriber implements EventSubscriberInterf
 
     public function onAccountEditOrderPageLoaded(AccountEditOrderPageLoadedEvent $event): void
     {
-        try 
-        {
-            if ($this->pluginConfigurationValidator->isInvalid())
-            {
+        try {
+            if ($this->pluginConfigurationValidator->isInvalid()) {
                 return;
             }
             $this->accountEditOrderPageLoadedEventHandler->handle($event);
-        } 
-        catch (\Throwable $th) 
-        {
+        } catch (\Throwable $th) {
             $this->errorHandler->handle($th);
         }
     }

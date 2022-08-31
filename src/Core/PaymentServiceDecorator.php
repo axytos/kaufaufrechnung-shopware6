@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Core;
 
@@ -39,8 +41,8 @@ class PaymentServiceDecorator extends PaymentService
         PaymentMethodPredicates $paymentMethodPredicates,
         ErrorHandler $errorHandler,
         InvoiceClientInterface $invoiceClient,
-        InvoiceOrderContextFactory $invoiceOrderContextFactory)
-    {
+        InvoiceOrderContextFactory $invoiceOrderContextFactory
+    ) {
         $this->decorated = $decorated;
         $this->pluginConfigurationValidator = $pluginConfigurationValidator;
         $this->orderStateMachine = $orderStateMachine;
@@ -57,24 +59,19 @@ class PaymentServiceDecorator extends PaymentService
         RequestDataBag $dataBag,
         SalesChannelContext $context,
         ?string $finishUrl = null,
-        ?string $errorUrl = null): ?RedirectResponse
-    {
-        try 
-        {            
-            if ($this->pluginConfigurationValidator->isInvalid())
-            {
+        ?string $errorUrl = null
+    ): ?RedirectResponse {
+        try {
+            if ($this->pluginConfigurationValidator->isInvalid()) {
                 return $this->completeOrder($orderId, $dataBag, $context, $finishUrl, $errorUrl);
             }
 
-            if ($this->usesAxytosInvoicePaymentMethod($context))
-            {
+            if ($this->usesAxytosInvoicePaymentMethod($context)) {
                 return $this->executeAxytosInvoice($orderId, $dataBag, $context, $finishUrl, $errorUrl);
             }
-            
+
             return $this->completeOrder($orderId, $dataBag, $context, $finishUrl, $errorUrl);
-        }
-        catch (Throwable $t)
-        {
+        } catch (Throwable $t) {
             $this->orderCheckProcessStateMachine->setFailed($orderId, $context);
             $this->errorHandler->handle($t);
             return $this->completeOrder($orderId, $dataBag, $context, $finishUrl, $errorUrl);
@@ -92,8 +89,8 @@ class PaymentServiceDecorator extends PaymentService
         RequestDataBag $dataBag,
         SalesChannelContext $context,
         ?string $finishUrl = null,
-        ?string $errorUrl = null): ?RedirectResponse
-    {
+        ?string $errorUrl = null
+    ): ?RedirectResponse {
         $this->orderCheckProcessStateMachine->setUnchecked($orderId, $context);
 
         $invoiceOrderContext = $this->invoiceOrderContextFactory->getInvoiceOrderContext($orderId, $context->getContext());
@@ -101,8 +98,7 @@ class PaymentServiceDecorator extends PaymentService
 
         $this->orderCheckProcessStateMachine->setChecked($orderId, $context);
 
-        if ($action === ShopActions::CHANGE_PAYMENT_METHOD)
-        {
+        if ($action === ShopActions::CHANGE_PAYMENT_METHOD) {
             return $this->changePaymentMethodWithError($orderId, $context);
         }
 
@@ -123,8 +119,8 @@ class PaymentServiceDecorator extends PaymentService
         RequestDataBag $dataBag,
         SalesChannelContext $context,
         ?string $finishUrl = null,
-        ?string $errorUrl = null): ?RedirectResponse
-    {
+        ?string $errorUrl = null
+    ): ?RedirectResponse {
         return $this->decorated->handlePaymentByOrder($orderId, $dataBag, $context, $finishUrl, $errorUrl);
     }
 
