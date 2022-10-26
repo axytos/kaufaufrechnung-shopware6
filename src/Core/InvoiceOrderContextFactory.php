@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Core;
 
-use Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface;
 use Axytos\ECommerce\DataMapping\DtoToDtoMapper;
 use Axytos\Shopware\DataAbstractionLayer\OrderEntityRepository;
 use Axytos\Shopware\DataMapping\CustomerDataDtoFactory;
@@ -50,7 +49,7 @@ class InvoiceOrderContextFactory
         $this->returnPositionModelDtoCollectionFactory = $returnPositionModelDtoCollectionFactory;
     }
 
-    public function getInvoiceOrderContext(string $orderId, Context $context): InvoiceOrderContextInterface
+    public function getInvoiceOrderContext(string $orderId, Context $context): InvoiceOrderContext
     {
         return new InvoiceOrderContext(
             $orderId,

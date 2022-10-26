@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests;
 
@@ -9,7 +11,8 @@ class AxytosKaufAufRechnungTest extends TestCase
 {
     private AxytosKaufAufRechnung $sut;
 
-    public function setup(): void{
+    public function setup(): void
+    {
         $this->sut = new AxytosKaufAufRechnung(true, 'basePath');
     }
 

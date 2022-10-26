@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests;
 
@@ -64,7 +66,7 @@ class PaymentControllerTest extends TestCase
         $paymentId = 'paymentId';
         $request = $this->createRequest($xSecretHeader);
         $context = $this->createMock(SalesChannelContext::class);
-        
+
         $this->setUpPluginConfigurationValidator($configInvalid);
         $this->setUpInvoiceOrderPaymentUpdate($paymentId, $orderId, $paymentStatus);
         $this->setUpClientSecret($clientSecret);
@@ -89,18 +91,18 @@ class PaymentControllerTest extends TestCase
      * @dataProvider dataProvider_test_order_state_updates
      */
     public function test_order_state_updates(
-        bool $configInvalid, 
-        string $xSecretHeader, 
-        string $clientSecret, 
-        string $paymentStatus, 
-        InvokedCount $expectedPayOrderCount, 
-        InvokedCount $expectedPayOrderPartially): void
-    {
+        bool $configInvalid,
+        string $xSecretHeader,
+        string $clientSecret,
+        string $paymentStatus,
+        InvokedCount $expectedPayOrderCount,
+        InvokedCount $expectedPayOrderPartially
+    ): void {
         $orderId = 'orderId';
         $paymentId = 'paymentId';
         $request = $this->createRequest($xSecretHeader);
         $context = $this->createMock(SalesChannelContext::class);
-        
+
         $this->setUpPluginConfigurationValidator($configInvalid);
         $this->setUpInvoiceOrderPaymentUpdate($paymentId, $orderId, $paymentStatus);
         $this->setUpClientSecret($clientSecret);
@@ -125,19 +127,19 @@ class PaymentControllerTest extends TestCase
             [true, 'secret', 'secret', PaymentStatus::PAID, $this->never(), $this->never()],
             [false, 'secret', 'other secret', PaymentStatus::PAID, $this->never(), $this->never()],
             [false, 'secret', 'secret', PaymentStatus::PAID, $this->once(), $this->never()],
-            
+
             [true, 'secret', 'other secret', PaymentStatus::OVERPAID, $this->never(), $this->never()],
             [true, 'secret', 'secret', PaymentStatus::OVERPAID, $this->never(), $this->never()],
             [false, 'secret', 'other secret', PaymentStatus::OVERPAID, $this->never(), $this->never()],
             [false, 'secret', 'secret', PaymentStatus::OVERPAID, $this->once(), $this->never()],
-            
+
             [true, 'secret', 'other secret', PaymentStatus::PARTIALLY_PAID, $this->never(), $this->never()],
             [true, 'secret', 'secret', PaymentStatus::PARTIALLY_PAID, $this->never(), $this->never()],
             [false, 'secret', 'other secret', PaymentStatus::PARTIALLY_PAID, $this->never(), $this->never()],
             [false, 'secret', 'secret', PaymentStatus::PARTIALLY_PAID, $this->never(), $this->once()],
         ];
     }
-    
+
     private function setUpPluginConfigurationValidator(bool $isInvalid): void
     {
         $this->pluginConfigurationValidator

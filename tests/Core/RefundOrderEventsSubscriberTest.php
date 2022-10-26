@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Core;
 
@@ -19,7 +21,7 @@ use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 
-class RefundOrderEventsSubscriberTest extends TestCase 
+class RefundOrderEventsSubscriberTest extends TestCase
 {
     const ORDER_ID = 'orderId';
     const INVOICE_NUMBER = 'invoiceNumber';
@@ -67,7 +69,7 @@ class RefundOrderEventsSubscriberTest extends TestCase
         $this->pluginConfigurationValidator = $this->createMock(PluginConfigurationValidator::class);
 
         $this->sut = new RefundOrderEventsSubscriber(
-            $this->errorHandler, 
+            $this->errorHandler,
             $this->invoiceClient,
             $this->invoiceOrderContextFactory,
             $this->orderCheckProcessStateMachine,

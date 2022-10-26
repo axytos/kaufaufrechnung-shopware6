@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests;
 
@@ -17,7 +19,7 @@ class PluginConfigurationTest extends TestCase
     public function setUp(): void
     {
         $this->systemConfigService = $this->createMock(SystemConfigService::class);
-        
+
         $this->sut = new PluginConfiguration($this->systemConfigService);
     }
 

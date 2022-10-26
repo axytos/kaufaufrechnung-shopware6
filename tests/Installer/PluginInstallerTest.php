@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests;
 
@@ -106,7 +108,7 @@ class PluginInstallerTest extends TestCase
     {
         $paymentName = 'Kauf auf Rechnung';
         $paymentDescription = 'Axytos Kauf auf Rechnung';
-        
+
         $this->setUpPluginNotInstalled();
 
         $this->paymentMethodRepository

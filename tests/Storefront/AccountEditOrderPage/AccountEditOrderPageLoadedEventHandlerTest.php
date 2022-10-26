@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests;
 
@@ -76,7 +78,7 @@ class AccountEditOrderPageLoadedEventHandlerTest extends TestCase
     private function setUpEvent(): void
     {
         $this->order->method('getId')->willReturn(self::ORDER_ID);
-        $this->page->method('getOrder')->willReturn($this->order);   
+        $this->page->method('getOrder')->willReturn($this->order);
         $this->event->method('getPage')->willReturn($this->page);
         $this->event->method('getSalesChannelContext')->willReturn($this->salesChannelContext);
         $this->event->method('getContext')->willReturn($this->context);
@@ -85,7 +87,7 @@ class AccountEditOrderPageLoadedEventHandlerTest extends TestCase
     private function setUpPaymentMethods(): void
     {
         $this->page->method('getPaymentMethods')->willReturn($this->paymentMethods);
-        
+
         $this->paymentMethodCollectionFilter
             ->method('filterAllowedFallbackPaymentMethods')
             ->with($this->paymentMethods)
@@ -141,6 +143,4 @@ class AccountEditOrderPageLoadedEventHandlerTest extends TestCase
 
         $this->sut->handle($this->event);
     }
-
-    
 }

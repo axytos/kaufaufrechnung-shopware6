@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests;
 
@@ -18,9 +20,8 @@ class PluginInstallerFactoryTest extends TestCase
         /** @var ContainerInterface&MockObject */
         $container = $this->createMock(ContainerInterface::class);
 
-        $container->method('get')->willReturnCallback(function($name){
-            switch ($name)
-            {
+        $container->method('get')->willReturnCallback(function ($name) {
+            switch ($name) {
                 case 'payment_method.repository':
                     return $this->createMock(EntityRepositoryInterface::class);
                 case PluginIdProvider::class:

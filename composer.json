@@ -1,7 +1,14 @@
 {
     "name": "axytos/kaufaufrechnung-shopware6",
-    "version": "1.0.0",
-    "description": "axytos Kauf auf Rechnung for Shopware",
+    "version": "1.1.0",
+    "authors": [
+        {
+            "name": "axytos GmbH",
+            "email": "info@axytos.com",
+            "homepage": "https://www.axytos.com"
+        }
+    ],
+    "description": "axytos Kauf auf Rechnung for Shopware6",
     "type": "shopware-platform-plugin",
     "license": "proprietary",
     "extra": {
@@ -12,24 +19,10 @@
         },
         "shopware-core-version": "6.4.*"
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "./packages/ecommerce-sdk"
-        },
-        {
-            "type": "path",
-            "url": "./packages/financial-services-api-sdk"
-        },
-        {
-            "type": "path",
-            "url": "./packages/shopware6-sdk"
-        }
-    ],
     "require": {
         "php": ">=7.4.0",
-        "axytos/ecommerce-sdk": "^1.0.0",
-        "axytos/shopware6-sdk": "^1.0.0"
+        "axytos/ecommerce-sdk": "^1.1.0",
+        "axytos/shopware6-sdk": "^1.1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",

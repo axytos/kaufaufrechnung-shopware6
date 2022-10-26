@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Client;
 
@@ -38,7 +40,7 @@ class UserAgentInfoProviderTest extends TestCase
         $composerJson = file_get_contents(__DIR__ . '/../../composer.json');
         /** @var string[] */
         $config = json_decode($composerJson, true);
-        
+
         return $config["name"];
     }
 
@@ -77,6 +79,4 @@ class UserAgentInfoProviderTest extends TestCase
 
         $this->assertEquals($expected, $actual);
     }
-
-
 }

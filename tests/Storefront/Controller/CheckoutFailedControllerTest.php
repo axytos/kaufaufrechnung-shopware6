@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests;
 
@@ -45,7 +47,7 @@ class CheckoutFailedControllerTest extends TestCase
         );
     }
 
-    public function test_failed_renders_checkout_failed_view(): void 
+    public function test_failed_renders_checkout_failed_view(): void
     {
         $request = $this->createMock(Request::class);
         $context = $this->createMock(SalesChannelContext::class);

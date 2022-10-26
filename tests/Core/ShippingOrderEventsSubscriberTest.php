@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Core;
 
@@ -17,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\Framework\Context;
 
-class ShippingOrderEventsSubscriberTest extends TestCase 
+class ShippingOrderEventsSubscriberTest extends TestCase
 {
     const ORDER_ID = 'orderId';
 
@@ -56,7 +58,7 @@ class ShippingOrderEventsSubscriberTest extends TestCase
         $this->orderCheckProcessStateMachine = $this->createMock(OrderCheckProcessStateMachine::class);
         $this->pluginConfigurationValidator = $this->createMock(PluginConfigurationValidator::class);
         $this->sut = new ShippingOrderEventsSubscriber(
-            $this->errorHandler, 
+            $this->errorHandler,
             $this->invoiceClient,
             $this->invoiceOrderContextFactory,
             $this->orderCheckProcessStateMachine,
@@ -130,7 +132,7 @@ class ShippingOrderEventsSubscriberTest extends TestCase
             [true, OrderCheckProcessStates::CHECKED, $this->never()],
             [true, OrderCheckProcessStates::FAILED, $this->never()],
             [true, OrderCheckProcessStates::CONFIRMED, $this->never()],
-            
+
             [false, OrderCheckProcessStates::UNCHECKED, $this->never()],
             [false, OrderCheckProcessStates::CHECKED, $this->never()],
             [false, OrderCheckProcessStates::FAILED, $this->never()],

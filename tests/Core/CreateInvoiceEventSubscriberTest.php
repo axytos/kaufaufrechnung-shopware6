@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Core;
 
@@ -76,7 +78,7 @@ class InvoiceEntityWrittenSubscriberTest extends TestCase
         $this->event = $this->createMock(EntityWrittenEvent::class);
         $this->context = $this->createMock(Context::class);
         $this->invoiceOrderContext = $this->createMock(InvoiceOrderContext::class);
-        
+
         $this->setUpContext();
     }
 
@@ -142,8 +144,7 @@ class InvoiceEntityWrittenSubscriberTest extends TestCase
             ->method('getConfig')
             ->willReturn($documentConfig);
 
-        if ($hasDocumentType)
-        {
+        if ($hasDocumentType) {
             /** @var DocumentTypeEntity&MockObject*/
             $documentType = $this->createMock(DocumentTypeEntity::class);
 
@@ -154,9 +155,7 @@ class InvoiceEntityWrittenSubscriberTest extends TestCase
             $documentType
                 ->method('getTechnicalName')
                 ->willReturn($documentTypeTechnicalName);
-        }
-        else
-        {
+        } else {
             $document
                 ->method('getDocumentType')
                 ->willReturn(null);
@@ -198,13 +197,10 @@ class InvoiceEntityWrittenSubscriberTest extends TestCase
     {
         $documentNumber = 'documentNumber';
         $this->setUpPluginConfigurationIsInvalid($configIsInvalid);
-        if ($hasOrder)
-        {
+        if ($hasOrder) {
             $order = $this->setUpOrder();
             $this->setUpDocument($hasDocumentType, $order, $documentTypeTechnicalName, $documentNumber);
-        }
-        else
-        {
+        } else {
             $this->setUpDocument($hasDocumentType, null, $documentTypeTechnicalName, $documentNumber);
         }
         $this->setUpOrderState($orderState);

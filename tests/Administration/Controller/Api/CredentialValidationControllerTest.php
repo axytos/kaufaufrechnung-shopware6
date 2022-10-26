@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Administration;
 
@@ -19,7 +21,7 @@ class CredentialValidationControllerTest extends TestCase
     private CredentialValidationController $sut;
 
     public function setUp(): void
-    {        
+    {
         $this->credentialValidationClient = $this->createMock(CredentialValidationClientInterface::class);
         $this->errorHandler = $this->createMock(ErrorHandler::class);
 
@@ -34,7 +36,7 @@ class CredentialValidationControllerTest extends TestCase
         $this->credentialValidationClient
           ->method('validateApiKey')
           ->willReturn(true);
-        
+
         $response = $this->sut->validateCredentials();
 
         /** @var string */
@@ -50,7 +52,7 @@ class CredentialValidationControllerTest extends TestCase
         $this->credentialValidationClient
           ->method('validateApiKey')
           ->willReturn(false);
-        
+
         $response = $this->sut->validateCredentials();
 
         /** @var string */
@@ -66,7 +68,7 @@ class CredentialValidationControllerTest extends TestCase
         $this->credentialValidationClient
           ->method('validateApiKey')
           ->willThrowException(new \Exception());
-        
+
         $response = $this->sut->validateCredentials();
 
         /** @var string */
@@ -84,7 +86,7 @@ class CredentialValidationControllerTest extends TestCase
         $this->credentialValidationClient
           ->method('validateApiKey')
           ->willThrowException($exception);
-        
+
         $this->errorHandler
             ->expects($this->once())
             ->method('handle')

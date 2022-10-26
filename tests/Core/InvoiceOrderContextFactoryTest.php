@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Core;
 
@@ -44,5 +46,4 @@ class InvoiceOrderContextFactoryTest extends TestCase
 
         $this->assertInstanceOf(InvoiceOrderContextInterface::class, $actual);
     }
-
 }

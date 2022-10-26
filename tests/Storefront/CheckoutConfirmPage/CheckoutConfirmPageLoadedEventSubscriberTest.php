@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests;
 
@@ -21,7 +23,7 @@ class CheckoutConfirmPageLoadedEventSubscriberTest extends TestCase
 
     /** @var ErrorHandler&MockObject */
     private ErrorHandler $errorHandler;
-    
+
     private CheckoutConfirmPageLoadedEventSubscriber $sut;
 
     public function setUp(): void
@@ -42,8 +44,9 @@ class CheckoutConfirmPageLoadedEventSubscriberTest extends TestCase
         $subscribedEvents = $this->sut->getSubscribedEvents();
 
         $this->assertEquals(
-            $subscribedEvents[CheckoutConfirmPageLoadedEvent::class], 
-            'onCheckoutConfirmPageLoaded');
+            $subscribedEvents[CheckoutConfirmPageLoadedEvent::class],
+            'onCheckoutConfirmPageLoaded'
+        );
     }
 
     public function test_onCheckoutConfirmPageLoaded_plugin_configuraton_is_valid_executes_handler(): void

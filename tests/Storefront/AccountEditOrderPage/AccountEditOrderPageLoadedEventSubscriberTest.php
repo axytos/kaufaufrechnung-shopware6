@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests;
 
@@ -12,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Storefront\Page\Account\Order\AccountEditOrderPageLoadedEvent;
 
 class AccountEditOrderPageLoadedEventSubscriberTest extends TestCase
-{   
+{
     /** @var PluginConfigurationValidator&MockObject */
     private PluginConfigurationValidator $pluginConfigurationValidator;
 
@@ -42,8 +44,9 @@ class AccountEditOrderPageLoadedEventSubscriberTest extends TestCase
         $subscribedEvents = $this->sut->getSubscribedEvents();
 
         $this->assertEquals(
-            $subscribedEvents[AccountEditOrderPageLoadedEvent::class], 
-            'onAccountEditOrderPageLoaded');
+            $subscribedEvents[AccountEditOrderPageLoadedEvent::class],
+            'onAccountEditOrderPageLoaded'
+        );
     }
 
     public function test_onAccountEditOrderPageLoaded_plugin_configuraton_is_valid_executes_handler(): void

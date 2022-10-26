@@ -1,13 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Core;
 
 use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
-use Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory;
 use Axytos\Shopware\Order\OrderCheckProcessStateMachine;
 use Axytos\ECommerce\Order\OrderCheckProcessStates;
+use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
 use Axytos\KaufAufRechnung\Shopware\Core\ReturnOrderEventsSubscriber;
 use Axytos\Shopware\ErrorReporting\ErrorHandler;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -16,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\Framework\Context;
 
-class ReturnOrderEventsSubscriberTest extends TestCase 
+class ReturnOrderEventsSubscriberTest extends TestCase
 {
     /** @var ErrorHandler&MockObject */
     private ErrorHandler $errorHandler;
@@ -68,7 +70,7 @@ class ReturnOrderEventsSubscriberTest extends TestCase
     {
         $orderId = 'orderId';
         $context = $this->createMock(Context::class);
-        $invoiceOrderContext = $this->createMock(InvoiceOrderContextInterface::class);
+        $invoiceOrderContext = $this->createMock(InvoiceOrderContext::class);
 
         /** @var OrderStateMachineStateChangeEvent&MockObject */
         $event = $this->createMock(OrderStateMachineStateChangeEvent::class);
@@ -88,7 +90,7 @@ class ReturnOrderEventsSubscriberTest extends TestCase
             ->method('getState')
             ->with($orderId, $context)
             ->willReturn($orderCheckState);
-        
+
         $this->invoiceClient
             ->expects($expectedInvocationCount)
             ->method('return')

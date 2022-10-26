@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Core;
 
@@ -132,7 +134,7 @@ class InvoiceOrderContextTest extends TestCase
         $customerDataDto = $this->createMock(CustomerDataDto::class);
 
         $this->setUpOrderEntityRepository($orderEntity);
-        
+
         $this->customerDataDtoFactory
             ->method('create')
             ->with($orderEntity)
@@ -149,7 +151,7 @@ class InvoiceOrderContextTest extends TestCase
         $invoiceAddressDto = $this->createMock(InvoiceAddressDto::class);
 
         $this->setUpOrderEntityRepository($orderEntity);
-        
+
         $this->invoiceAddressDtoFactory
             ->method('create')
             ->with($orderEntity)
@@ -166,7 +168,7 @@ class InvoiceOrderContextTest extends TestCase
         $deliveryAddressDto = $this->createMock(DeliveryAddressDto::class);
 
         $this->setUpOrderEntityRepository($orderEntity);
-        
+
         $this->deliveryAddressDtoFactory
             ->method('create')
             ->with($orderEntity)
@@ -183,7 +185,7 @@ class InvoiceOrderContextTest extends TestCase
         $basketDto = $this->createMock(BasketDto::class);
 
         $this->setUpOrderEntityRepository($orderEntity);
-        
+
         $this->basketDtoFactory
             ->method('create')
             ->with($orderEntity)
@@ -244,7 +246,7 @@ class InvoiceOrderContextTest extends TestCase
         $refundBasketDto = $this->createMock(RefundBasketDto::class);
 
         $this->setUpOrderEntityRepository($orderEntity);
-        
+
         $this->refundBasketDtoFactory
             ->method('create')
             ->with($orderEntity)

@@ -16,11 +16,8 @@ parameters:
     paths:
         - src
         - tests
-        - packages/ecommerce-sdk/src
-        - packages/ecommerce-sdk/tests
-        - packages/shopware6-sdk/src
-        - packages/shopware6-sdk/tests
     excludePaths:
+        - packages
         - vendor
         - coverage
 

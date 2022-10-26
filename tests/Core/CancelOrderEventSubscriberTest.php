@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Core;
 
@@ -65,7 +67,7 @@ class CancelOrderEventSubscriberTest extends TestCase
         $this->event = $this->createMock(OrderStateMachineStateChangeEvent::class);
         $this->context = $this->createMock(Context::class);
         $this->invoiceOrderContext = $this->createMock(InvoiceOrderContext::class);
-        
+
         $this->setUpInvoiceOrderContext();
     }
 
@@ -123,7 +125,7 @@ class CancelOrderEventSubscriberTest extends TestCase
             [true, OrderCheckProcessStates::CHECKED, $this->never()],
             [true, OrderCheckProcessStates::FAILED, $this->never()],
             [true, OrderCheckProcessStates::CONFIRMED, $this->never()],
-            
+
             [false, OrderCheckProcessStates::UNCHECKED, $this->never()],
             [false, OrderCheckProcessStates::CHECKED, $this->never()],
             [false, OrderCheckProcessStates::FAILED, $this->never()],
