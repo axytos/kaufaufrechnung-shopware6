@@ -1,6 +1,5 @@
 {
     "name": "axytos/kaufaufrechnung-shopware6",
-    "version": "1.1.0",
     "authors": [
         {
             "name": "axytos GmbH",
@@ -61,7 +60,7 @@
         "shopware-console": "../../../bin/console",
         "shopware-lint-container": "../../../bin/console lint:container",
         "shopware-build-administration": [
-            "rm -r ./src/Resources/public",
+            "rm -rf ./src/Resources/public",
             "../../../bin/build-administration.sh"
         ],
         "shopware-build-storefront": "../../../bin/build-storefront.sh",
