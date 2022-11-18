@@ -107,7 +107,7 @@ class PluginInstallerTest extends TestCase
     public function test_install_plugin_not_installed_creates_new_payment_method(): void
     {
         $paymentName = 'Kauf auf Rechnung';
-        $paymentDescription = 'Axytos Kauf auf Rechnung';
+        $paymentDescription = 'Sie zahlen bequem die Rechnung, sobald Sie die Ware erhalten haben, innerhalb der Zahlfrist';
 
         $this->setUpPluginNotInstalled();
 

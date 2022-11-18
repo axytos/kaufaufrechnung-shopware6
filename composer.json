@@ -13,15 +13,15 @@
     "extra": {
         "shopware-plugin-class": "Axytos\\KaufAufRechnung\\Shopware\\AxytosKaufAufRechnung",
         "label": {
-            "de-DE": "axytos Kauf auf Rechnung",
-            "en-GB": "axytos Kauf auf Rechnung"
+            "de-DE": "Kauf auf Rechnung",
+            "en-GB": "Buy Now Pay Later"
         },
         "shopware-core-version": "6.4.*"
     },
     "require": {
         "php": ">=7.4.0",
-        "axytos/ecommerce-sdk": "^1.1.0",
-        "axytos/shopware6-sdk": "^1.1.0"
+        "axytos/ecommerce-sdk": "^1.2.0",
+        "axytos/shopware6-sdk": "^1.2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
