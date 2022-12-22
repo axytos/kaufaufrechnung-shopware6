@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\Tests;
 
 use Axytos\KaufAufRechnung\Shopware\Core\AxytosInvoicePaymentHandler;
-use Axytos\Shopware\DataAbstractionLayer\PaymentMethodEntityRepository;
+use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\PaymentMethodEntityRepository;
 use Axytos\KaufAufRechnung\Shopware\Installer\PluginIdProviderInterface;
 use Axytos\KaufAufRechnung\Shopware\Installer\PluginInstaller;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -21,27 +21,30 @@ class PluginInstallerTest extends TestCase
     const PLUGIN_ID = 'PLUGIN_ID';
 
     /** @var PaymentMethodEntityRepository&MockObject */
-    private PaymentMethodEntityRepository $paymentMethodRepository;
+    private $paymentMethodRepository;
 
     /** @var PluginIdProviderInterface&MockObject */
-    private PluginIdProviderInterface $pluginIdProvider;
+    private $pluginIdProvider;
 
-    private PluginInstaller $sut;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Installer\PluginInstaller
+     */
+    private $sut;
 
     /** @var Context&MockObject */
-    private Context $context;
+    private $context;
 
     /** @var InstallContext&MockObject */
-    private InstallContext $installContext;
+    private $installContext;
 
     /** @var UninstallContext&MockObject */
-    private UninstallContext $unintallContext;
+    private $unintallContext;
 
     /** @var ActivateContext&MockObject */
-    private ActivateContext $activateContext;
+    private $activateContext;
 
     /** @var DeactivateContext&MockObject */
-    private DeactivateContext $deactivateContext;
+    private $deactivateContext;
 
     public function setUp(): void
     {

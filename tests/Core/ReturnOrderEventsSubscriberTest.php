@@ -7,11 +7,11 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests\Core;
 use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory;
-use Axytos\Shopware\Order\OrderCheckProcessStateMachine;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
 use Axytos\ECommerce\Order\OrderCheckProcessStates;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
 use Axytos\KaufAufRechnung\Shopware\Core\ReturnOrderEventsSubscriber;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\TestCase;
@@ -21,21 +21,24 @@ use Shopware\Core\Framework\Context;
 class ReturnOrderEventsSubscriberTest extends TestCase
 {
     /** @var ErrorHandler&MockObject */
-    private ErrorHandler $errorHandler;
+    private $errorHandler;
 
     /** @var InvoiceClientInterface&MockObject */
-    private InvoiceClientInterface $invoiceClient;
+    private $invoiceClient;
 
     /** @var InvoiceOrderContextFactory&MockObject */
-    private InvoiceOrderContextFactory $invoiceOrderContextFactory;
+    private $invoiceOrderContextFactory;
 
     /** @var OrderCheckProcessStateMachine&MockObject */
-    private OrderCheckProcessStateMachine $orderCheckProcessStateMachine;
+    private $orderCheckProcessStateMachine;
 
     /** @var PluginConfigurationValidator&MockObject */
-    private PluginConfigurationValidator $pluginConfigurationValidator;
+    private $pluginConfigurationValidator;
 
-    private ReturnOrderEventsSubscriber $sut;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Core\ReturnOrderEventsSubscriber
+     */
+    private $sut;
 
     public function setUp(): void
     {
@@ -45,13 +48,7 @@ class ReturnOrderEventsSubscriberTest extends TestCase
         $this->orderCheckProcessStateMachine = $this->createMock(OrderCheckProcessStateMachine::class);
         $this->pluginConfigurationValidator = $this->createMock(PluginConfigurationValidator::class);
 
-        $this->sut = new ReturnOrderEventsSubscriber(
-            $this->errorHandler,
-            $this->invoiceClient,
-            $this->invoiceOrderContextFactory,
-            $this->orderCheckProcessStateMachine,
-            $this->pluginConfigurationValidator,
-        );
+        $this->sut = new ReturnOrderEventsSubscriber($this->errorHandler, $this->invoiceClient, $this->invoiceOrderContextFactory, $this->orderCheckProcessStateMachine, $this->pluginConfigurationValidator);
     }
 
     public function test_getSubscribedEvents_subscribes_onReturned_method(): void
@@ -93,7 +90,7 @@ class ReturnOrderEventsSubscriberTest extends TestCase
 
         $this->invoiceClient
             ->expects($expectedInvocationCount)
-            ->method('return')
+            ->method('returnOrder')
             ->with($invoiceOrderContext);
 
         $this->sut->onReturned($event);
@@ -126,7 +123,7 @@ class ReturnOrderEventsSubscriberTest extends TestCase
         $exception = new \Exception();
 
         $this->invoiceClient
-            ->method('return')
+            ->method('returnOrder')
             ->willThrowException($exception);
 
         $this->errorHandler

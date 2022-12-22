@@ -5,15 +5,24 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage;
 
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Shopware\Storefront\Page\Checkout\Confirm\CheckoutConfirmPageLoadedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CheckoutConfirmPageLoadedEventSubscriber implements EventSubscriberInterface
 {
-    private PluginConfigurationValidator $pluginConfigurationValidator;
-    private CheckoutConfirmPageLoadedEventHandler $checkoutConfirmPageLoadedEventHandler;
-    private ErrorHandler $errorHandler;
+    /**
+     * @var \Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator
+     */
+    private $pluginConfigurationValidator;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage\CheckoutConfirmPageLoadedEventHandler
+     */
+    private $checkoutConfirmPageLoadedEventHandler;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler
+     */
+    private $errorHandler;
 
     public function __construct(
         PluginConfigurationValidator $pluginConfigurationValidator,

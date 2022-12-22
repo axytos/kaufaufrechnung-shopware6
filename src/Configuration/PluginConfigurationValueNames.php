@@ -9,4 +9,6 @@ abstract class PluginConfigurationValueNames
     public const API_KEY = 'AxytosKaufAufRechnung.config.apiKey';
     public const API_HOST = 'AxytosKaufAufRechnung.config.apiHost';
     public const CLIENT_SECRET = 'AxytosKaufAufRechnung.config.clientSecret';
+    public const AFTER_CHECKOUT_ORDER_STATUS = 'AxytosKaufAufRechnung.config.afterCheckoutOrderStatus';
+    public const AFTER_CHECKOUT_PAYMENT_STATUS = 'AxytosKaufAufRechnung.config.afterCheckoutPaymentStatus';
 }

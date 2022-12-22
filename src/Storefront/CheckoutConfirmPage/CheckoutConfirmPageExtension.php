@@ -8,6 +8,12 @@ use Shopware\Core\Framework\Struct\Struct;
 
 class CheckoutConfirmPageExtension extends Struct
 {
-    public bool $showCreditCheckAgreement;
-    public string $creditCheckAgreementInfo;
+    /**
+     * @var bool
+     */
+    public $showCreditCheckAgreement;
+    /**
+     * @var string
+     */
+    public $creditCheckAgreementInfo;
 }

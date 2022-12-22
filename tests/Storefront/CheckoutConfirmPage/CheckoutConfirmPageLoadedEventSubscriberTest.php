@@ -7,7 +7,7 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
 use Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage\CheckoutConfirmPageLoadedEventHandler;
 use Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage\CheckoutConfirmPageLoadedEventSubscriber;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -16,15 +16,18 @@ use Shopware\Storefront\Page\Checkout\Confirm\CheckoutConfirmPageLoadedEvent;
 class CheckoutConfirmPageLoadedEventSubscriberTest extends TestCase
 {
     /** @var PluginConfigurationValidator&MockObject */
-    private PluginConfigurationValidator $pluginConfigurationValidator;
+    private $pluginConfigurationValidator;
 
     /** @var CheckoutConfirmPageLoadedEventHandler&MockObject */
-    private CheckoutConfirmPageLoadedEventHandler $checkoutConfirmPageLoadedEventHandler;
+    private $checkoutConfirmPageLoadedEventHandler;
 
     /** @var ErrorHandler&MockObject */
-    private ErrorHandler $errorHandler;
+    private $errorHandler;
 
-    private CheckoutConfirmPageLoadedEventSubscriber $sut;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage\CheckoutConfirmPageLoadedEventSubscriber
+     */
+    private $sut;
 
     public function setUp(): void
     {

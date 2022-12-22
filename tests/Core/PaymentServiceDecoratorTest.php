@@ -6,16 +6,16 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests\Core;
 
 use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Invoice\ShopActions;
-use Axytos\Shopware\PaymentMethod\PaymentMethodPredicates;
+use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
 use Axytos\KaufAufRechnung\Shopware\Core\AxytosInvoicePaymentHandler;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory;
-use Axytos\Shopware\Order\OrderCheckProcessStateMachine;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
 use Axytos\KaufAufRechnung\Shopware\Core\PaymentServiceDecorator;
-use Axytos\Shopware\Order\OrderStateMachine;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
-use Axytos\Shopware\Routing\Router;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\Routing\Router;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Shopware\Core\Checkout\Payment\Cart\Token\TokenStruct;
@@ -30,61 +30,64 @@ use Symfony\Component\HttpFoundation\Request;
 class PaymentServiceDecoratorTest extends TestCase
 {
     /** @var PaymentService&MockObject */
-    private PaymentService $decorated;
+    private $decorated;
 
     /** @var PluginConfigurationValidator&MockObject */
-    private PluginConfigurationValidator $pluginConfigurationValidator;
+    private $pluginConfigurationValidator;
 
     /** @var OrderStateMachine&MockObject */
-    private OrderStateMachine $orderStateMachine;
+    private $orderStateMachine;
 
     /** @var Router&MockObject */
-    private Router $router;
+    private $router;
 
     /** @var PaymentMethodPredicates&MockObject */
-    private PaymentMethodPredicates $paymentMethodPredicates;
+    private $paymentMethodPredicates;
 
     /** @var OrderCheckProcessStateMachine&MockObject */
-    private OrderCheckProcessStateMachine $orderCheckProcessStateMachine;
+    private $orderCheckProcessStateMachine;
 
     /** @var ErrorHandler&MockObject */
-    private ErrorHandler $errorHandler;
+    private $errorHandler;
 
     /** @var InvoiceClientInterface&MockObject */
-    private InvoiceClientInterface $invoiceClient;
+    private $invoiceClient;
 
     /** @var InvoiceOrderContextFactory&MockObject */
-    private InvoiceOrderContextFactory $invoiceOrderContextFactory;
+    private $invoiceOrderContextFactory;
 
-    private PaymentServiceDecorator $sut;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Core\PaymentServiceDecorator
+     */
+    private $sut;
 
     private const ORDER_ID = 'orderId';
     private const FINISH_URL = 'finishUrl';
     private const ERROR_URL = 'errorUrl';
 
     /** @var RequestDataBag&MockObject */
-    private RequestDataBag $requestDataBag;
+    private $requestDataBag;
 
     /** @var SalesChannelContext&MockObject */
-    private SalesChannelContext $salesChannelContext;
+    private $salesChannelContext;
 
     /** @var PaymentMethodEntity&MockObject */
-    private PaymentMethodEntity $paymentMethod;
+    private $paymentMethod;
 
     /** @var RedirectResponse&MockObject */
-    private RedirectResponse $completeOrderResponse;
+    private $completeOrderResponse;
 
     /** @var RedirectResponse&MockObject */
-    private RedirectResponse $cancelOrderResponse;
+    private $cancelOrderResponse;
 
     /** @var RedirectResponse&MockObject */
-    private RedirectResponse $changePaymentMethodResponse;
+    private $changePaymentMethodResponse;
 
     /** @var RedirectResponse&MockObject */
-    private RedirectResponse $changePaymentMethodWithErrorResponse;
+    private $changePaymentMethodWithErrorResponse;
 
     /** @var InvoiceOrderContext&MockObject */
-    private InvoiceOrderContext $invoiceOrderContext;
+    private $invoiceOrderContext;
 
     public function setUp(): void
     {

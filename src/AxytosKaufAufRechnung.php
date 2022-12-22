@@ -6,7 +6,7 @@ namespace Axytos\KaufAufRechnung\Shopware;
 
 use Axytos\KaufAufRechnung\Shopware\Installer\PluginInstaller;
 use Axytos\KaufAufRechnung\Shopware\Installer\PluginInstallerFactory;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
@@ -19,7 +19,10 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
 
 class AxytosKaufAufRechnung extends Plugin
 {
-    private ErrorHandler $errorHandler;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler
+     */
+    private $errorHandler;
 
     public function setErrorHandler(ErrorHandler $errorHandler): void
     {

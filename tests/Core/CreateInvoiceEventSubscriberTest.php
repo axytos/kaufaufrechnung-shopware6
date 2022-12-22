@@ -9,10 +9,10 @@ use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
 use Axytos\KaufAufRechnung\Shopware\Core\CreateInvoiceEventSubscriber;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory;
-use Axytos\Shopware\Order\OrderCheckProcessStateMachine;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
 use Axytos\ECommerce\Order\OrderCheckProcessStates;
-use Axytos\Shopware\DataAbstractionLayer\DocumentEntityRepository;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\DocumentEntityRepository;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvocationOrder;
@@ -29,33 +29,36 @@ class InvoiceEntityWrittenSubscriberTest extends TestCase
     const DOCUMENT_ID = 'documentId';
 
     /** @var InvoiceClientInterface&MockObject*/
-    private InvoiceClientInterface $invoiceClient;
+    private $invoiceClient;
 
     /** @var ErrorHandler&MockObject*/
-    private ErrorHandler $errorHandler;
+    private $errorHandler;
 
     /** @var PluginConfigurationValidator&MockObject*/
-    private PluginConfigurationValidator $pluginConfigurationValidator;
+    private $pluginConfigurationValidator;
 
     /** @var OrderCheckProcessStateMachine&MockObject*/
-    private OrderCheckProcessStateMachine $orderCheckProcessStateMachine;
+    private $orderCheckProcessStateMachine;
 
     /** @var DocumentEntityRepository&MockObject*/
-    private DocumentEntityRepository $documentEntityRepository;
+    private $documentEntityRepository;
 
     /** @var InvoiceOrderContextFactory&MockObject*/
-    private InvoiceOrderContextFactory $invoiceOrderContextFactory;
+    private $invoiceOrderContextFactory;
 
-    private CreateInvoiceEventSubscriber $sut;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Core\CreateInvoiceEventSubscriber
+     */
+    private $sut;
 
     /** @var EntityWrittenEvent&MockObject*/
-    private EntityWrittenEvent $event;
+    private $event;
 
     /** @var Context&MockObject*/
-    private Context $context;
+    private $context;
 
     /** @var InvoiceOrderContext&MockObject*/
-    private InvoiceOrderContext $invoiceOrderContext;
+    private $invoiceOrderContext;
 
     public function setUp(): void
     {

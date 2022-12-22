@@ -10,8 +10,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DefaultPluginIdProvider implements PluginIdProviderInterface
 {
-    private ContainerInterface $container;
-    private string $pluginClassName;
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    private $container;
+    /**
+     * @var string
+     */
+    private $pluginClassName;
 
     public function __construct(
         ContainerInterface $container,

@@ -9,7 +9,10 @@ use Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration;
 
 class ApiHostProvider implements ApiHostProviderInterface
 {
-    public PluginConfiguration $pluginConfig;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration
+     */
+    public $pluginConfig;
 
     public function __construct(PluginConfiguration $pluginConfig)
     {

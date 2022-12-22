@@ -9,7 +9,10 @@ use PHPUnit\Framework\TestCase;
 
 class AxytosKaufAufRechnungTest extends TestCase
 {
-    private AxytosKaufAufRechnung $sut;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\AxytosKaufAufRechnung
+     */
+    private $sut;
 
     public function setup(): void
     {

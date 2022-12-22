@@ -13,9 +13,12 @@ use PHPUnit\Framework\TestCase;
 class ApiHostProviderTest extends TestCase
 {
     /** @var PluginConfiguration&MockObject */
-    private PluginConfiguration $pluginConfiguration;
+    private $pluginConfiguration;
 
-    private ApiHostProvider $sut;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Client\ApiHostProvider
+     */
+    private $sut;
 
     public function setUp(): void
     {

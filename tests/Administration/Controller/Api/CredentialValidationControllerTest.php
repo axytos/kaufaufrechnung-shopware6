@@ -6,19 +6,22 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests\Administration;
 
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface;
 use Axytos\KaufAufRechnung\Shopware\Administration\Controller\Api\CredentialValidationController;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CredentialValidationControllerTest extends TestCase
 {
     /** @var CredentialValidationClientInterface&MockObject */
-    private CredentialValidationClientInterface $credentialValidationClient;
+    private $credentialValidationClient;
 
     /** @var ErrorHandler&MockObject */
-    private ErrorHandler $errorHandler;
+    private $errorHandler;
 
-    private CredentialValidationController $sut;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Administration\Controller\Api\CredentialValidationController
+     */
+    private $sut;
 
     public function setUp(): void
     {

@@ -12,14 +12,16 @@ use Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto;
 use Axytos\ECommerce\DataTransferObjects\RefundBasketDto;
 use Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
-use Axytos\Shopware\DataAbstractionLayer\OrderEntityRepository;
-use Axytos\Shopware\DataMapping\BasketDtoFactory;
-use Axytos\Shopware\DataMapping\CreateInvoiceBasketDtoFactory;
-use Axytos\Shopware\DataMapping\CustomerDataDtoFactory;
-use Axytos\Shopware\DataMapping\DeliveryAddressDtoFactory;
-use Axytos\Shopware\DataMapping\InvoiceAddressDtoFactory;
-use Axytos\Shopware\DataMapping\RefundBasketDtoFactory;
-use Axytos\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory;
+use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\BasketDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\CustomerDataDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\DeliveryAddressDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\InvoiceAddressDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory;
+use Axytos\KaufAufRechnung\Shopware\ValueCalculation\LogisticianCalculator;
+use Axytos\KaufAufRechnung\Shopware\ValueCalculation\TrackingIdCalculator;
 use DateTime;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -32,27 +34,30 @@ class InvoiceOrderContextTest extends TestCase
 {
     const ORDER_ID = 'orderId';
     /** @var Context&MockObject */
-    private Context $context;
+    private $context;
     /** @var OrderEntityRepository&MockObject */
-    private OrderEntityRepository $orderEntityRepository;
+    private $orderEntityRepository;
     /** @var CustomerDataDtoFactory&MockObject */
-    private CustomerDataDtoFactory $customerDataDtoFactory;
+    private $customerDataDtoFactory;
     /** @var DeliveryAddressDtoFactory&MockObject */
-    private DeliveryAddressDtoFactory $deliveryAddressDtoFactory;
+    private $deliveryAddressDtoFactory;
     /** @var InvoiceAddressDtoFactory&MockObject */
-    private InvoiceAddressDtoFactory $invoiceAddressDtoFactory;
+    private $invoiceAddressDtoFactory;
     /** @var BasketDtoFactory&MockObject */
-    private BasketDtoFactory $basketDtoFactory;
+    private $basketDtoFactory;
     /** @var CreateInvoiceBasketDtoFactory&MockObject */
-    private CreateInvoiceBasketDtoFactory $createInvoiceBasketDtoFactory;
+    private $createInvoiceBasketDtoFactory;
     /** @var RefundBasketDtoFactory&MockObject */
-    private RefundBasketDtoFactory $refundBasketDtoFactory;
+    private $refundBasketDtoFactory;
     /** @var DtoToDtoMapper&MockObject */
-    private DtoToDtoMapper $dtoToDtoMapper;
+    private $dtoToDtoMapper;
     /** @var ReturnPositionModelDtoCollectionFactory&MockObject */
-    private ReturnPositionModelDtoCollectionFactory $returnPositionModelDtoCollectionFactory;
+    private $returnPositionModelDtoCollectionFactory;
 
-    private InvoiceOrderContext $sut;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext
+     */
+    private $sut;
 
     public function setUp(): void
     {
@@ -78,7 +83,9 @@ class InvoiceOrderContextTest extends TestCase
             $this->createInvoiceBasketDtoFactory,
             $this->refundBasketDtoFactory,
             $this->dtoToDtoMapper,
-            $this->returnPositionModelDtoCollectionFactory
+            $this->returnPositionModelDtoCollectionFactory,
+            $this->createMock(TrackingIdCalculator::class),
+            $this->createMock(LogisticianCalculator::class)
         );
     }
 

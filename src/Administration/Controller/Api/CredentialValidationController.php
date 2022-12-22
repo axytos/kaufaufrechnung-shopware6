@@ -6,15 +6,21 @@ use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 
 /**
  * @RouteScope(scopes={"administration"})
  */
 class CredentialValidationController
 {
-    private CredentialValidationClientInterface $CredentialValidationClient;
-    private ErrorHandler $errorHandler;
+    /**
+     * @var \Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface
+     */
+    private $CredentialValidationClient;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler
+     */
+    private $errorHandler;
 
     public function __construct(
         CredentialValidationClientInterface $CredentialValidationClient,

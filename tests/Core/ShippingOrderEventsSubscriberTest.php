@@ -8,10 +8,10 @@ use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory;
-use Axytos\Shopware\Order\OrderCheckProcessStateMachine;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
 use Axytos\ECommerce\Order\OrderCheckProcessStates;
 use Axytos\KaufAufRechnung\Shopware\Core\ShippingOrderEventsSubscriber;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvocationOrder;
@@ -24,31 +24,31 @@ class ShippingOrderEventsSubscriberTest extends TestCase
     const ORDER_ID = 'orderId';
 
     /** @var ErrorHandler&MockObject */
-    private ErrorHandler $errorHandler;
+    private $errorHandler;
 
     /** @var InvoiceClientInterface&MockObject */
-    private InvoiceClientInterface $invoiceClient;
+    private $invoiceClient;
 
     /** @var InvoiceOrderContextFactory&MockObject */
-    private InvoiceOrderContextFactory $invoiceOrderContextFactory;
+    private $invoiceOrderContextFactory;
 
     /** @var OrderCheckProcessStateMachine&MockObject */
-    private OrderCheckProcessStateMachine $orderCheckProcessStateMachine;
+    private $orderCheckProcessStateMachine;
 
     /** @var PluginConfigurationValidator&MockObject */
-    private PluginConfigurationValidator $pluginConfigurationValidator;
+    private $pluginConfigurationValidator;
 
     /** @var ShippingOrderEventsSubscriber */
-    private ShippingOrderEventsSubscriber $sut;
+    private $sut;
 
     /** @var OrderStateMachineStateChangeEvent&MockObject */
-    private OrderStateMachineStateChangeEvent $event;
+    private $event;
 
     /** @var InvoiceOrderContext&MockObject */
-    private InvoiceOrderContext $invoiceOrderContext;
+    private $invoiceOrderContext;
 
     /** @var Context&MockObject */
-    private Context $context;
+    private $context;
 
     public function setUp(): void
     {

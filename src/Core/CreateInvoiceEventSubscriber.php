@@ -6,9 +6,9 @@ namespace Axytos\KaufAufRechnung\Shopware\Core;
 
 use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
-use Axytos\Shopware\DataAbstractionLayer\DocumentEntityRepository;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
-use Axytos\Shopware\Order\OrderCheckProcessStateMachine;
+use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\DocumentEntityRepository;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
 use Axytos\ECommerce\Order\OrderCheckProcessStates;
 use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -16,12 +16,30 @@ use Throwable;
 
 class CreateInvoiceEventSubscriber implements EventSubscriberInterface
 {
-    private InvoiceClientInterface $invoiceClient;
-    private ErrorHandler $errorHandler;
-    private PluginConfigurationValidator $pluginConfigurationValidator;
-    private OrderCheckProcessStateMachine $orderCheckProcessStateMachine;
-    private DocumentEntityRepository $documentEntityRepository;
-    private InvoiceOrderContextFactory $invoiceOrderContextFactory;
+    /**
+     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface
+     */
+    private $invoiceClient;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler
+     */
+    private $errorHandler;
+    /**
+     * @var \Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator
+     */
+    private $pluginConfigurationValidator;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine
+     */
+    private $orderCheckProcessStateMachine;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\DocumentEntityRepository
+     */
+    private $documentEntityRepository;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory
+     */
+    private $invoiceOrderContextFactory;
 
     public function __construct(
         InvoiceClientInterface $invoiceClient,

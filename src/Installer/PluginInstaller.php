@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\Installer;
 
 use Axytos\KaufAufRechnung\Shopware\Core\AxytosInvoicePaymentHandler;
-use Axytos\Shopware\DataAbstractionLayer\PaymentMethodEntityRepository;
+use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\PaymentMethodEntityRepository;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
@@ -15,8 +15,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PluginInstaller
 {
-    private PaymentMethodEntityRepository $paymentMethodRepository;
-    private PluginIdProviderInterface $pluginIdProvider;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\PaymentMethodEntityRepository
+     */
+    private $paymentMethodRepository;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Installer\PluginIdProviderInterface
+     */
+    private $pluginIdProvider;
 
     public function __construct(
         PaymentMethodEntityRepository $paymentMethodRepository,

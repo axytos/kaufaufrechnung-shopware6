@@ -6,7 +6,7 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests;
 
 use Axytos\KaufAufRechnung\Shopware\Storefront\Controller\CheckoutFailedController;
 use Axytos\KaufAufRechnung\Shopware\Storefront\Controller\StorefrontViewRenderer;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
@@ -19,18 +19,21 @@ use Symfony\Component\HttpFoundation\Response;
 class CheckoutFailedControllerTest extends TestCase
 {
     /** @var GenericPageLoader&MockObject */
-    private GenericPageLoader $genericPageLoader;
+    private $genericPageLoader;
 
     /** @var StorefrontViewRenderer&MockObject */
-    private StorefrontViewRenderer $storefrontViewRenderer;
+    private $storefrontViewRenderer;
 
     /** @var ErrorController&MockObject */
-    private ErrorController $errorController;
+    private $errorController;
 
     /** @var ErrorHandler&MockObject */
-    private ErrorHandler $errorHandler;
+    private $errorHandler;
 
-    private CheckoutFailedController $sut;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Storefront\Controller\CheckoutFailedController
+     */
+    private $sut;
 
     public function setUp(): void
     {

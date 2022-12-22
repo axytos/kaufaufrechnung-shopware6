@@ -6,12 +6,12 @@ namespace Axytos\KaufAufRechnung\Shopware\Core;
 
 use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Invoice\ShopActions;
-use Axytos\Shopware\PaymentMethod\PaymentMethodPredicates;
+use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
-use Axytos\Shopware\Order\OrderStateMachine;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
-use Axytos\Shopware\Order\OrderCheckProcessStateMachine;
-use Axytos\Shopware\Routing\Router;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
+use Axytos\KaufAufRechnung\Shopware\Routing\Router;
 use Shopware\Core\Checkout\Payment\Cart\Token\TokenStruct;
 use Shopware\Core\Checkout\Payment\PaymentService;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
@@ -22,15 +22,42 @@ use Throwable;
 
 class PaymentServiceDecorator extends PaymentService
 {
-    private PaymentService $decorated;
-    private PluginConfigurationValidator $pluginConfigurationValidator;
-    private OrderStateMachine $orderStateMachine;
-    private Router $router;
-    private OrderCheckProcessStateMachine $orderCheckProcessStateMachine;
-    private PaymentMethodPredicates $paymentMethodPredicates;
-    private ErrorHandler $errorHandler;
-    private InvoiceClientInterface $invoiceClient;
-    private InvoiceOrderContextFactory $invoiceOrderContextFactory;
+    /**
+     * @var \Shopware\Core\Checkout\Payment\PaymentService
+     */
+    private $decorated;
+    /**
+     * @var \Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator
+     */
+    private $pluginConfigurationValidator;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine
+     */
+    private $orderStateMachine;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Routing\Router
+     */
+    private $router;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine
+     */
+    private $orderCheckProcessStateMachine;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates
+     */
+    private $paymentMethodPredicates;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler
+     */
+    private $errorHandler;
+    /**
+     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface
+     */
+    private $invoiceClient;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory
+     */
+    private $invoiceOrderContextFactory;
 
     public function __construct(
         PaymentService $decorated,
@@ -104,6 +131,9 @@ class PaymentServiceDecorator extends PaymentService
 
         $this->invoiceClient->confirmOrder($invoiceOrderContext);
         $this->orderCheckProcessStateMachine->setConfirmed($orderId, $context);
+
+        $this->orderStateMachine->setConfiguredAfterCheckoutOrderStatus($orderId, $context);
+        $this->orderStateMachine->setConfiguredAfterCheckoutPaymentStatus($orderId, $context);
 
         return $this->completeOrder($orderId, $dataBag, $context, $finishUrl, $errorUrl);
     }

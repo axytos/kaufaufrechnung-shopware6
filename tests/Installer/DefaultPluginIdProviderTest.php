@@ -17,15 +17,18 @@ class DefaultPluginIdProviderTest extends TestCase
     const PLUGIN_ID = 'PLUGIN_ID';
 
     /** @var ContainerInterface&MockObject */
-    private ContainerInterface $container;
+    private $container;
 
-    private DefaultPluginIdProvider $sut;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Installer\DefaultPluginIdProvider
+     */
+    private $sut;
 
     /** @var Context&MockObject */
-    private Context $context;
+    private $context;
 
     /** @var PluginIdProvider&MockObject */
-    private PluginIdProvider $pluginIdProvider;
+    private $pluginIdProvider;
 
     public function setUp(): void
     {

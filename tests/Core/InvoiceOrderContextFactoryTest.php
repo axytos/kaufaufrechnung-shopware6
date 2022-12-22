@@ -7,20 +7,25 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests\Core;
 use Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface;
 use Axytos\ECommerce\DataMapping\DtoToDtoMapper;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory;
-use Axytos\Shopware\DataAbstractionLayer\OrderEntityRepository;
-use Axytos\Shopware\DataMapping\BasketDtoFactory;
-use Axytos\Shopware\DataMapping\CreateInvoiceBasketDtoFactory;
-use Axytos\Shopware\DataMapping\CustomerDataDtoFactory;
-use Axytos\Shopware\DataMapping\DeliveryAddressDtoFactory;
-use Axytos\Shopware\DataMapping\InvoiceAddressDtoFactory;
-use Axytos\Shopware\DataMapping\RefundBasketDtoFactory;
-use Axytos\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory;
+use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\BasketDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\CustomerDataDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\DeliveryAddressDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\InvoiceAddressDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory;
+use Axytos\KaufAufRechnung\Shopware\ValueCalculation\LogisticianCalculator;
+use Axytos\KaufAufRechnung\Shopware\ValueCalculation\TrackingIdCalculator;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Framework\Context;
 
 class InvoiceOrderContextFactoryTest extends TestCase
 {
-    private InvoiceOrderContextFactory $sut;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory
+     */
+    private $sut;
 
     public function setUp(): void
     {
@@ -33,7 +38,9 @@ class InvoiceOrderContextFactoryTest extends TestCase
             $this->createMock(CreateInvoiceBasketDtoFactory::class),
             $this->createMock(RefundBasketDtoFactory::class),
             $this->createMock(DtoToDtoMapper::class),
-            $this->createMock(ReturnPositionModelDtoCollectionFactory::class)
+            $this->createMock(ReturnPositionModelDtoCollectionFactory::class),
+            $this->createMock(TrackingIdCalculator::class),
+            $this->createMock(LogisticianCalculator::class)
         );
     }
 

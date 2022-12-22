@@ -7,10 +7,10 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests;
 use Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface;
 use Axytos\ECommerce\Clients\Checkout\CreditCheckAgreementLoadFailedException;
 use Axytos\KaufAufRechnung\Shopware\Core\AxytosInvoicePaymentHandler;
-use Axytos\Shopware\PaymentMethod\PaymentMethodCollectionFilter;
+use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodCollectionFilter;
 use Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage\CheckoutConfirmPageExtension;
 use Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage\CheckoutConfirmPageLoadedEventHandler;
-use Axytos\Shopware\PaymentMethod\PaymentMethodPredicates;
+use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -26,34 +26,37 @@ class CheckoutConfirmPageLoadedEventHandlerTest extends TestCase
     private const PAYMENT_METHOD_ID = 'paymentMethodId';
 
     /** @var CheckoutClientInterface&MockObject */
-    private CheckoutClientInterface $checkoutClient;
+    private $checkoutClient;
 
     /** @var PaymentMethodCollectionFilter&MockObject */
-    private PaymentMethodCollectionFilter $paymentMethodCollectionFilter;
+    private $paymentMethodCollectionFilter;
 
     /** @var PaymentMethodPredicates&MockObject */
-    private PaymentMethodPredicates $paymentMethodPredicates;
+    private $paymentMethodPredicates;
 
-    private CheckoutConfirmPageLoadedEventHandler $sut;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage\CheckoutConfirmPageLoadedEventHandler
+     */
+    private $sut;
 
 
     /** @var CheckoutConfirmPage&MockObject */
-    private CheckoutConfirmPage $page;
+    private $page;
 
     /** @var SalesChannelContext&MockObject */
-    private SalesChannelContext $salesChannelContext;
+    private $salesChannelContext;
 
     /** @var PaymentMethodEntity&MockObject */
-    private PaymentMethodEntity $paymentMethod;
+    private $paymentMethod;
 
     /** @var PaymentMethodCollection&MockObject */
-    private PaymentMethodCollection $paymentMethods;
+    private $paymentMethods;
 
     /** @var PaymentMethodCollection&MockObject */
-    private PaymentMethodCollection $fallbackPaymentMethods;
+    private $fallbackPaymentMethods;
 
     /** @var CheckoutConfirmPageLoadedEvent&MockObject */
-    private CheckoutConfirmPageLoadedEvent $event;
+    private $event;
 
     public function setUp(): void
     {

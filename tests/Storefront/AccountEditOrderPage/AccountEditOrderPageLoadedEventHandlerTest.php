@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\Tests;
 
 use Axytos\KaufAufRechnung\Shopware\Core\AxytosInvoicePaymentHandler;
-use Axytos\Shopware\PaymentMethod\PaymentMethodCollectionFilter;
-use Axytos\Shopware\Order\OrderCheckProcessStateMachine;
+use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodCollectionFilter;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
 use Axytos\ECommerce\Order\OrderCheckProcessStates;
 use Axytos\KaufAufRechnung\Shopware\Storefront\AccountEditOrderPage\AccountEditOrderPageLoadedEventHandler;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -21,34 +21,49 @@ use Shopware\Storefront\Page\Account\Order\AccountEditOrderPageLoadedEvent;
 class AccountEditOrderPageLoadedEventHandlerTest extends TestCase
 {
     /** @var OrderCheckProcessStateMachine&MockObject $orderCheckProcessStateMachine */
-    private OrderCheckProcessStateMachine $orderCheckProcessStateMachine;
+    private $orderCheckProcessStateMachine;
 
     /** @var PaymentMethodCollectionFilter&MockObject $paymentMethodCollectionFilter */
-    private PaymentMethodCollectionFilter $paymentMethodCollectionFilter;
+    private $paymentMethodCollectionFilter;
 
-    private AccountEditOrderPageLoadedEventHandler $sut;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Storefront\AccountEditOrderPage\AccountEditOrderPageLoadedEventHandler
+     */
+    private $sut;
 
     private const ORDER_ID = 'orderId';
 
     /** @var OrderEntity&MockObject $order */
-    private OrderEntity $order;
+    private $order;
 
     /** @var SalesChannelContext&MockObject $salesChannelContext */
-    private SalesChannelContext $salesChannelContext;
+    private $salesChannelContext;
 
     /** @var Context&MockObject $context */
-    private Context $context;
+    private $context;
 
     /** @var AccountEditOrderPage&MockObject $page */
-    private AccountEditOrderPage $page;
+    private $page;
 
     /** @var AccountEditOrderPageLoadedEvent&MockObject $event */
-    private AccountEditOrderPageLoadedEvent $event;
+    private $event;
 
-    private PaymentMethodCollection $paymentMethods;
-    private PaymentMethodCollection $allowedFallbackPaymentMethods;
-    private PaymentMethodCollection $notUnsafePaymentMethods;
-    private PaymentMethodCollection $noAxytosInvoicePaymentMethods;
+    /**
+     * @var \Shopware\Core\Checkout\Payment\PaymentMethodCollection
+     */
+    private $paymentMethods;
+    /**
+     * @var \Shopware\Core\Checkout\Payment\PaymentMethodCollection
+     */
+    private $allowedFallbackPaymentMethods;
+    /**
+     * @var \Shopware\Core\Checkout\Payment\PaymentMethodCollection
+     */
+    private $notUnsafePaymentMethods;
+    /**
+     * @var \Shopware\Core\Checkout\Payment\PaymentMethodCollection
+     */
+    private $noAxytosInvoicePaymentMethods;
 
     public function setUp(): void
     {

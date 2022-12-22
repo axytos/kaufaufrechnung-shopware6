@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Installer;
 
-use Axytos\Shopware\DataAbstractionLayer\PaymentMethodEntityRepository;
+use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\PaymentMethodEntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

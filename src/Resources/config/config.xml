@@ -22,6 +22,69 @@
             <label>Client Secret</label>
         </input-field>
 
+        <input-field type="single-select">
+            <name>afterCheckoutOrderStatus</name>
+            <label>Order State after Checkout</label>
+            <label lang="de-DE">Bestellstatus nach Checkout</label>
+            <defaultValue>ORDER_STATE_OPEN</defaultValue>
+            <options>
+                <option>
+                    <id>ORDER_STATE_OPEN</id>
+                    <name lang="de-DE">Offen</name>
+                    <name>Open</name>
+                </option>
+                <option>
+                    <id>ORDER_STATE_CANCELLED</id>
+                    <name lang="de-DE">Abgebrochen</name>
+                    <name>Cancelled</name>
+                </option>
+                <option>
+                    <id>ORDER_STATE_IN_PROGRESS</id>
+                    <name lang="de-DE">In Bearbeitung</name>
+                    <name>In Progress</name>
+                </option>
+            </options>
+        </input-field>
+
+        <input-field type="single-select">
+            <name>afterCheckoutPaymentStatus</name>
+            <label>Payment State after Checkout</label>
+            <label lang="de-DE">Zahlungsstatus nach Checkout</label>
+            <defaultValue>PAYMENT_STATE_OPEN</defaultValue>
+            <options>
+                <option>
+                    <id>PAYMENT_STATE_OPEN</id>
+                    <name lang="de-DE">Offen</name>
+                    <name>Open</name>
+                </option>
+                <option>
+                    <id>PAYMENT_STATE_CANCELLED</id>
+                    <name lang="de-DE">Abgebrochen</name>
+                    <name>Cancelled</name>
+                </option>
+                <option>
+                    <id>PAYMENT_STATE_REMINDED</id>
+                    <name lang="de-DE">Erinnert</name>
+                    <name>Reminded</name>
+                </option>
+                <option>
+                    <id>PAYMENT_STATE_PAID</id>
+                    <name lang="de-DE">Bezahlt</name>
+                    <name>Paid</name>
+                </option>
+                <option>
+                    <id>PAYMENT_STATE_PAID_PARTIALLY</id>
+                    <name lang="de-DE">Teilweise bezahlt</name>
+                    <name>Paid (partially)</name>
+                </option>
+                <option>
+                    <id>PAYMENT_STATE_AUTHORIZED</id>
+                    <name lang="de-DE">Authorisiert</name>
+                    <name>Authorized</name>
+                </option>
+            </options>
+        </input-field>
+
         <component name="credentials-validation-button">
             <name>CredentialsValidationButton</name>
         </component>

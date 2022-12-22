@@ -7,8 +7,8 @@ namespace Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage;
 use Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface;
 use Axytos\ECommerce\Clients\Checkout\CreditCheckAgreementLoadFailedException;
 use Axytos\KaufAufRechnung\Shopware\Core\AxytosInvoicePaymentHandler;
-use Axytos\Shopware\PaymentMethod\PaymentMethodCollectionFilter;
-use Axytos\Shopware\PaymentMethod\PaymentMethodPredicates;
+use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodCollectionFilter;
+use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates;
 use Shopware\Storefront\Page\Checkout\Confirm\CheckoutConfirmPage;
 use Shopware\Storefront\Page\Checkout\Confirm\CheckoutConfirmPageLoadedEvent;
 
@@ -16,9 +16,18 @@ class CheckoutConfirmPageLoadedEventHandler
 {
     private const EXTENSION_NAME = 'axytos_kauf_auf_rechnung_checkout_confirm_page';
 
-    private CheckoutClientInterface $checkoutClient;
-    private PaymentMethodCollectionFilter $paymentMethodCollectionFilter;
-    private PaymentMethodPredicates $paymentMethodPredicates;
+    /**
+     * @var \Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface
+     */
+    private $checkoutClient;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodCollectionFilter
+     */
+    private $paymentMethodCollectionFilter;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates
+     */
+    private $paymentMethodPredicates;
 
     public function __construct(
         CheckoutClientInterface $checkoutClient,
@@ -71,12 +80,12 @@ class CheckoutConfirmPageLoadedEventHandler
         $salesChannelContext = $event->getSalesChannelContext();
         $selectedPaymentMethod = $salesChannelContext->getPaymentMethod();
 
-        return $this->paymentMethodPredicates->usesHandler($selectedPaymentMethod, AxytosInvoicePaymentHandler::class);
+        return boolval($this->paymentMethodPredicates->usesHandler($selectedPaymentMethod, AxytosInvoicePaymentHandler::class));
     }
 
     private function getCreditCheckAgreementInfo(CheckoutConfirmPageLoadedEvent $event): string
     {
-        return $this->checkoutClient->getCreditCheckAgreementInfo();
+        return strval($this->checkoutClient->getCreditCheckAgreementInfo());
     }
 
     private function extendPage(

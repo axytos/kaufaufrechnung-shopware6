@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Storefront\Controller;
 
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Storefront\Controller\ErrorController;
@@ -21,10 +21,22 @@ class CheckoutFailedController extends StorefrontController
 {
     const CHECKOUT_FAILED_VIEW = '@AxytosKaufAufRechnung/storefront/page/checkout/failed/index.html.twig';
 
-    private GenericPageLoader $genericPageLoader;
-    private StorefrontViewRenderer $storefrontViewRenderer;
-    private ErrorController $errorController;
-    private ErrorHandler $errorHandler;
+    /**
+     * @var \Shopware\Storefront\Page\GenericPageLoader
+     */
+    private $genericPageLoader;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Storefront\Controller\StorefrontViewRenderer
+     */
+    private $storefrontViewRenderer;
+    /**
+     * @var \Shopware\Storefront\Controller\ErrorController
+     */
+    private $errorController;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler
+     */
+    private $errorHandler;
 
     public function __construct(
         GenericPageLoader $genericPageLoader,

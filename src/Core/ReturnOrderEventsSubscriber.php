@@ -7,8 +7,8 @@ namespace Axytos\KaufAufRechnung\Shopware\Core;
 use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
-use Axytos\Shopware\Order\OrderCheckProcessStateMachine;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
 use Axytos\ECommerce\Order\OrderCheckProcessStates;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
@@ -16,11 +16,26 @@ use Throwable;
 
 class ReturnOrderEventsSubscriber implements EventSubscriberInterface
 {
-    private ErrorHandler $errorHandler;
-    private InvoiceClientInterface $invoiceClient;
-    private InvoiceOrderContextFactory $invoiceOrderContextFactory;
-    private OrderCheckProcessStateMachine $orderCheckProcessStateMachine;
-    private PluginConfigurationValidator $pluginConfigurationValidator;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler
+     */
+    private $errorHandler;
+    /**
+     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface
+     */
+    private $invoiceClient;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory
+     */
+    private $invoiceOrderContextFactory;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine
+     */
+    private $orderCheckProcessStateMachine;
+    /**
+     * @var \Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator
+     */
+    private $pluginConfigurationValidator;
 
     public function __construct(
         ErrorHandler $errorHandler,
@@ -55,7 +70,7 @@ class ReturnOrderEventsSubscriber implements EventSubscriberInterface
             }
 
             $invoiceOrderContext = $this->getInvoiceOrderContext($event);
-            $this->invoiceClient->return($invoiceOrderContext);
+            $this->invoiceClient->returnOrder($invoiceOrderContext);
         } catch (Throwable $throwable) {
             $this->errorHandler->handle($throwable);
         }

@@ -6,8 +6,8 @@ namespace Axytos\KaufAufRechnung\Shopware\Core;
 
 use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
-use Axytos\Shopware\Order\OrderCheckProcessStateMachine;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
 use Axytos\ECommerce\Order\OrderCheckProcessStates;
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -15,11 +15,26 @@ use Throwable;
 
 class CancelOrderEventSubscriber implements EventSubscriberInterface
 {
-    private InvoiceClientInterface $invoiceClient;
-    private ErrorHandler $errorHandler;
-    private PluginConfigurationValidator $pluginConfigurationValidator;
-    private OrderCheckProcessStateMachine $orderCheckProcessStateMachine;
-    private InvoiceOrderContextFactory $invoiceOrderContextFactory;
+    /**
+     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface
+     */
+    private $invoiceClient;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler
+     */
+    private $errorHandler;
+    /**
+     * @var \Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator
+     */
+    private $pluginConfigurationValidator;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine
+     */
+    private $orderCheckProcessStateMachine;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory
+     */
+    private $invoiceOrderContextFactory;
 
     public function __construct(
         InvoiceClientInterface $invoiceClient,

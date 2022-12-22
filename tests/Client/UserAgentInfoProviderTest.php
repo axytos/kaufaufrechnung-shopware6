@@ -13,8 +13,11 @@ use PHPUnit\Framework\TestCase;
 class UserAgentInfoProviderTest extends TestCase
 {
     /** @var ComposerPackageInfoProvider&MockObject $composerPackageInfoProvider */
-    private ComposerPackageInfoProvider $composerPackageInfoProvider;
-    private UserAgentInfoProvider $sut;
+    private $composerPackageInfoProvider;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Client\UserAgentInfoProvider
+     */
+    private $sut;
 
     public function setUp(): void
     {

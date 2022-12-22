@@ -7,7 +7,7 @@
         <!-- Installer Integration-->
         <service id="Axytos\KaufAufRechnung\Shopware\AxytosKaufAufRechnung">
             <call method="setErrorHandler">
-                <argument type="service" id="Axytos\Shopware\ErrorReporting\ErrorHandler"/>
+                <argument type="service" id="Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler"/>
             </call>
         </service>
 
@@ -18,11 +18,11 @@
             <argument type="string">axytos.kauf_auf_rechnung.plugin</argument>
         </service>
 
-        <service id="Axytos\Shopware\Logging\LoggerAdapter">
+        <service id="Axytos\KaufAufRechnung\Shopware\Logging\LoggerAdapter">
             <argument type="service" id="axytos.kauf_auf_rechnung.plugin.logger"/>
         </service>
 
-        <service id="Axytos\ECommerce\Logging\LoggerAdapterInterface" alias="Axytos\Shopware\Logging\LoggerAdapter"/>
+        <service id="Axytos\ECommerce\Logging\LoggerAdapterInterface" alias="Axytos\KaufAufRechnung\Shopware\Logging\LoggerAdapter"/>
 
         <!-- Configuration Integration ================================================================================================== -->
 
@@ -61,49 +61,51 @@
 
         <!-- Common Integration ========================================================================================================== -->
         
-        <service autowire="true" id="Axytos\Shopware\PaymentMethod\PaymentMethodPredicates"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates"/>
 
-        <service autowire="true" id="Axytos\Shopware\PaymentMethod\PaymentMethodCollectionFilter"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodCollectionFilter"/>
 
-        <service autowire="true" id="Axytos\Shopware\Routing\Router"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Routing\Router"/>
 
-        <service autowire="true" id="Axytos\Shopware\ErrorReporting\ErrorHandler"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler"/>
 
         <!-- Core Integration ========================================================================================================== -->
 
-        <service autowire="true" id="Axytos\Shopware\Order\OrderStateMachine"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine"/>
 
-        <service autowire="true" id="Axytos\Shopware\Order\OrderCheckProcessStateMachine"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine"/>
 
-        <service autowire="true" id="Axytos\Shopware\ValueCalculation\PositionNetPriceCalculator"/>
-        <service autowire="true" id="Axytos\Shopware\ValueCalculation\PositionTaxPercentCalculator"/>
-        <service autowire="true" id="Axytos\Shopware\ValueCalculation\PositionNetPricePerUnitCalculator"/>
-        <service autowire="true" id="Axytos\Shopware\ValueCalculation\PositionGrossPricePerUnitCalculator"/>
-        <service autowire="true" id="Axytos\Shopware\ValueCalculation\PromotionIdentifierCalculator"/>
-        <service autowire="true" id="Axytos\Shopware\ValueCalculation\PositionProductIdCalculator"/>
-        <service autowire="true" id="Axytos\Shopware\ValueCalculation\PositionProductNameCalculator"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\ValueCalculation\LogisticianCalculator"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionNetPriceCalculator"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionTaxPercentCalculator"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionNetPricePerUnitCalculator"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionGrossPricePerUnitCalculator"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\ValueCalculation\PromotionIdentifierCalculator"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionProductIdCalculator"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionProductNameCalculator"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\ValueCalculation\TrackingIdCalculator"/>
         
-        <service autowire="true" id="Axytos\Shopware\DataMapping\BasketDtoFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\BasketPositionDtoFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\BasketPositionDtoCollectionFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\CustomerDataDtoFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\DeliveryAddressDtoFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\InvoiceAddressDtoFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\PaymentControlBasketDtoFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\PaymentControlBasketPositionDtoFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\PaymentControlBasketPositionDtoCollectionFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\CreateInvoiceBasketDtoFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\CreateInvoiceBasketPositionDtoFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\CreateInvoiceBasketPositionDtoCollectionFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\CreateInvoiceTaxGroupDtoFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\CreateInvoiceTaxGroupDtoCollectionFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\RefundBasketDtoFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\RefundBasketPositionDtoCollectionFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\RefundBasketPositionDtoFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\RefundBasketTaxGroupDtoCollectionFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\RefundBasketTaxGroupDtoFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\ReturnPositionModelDtoFactory"/>
-        <service autowire="true" id="Axytos\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\BasketDtoFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\BasketPositionDtoFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\BasketPositionDtoCollectionFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\CustomerDataDtoFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\DeliveryAddressDtoFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\InvoiceAddressDtoFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\PaymentControlBasketDtoFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\PaymentControlBasketPositionDtoFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\PaymentControlBasketPositionDtoCollectionFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketDtoFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketPositionDtoFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketPositionDtoCollectionFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceTaxGroupDtoFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceTaxGroupDtoCollectionFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketDtoFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketPositionDtoCollectionFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketPositionDtoFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketTaxGroupDtoCollectionFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketTaxGroupDtoFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoFactory"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory"/>
 
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Core\PaymentServiceDecorator" 
                  decorates="Shopware\Core\Checkout\Payment\PaymentService">
@@ -118,11 +120,11 @@
 
         <!-- DataAbstractionLayer ========================================================================================================== -->
 
-        <service autowire="true" id="Axytos\Shopware\DataAbstractionLayer\OrderEntityRepository"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository"/>
 
-        <service autowire="true" id="Axytos\Shopware\DataAbstractionLayer\DocumentEntityRepository"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\DocumentEntityRepository"/>
 
-        <service autowire="true" id="Axytos\Shopware\DataAbstractionLayer\PaymentMethodEntityRepository"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\PaymentMethodEntityRepository"/>
 
         <!-- Storefront =============================================================================================================== -->
 

@@ -13,8 +13,11 @@ use Shopware\Core\System\SystemConfig\SystemConfigService;
 class PluginConfigurationTest extends TestCase
 {
     /** @var SystemConfigService&MockObject $systemConfigService */
-    private SystemConfigService $systemConfigService;
-    private PluginConfiguration $sut;
+    private $systemConfigService;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration
+     */
+    private $sut;
 
     public function setUp(): void
     {

@@ -8,7 +8,10 @@ use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class PluginConfiguration
 {
-    private SystemConfigService $systemConfigService;
+    /**
+     * @var \Shopware\Core\System\SystemConfig\SystemConfigService
+     */
+    private $systemConfigService;
 
     public function __construct(SystemConfigService $systemConfigService)
     {
@@ -28,5 +31,19 @@ class PluginConfiguration
     public function getClientSecret(): ?string
     {
         return $this->systemConfigService->getString(PluginConfigurationValueNames::CLIENT_SECRET);
+    }
+
+    public function getAfterCheckoutOrderStatus(): AfterCheckoutOrderStatus
+    {
+        $value = $this->systemConfigService->getString(PluginConfigurationValueNames::AFTER_CHECKOUT_ORDER_STATUS);
+
+        return new AfterCheckoutOrderStatus($value);
+    }
+
+    public function getAfterCheckoutPaymentStatus(): AfterCheckoutPaymentStatus
+    {
+        $value = $this->systemConfigService->getString(PluginConfigurationValueNames::AFTER_CHECKOUT_PAYMENT_STATUS);
+
+        return new AfterCheckoutPaymentStatus($value);
     }
 }

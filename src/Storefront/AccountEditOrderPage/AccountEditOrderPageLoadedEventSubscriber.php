@@ -5,15 +5,24 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\Storefront\AccountEditOrderPage;
 
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Shopware\Storefront\Page\Account\Order\AccountEditOrderPageLoadedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class AccountEditOrderPageLoadedEventSubscriber implements EventSubscriberInterface
 {
-    private PluginConfigurationValidator $pluginConfigurationValidator;
-    private AccountEditOrderPageLoadedEventHandler $accountEditOrderPageLoadedEventHandler;
-    private ErrorHandler $errorHandler;
+    /**
+     * @var \Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator
+     */
+    private $pluginConfigurationValidator;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Storefront\AccountEditOrderPage\AccountEditOrderPageLoadedEventHandler
+     */
+    private $accountEditOrderPageLoadedEventHandler;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler
+     */
+    private $errorHandler;
 
     public function __construct(
         PluginConfigurationValidator $pluginConfigurationValidator,

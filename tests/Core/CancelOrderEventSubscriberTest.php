@@ -9,9 +9,9 @@ use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory;
 use Axytos\KaufAufRechnung\Shopware\Core\CancelOrderEventSubscriber;
-use Axytos\Shopware\Order\OrderCheckProcessStateMachine;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
 use Axytos\ECommerce\Order\OrderCheckProcessStates;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvocationOrder;
@@ -23,30 +23,33 @@ class CancelOrderEventSubscriberTest extends TestCase
     const ORDER_ID = 'orderId';
 
     /** @var InvoiceClientInterface&MockObject*/
-    private InvoiceClientInterface $invoiceClient;
+    private $invoiceClient;
 
     /** @var ErrorHandler&MockObject*/
-    private ErrorHandler $errorHandler;
+    private $errorHandler;
 
     /** @var PluginConfigurationValidator&MockObject*/
-    private PluginConfigurationValidator $pluginConfigurationValidator;
+    private $pluginConfigurationValidator;
 
     /** @var OrderCheckProcessStateMachine&MockObject*/
-    private OrderCheckProcessStateMachine $orderCheckProcessStateMachine;
+    private $orderCheckProcessStateMachine;
 
     /** @var InvoiceOrderContextFactory&MockObject*/
-    private InvoiceOrderContextFactory $invoiceOrderContextFactory;
+    private $invoiceOrderContextFactory;
 
-    private CancelOrderEventSubscriber $sut;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Core\CancelOrderEventSubscriber
+     */
+    private $sut;
 
     /** @var OrderStateMachineStateChangeEvent&MockObject*/
-    private OrderStateMachineStateChangeEvent $event;
+    private $event;
 
     /** @var Context&MockObject*/
-    private Context $context;
+    private $context;
 
     /** @var InvoiceOrderContext&MockObject*/
-    private InvoiceOrderContext $invoiceOrderContext;
+    private $invoiceOrderContext;
 
     public function setUp(): void
     {

@@ -10,8 +10,8 @@ use Axytos\ECommerce\Clients\Invoice\PaymentStatus;
 use Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
 use Axytos\KaufAufRechnung\Shopware\Storefront\Controller\PaymentController;
-use Axytos\Shopware\Order\OrderStateMachine;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Error;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,22 +23,25 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PaymentControllerTest extends TestCase
 {
-    private PaymentController $paymentController;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Storefront\Controller\PaymentController
+     */
+    private $paymentController;
 
     /** @var ErrorHandler&MockObject */
-    private ErrorHandler $errorHandler;
+    private $errorHandler;
 
     /** @var InvoiceClientInterface&MockObject */
-    private InvoiceClientInterface $invoiceClient;
+    private $invoiceClient;
 
     /** @var PluginConfigurationValidator&MockObject */
-    private PluginConfigurationValidator $pluginConfigurationValidator;
+    private $pluginConfigurationValidator;
 
     /** @var PluginConfiguration&MockObject */
-    private PluginConfiguration $pluginConfiguration;
+    private $pluginConfiguration;
 
     /** @var OrderStateMachine&MockObject */
-    private OrderStateMachine $orderStateMachine;
+    private $orderStateMachine;
 
     public function setUp(): void
     {

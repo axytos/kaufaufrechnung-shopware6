@@ -13,8 +13,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 class ApiKeyProviderTest extends TestCase
 {
     /** @var PluginConfiguration&MockObject $pluginConfiguration */
-    private PluginConfiguration $pluginConfiguration;
-    private ApiKeyProvider $sut;
+    private $pluginConfiguration;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Client\ApiKeyProvider
+     */
+    private $sut;
 
     public function setUp(): void
     {

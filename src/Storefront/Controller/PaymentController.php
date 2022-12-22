@@ -12,8 +12,8 @@ use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Invoice\PaymentStatus;
 use Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
-use Axytos\Shopware\Order\OrderStateMachine;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -22,11 +22,26 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class PaymentController extends StorefrontController
 {
-    private ErrorHandler $errorHandler;
-    private InvoiceClientInterface $invoiceClient;
-    private PluginConfigurationValidator $pluginConfigurationValidator;
-    private PluginConfiguration $pluginConfiguration;
-    private OrderStateMachine $orderStateMachine;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler
+     */
+    private $errorHandler;
+    /**
+     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface
+     */
+    private $invoiceClient;
+    /**
+     * @var \Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator
+     */
+    private $pluginConfigurationValidator;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration
+     */
+    private $pluginConfiguration;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine
+     */
+    private $orderStateMachine;
 
     public function __construct(
         ErrorHandler $errorHandler,

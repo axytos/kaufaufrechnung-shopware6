@@ -5,15 +5,21 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\Storefront\AccountEditOrderPage;
 
 use Axytos\KaufAufRechnung\Shopware\Core\AxytosInvoicePaymentHandler;
-use Axytos\Shopware\PaymentMethod\PaymentMethodCollectionFilter;
-use Axytos\Shopware\Order\OrderCheckProcessStateMachine;
+use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodCollectionFilter;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
 use Axytos\ECommerce\Order\OrderCheckProcessStates;
 use Shopware\Storefront\Page\Account\Order\AccountEditOrderPageLoadedEvent;
 
 class AccountEditOrderPageLoadedEventHandler
 {
-    private OrderCheckProcessStateMachine $orderCheckProcessStateMachine;
-    private PaymentMethodCollectionFilter $paymentMethodCollectionFilter;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine
+     */
+    private $orderCheckProcessStateMachine;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodCollectionFilter
+     */
+    private $paymentMethodCollectionFilter;
 
     public function __construct(
         OrderCheckProcessStateMachine $orderCheckProcessStateMachine,

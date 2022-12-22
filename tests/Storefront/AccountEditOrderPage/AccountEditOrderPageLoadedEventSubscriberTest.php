@@ -7,7 +7,7 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
 use Axytos\KaufAufRechnung\Shopware\Storefront\AccountEditOrderPage\AccountEditOrderPageLoadedEventHandler;
 use Axytos\KaufAufRechnung\Shopware\Storefront\AccountEditOrderPage\AccountEditOrderPageLoadedEventSubscriber;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -16,15 +16,18 @@ use Shopware\Storefront\Page\Account\Order\AccountEditOrderPageLoadedEvent;
 class AccountEditOrderPageLoadedEventSubscriberTest extends TestCase
 {
     /** @var PluginConfigurationValidator&MockObject */
-    private PluginConfigurationValidator $pluginConfigurationValidator;
+    private $pluginConfigurationValidator;
 
     /** @var AccountEditOrderPageLoadedEventHandler&MockObject */
-    private AccountEditOrderPageLoadedEventHandler $accountEditOrderPageLoadedEventHandler;
+    private $accountEditOrderPageLoadedEventHandler;
 
     /** @var ErrorHandler&MockObject */
-    private ErrorHandler $errorHandler;
+    private $errorHandler;
 
-    private AccountEditOrderPageLoadedEventSubscriber $sut;
+    /**
+     * @var \Axytos\KaufAufRechnung\Shopware\Storefront\AccountEditOrderPage\AccountEditOrderPageLoadedEventSubscriber
+     */
+    private $sut;
 
     public function setUp(): void
     {

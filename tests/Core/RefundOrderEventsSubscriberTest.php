@@ -8,11 +8,11 @@ use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory;
-use Axytos\Shopware\Order\OrderCheckProcessStateMachine;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
 use Axytos\ECommerce\Order\OrderCheckProcessStates;
 use Axytos\KaufAufRechnung\Shopware\Core\RefundOrderEventsSubscriber;
-use Axytos\Shopware\DataAbstractionLayer\DocumentEntityRepository;
-use Axytos\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\DocumentEntityRepository;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Document\Aggregate\DocumentType\DocumentTypeEntity;
@@ -27,37 +27,37 @@ class RefundOrderEventsSubscriberTest extends TestCase
     const INVOICE_NUMBER = 'invoiceNumber';
 
     /** @var ErrorHandler&MockObject */
-    private ErrorHandler $errorHandler;
+    private $errorHandler;
 
     /** @var InvoiceClientInterface&MockObject */
-    private InvoiceClientInterface $invoiceClient;
+    private $invoiceClient;
 
     /** @var InvoiceOrderContextFactory&MockObject */
-    private InvoiceOrderContextFactory $invoiceOrderContextFactory;
+    private $invoiceOrderContextFactory;
 
     /** @var OrderCheckProcessStateMachine&MockObject */
-    private OrderCheckProcessStateMachine $orderCheckProcessStateMachine;
+    private $orderCheckProcessStateMachine;
 
     /** @var DocumentEntityRepository&MockObject */
-    private DocumentEntityRepository $documentEntityRepository;
+    private $documentEntityRepository;
 
     /** @var PluginConfigurationValidator&MockObject */
-    private PluginConfigurationValidator $pluginConfigurationValidator;
+    private $pluginConfigurationValidator;
 
     /** @var RefundOrderEventsSubscriber */
-    private RefundOrderEventsSubscriber $sut;
+    private $sut;
 
     /** @var EntityWrittenEvent&MockObject */
-    private EntityWrittenEvent $event;
+    private $event;
 
     /** @var InvoiceOrderContext&MockObject */
-    private InvoiceOrderContext $invoiceOrderContext;
+    private $invoiceOrderContext;
 
     /** @var EntityWriteResult&MockObject */
-    private EntityWriteResult $writeResult;
+    private $writeResult;
 
     /** @var Context&MockObject */
-    private Context $context;
+    private $context;
 
     public function setUp(): void
     {
