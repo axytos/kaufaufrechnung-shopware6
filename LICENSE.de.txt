@@ -1,0 +1,32 @@
+Kostenlose Lizenz
+=================
+
+
+Präambel
+--------
+
+Die nachfolgende Vereinbarung regelt die Rechte und Pflichten zwischen Ihnen als "Nutzer" und der "axytos" für die von axytos kostenlos zur Verfügung gestellten Softwarelösungen (Plugins). Leistungen, die axytos im Rahmen eines Dienstleistungsvertrages dem Nutzer oder anderen Partnern anbietet, sind von dieser Vereinbarung ausdrücklich nicht betroffen. Mit der Installation und Nutzung der Software bestätigen Sie automatisch, dass Sie diese Freeware-Lizenzvereinbarung gelesen haben und mit ihr einverstanden sind. Wenn Sie mit diesen Bedingungen nicht einverstanden sind, installieren und nutzen Sie die Software bitte nicht.
+
+Lizenz
+------
+
+axytos räumt Ihnen ein nicht ausschließliches, kostenloses Nutzungsrecht an den von axytos kostenlos zur Verfügung gestellten Plugins ein.
+
+Die Dauer des Nutzungsrechts ist auf die Dauer des Dienstleistungsvertrages zwischen den beteiligten Parteien bzw. auf die Testphase im Vorfeld eines Vertragsschlusses beschränkt.
+
+Gemäß der Lizenzvereinbarung dürfen Sie die Software auf einem oder mehreren Computern installieren und nutzen. Die Lizenz für die Software ist kostenlos. Der Nutzer verpflichtet sich, das Plugin ausschließlich für die Dienstleistungen von axytos bzw. zu deren Test zu nutzen. Der Partner hat keinen Anspruch auf technische Unterstützung jeglicher Art durch axytos. axytos ist daher nicht verpflichtet, die Wartung, Überarbeitung oder Weiterentwicklung der Software sicherzustellen.
+
+Urheberrecht
+------------
+
+Alle Titel, Eigentumsrechte und geistigen Eigentumsrechte an der Software, sowie alle Kopien der Software und der dazugehörigen Dokumentation sind Eigentum von axytos (www.axytos.com). Alle Rechte sind vorbehalten. axytos behält sich rechtliche Schritte im Falle eines Verstoßes gegen diese Vereinbarung vor.
+
+Gewährleistung und Haftung
+--------------------------
+
+Die Nutzung der Software ist auf den vertraglich vereinbarten Umfang begrenzt. Für das korrekte Funktionieren der Plugins und / oder von Teilen der Plugins übernimmt axytos keine Garantie. Die Haftung für Sach- und Rechtsmängel ist ausgeschlossen, es sei denn der Mangel wurde arglistig verschwiegen. Ebenso übernimmt axytos keine Haftung für Schäden und / oder Folgeschäden, die direkt oder indirekt mit der Nutzung der kostenlosen axytos Plugins in Verbindung gebracht werden können, es sei denn, der Schaden ist vorsätzlich oder durch grobe Fahrlässigkeit von axytos entstanden. Nicht Bestandteil dieser Haftungsausschlussvereinbarung sind Schäden aus der Verletzung des Lebens oder der Gesundheit.
+
+Rechtsansprüche und Salvatorische Klausel
+-----------------------------------------
+
+Es gilt das Recht der Bundesrepublik Deutschland. Gerichtsstand oder Erfüllungsort ist Langen (Hessen). Sollte eine gegenwärtige oder zukünftige Bestimmung des Vertrages aus anderen Gründen als den §§ 305-310 des Bürgerlichen Gesetzbuches (BGB) ganz oder teilweise unwirksam sein, so wird dadurch die Gültigkeit der übrigen Bestimmungen des Vertrages nicht berührt. Die Parteien werden die unwirksame, ungültige oder undurchführbare Bestimmung durch eine wirksame ersetzen, die in ihrem rechtlichen und wirtschaftlichen Gehalt der unwirksamen oder undurchführbaren Bestimmung entspricht und auch dem Gesamtzweck der Vereinbarung gerecht wird. Gleiches gilt, wenn sich nach Abschluss des Vertrages Lücken im Vertrag ergeben. Die Bestimmung des § 139 BGB (salvatorische Klausel) wird vollständig ausgeschlossen.

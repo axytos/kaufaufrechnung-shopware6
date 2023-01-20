@@ -1,0 +1,32 @@
+Free license
+============
+
+
+Preamble
+--------
+
+The following agreement governs the rights and obligations between you as the "User" and "axytos" for the software solutions (plugins) provided free of charge by axytos. Services provided by axytos to the User or other partners under a service contract are expressly not covered by this Agreement. By installing and using the Software, you automatically acknowledge that you have read and agree to this Freeware License Agreement. If you do not agree with these terms, please do not install and use the software.
+
+License
+-------
+
+axytos grants you a non-exclusive, free of charge right to use the plugins provided by axytos free of charge.
+
+The duration of the right of use is limited to the duration of the service contract between the parties involved or to the test phase prior to the conclusion of a contract.
+
+According to the license agreement, you may install and use the Software on one or more computers. The license for the software is free of charge. The user agrees to use the plugin exclusively for the services of axytos or for testing them. The Partner is not entitled to technical support of any kind from axytos. Therefore, axytos is not obliged to provide maintenance, revision or further development of the Software.
+
+Copyright
+---------
+
+All title, ownership rights and intellectual property rights in the Software, as well as all copies of the Software and related documentation are the property of axytos (www.axytos.com). All rights are reserved. axytos reserves the right to take legal action in the event of any violation of this agreement.
+
+Warranty and liability
+----------------------
+
+The use of the software is limited to the contractually agreed scope. For the correct functioning of the plugins and / or parts of the plugins axytos does not provide any warranty. Liability for material defects and legal defects is excluded unless the defect was fraudulently concealed. Likewise, axytos assumes no liability for damages and / or consequential damages that can be directly or indirectly associated with the use of the free axytos plugins, unless the damage was caused intentionally or by gross negligence of axytos. Not part of this disclaimer agreement are damages from injury to life or health.
+
+Legal claims and severability clause
+------------------------------------
+
+The laws of the Federal Republic of Germany will be applicable. The place for court of law or going to court will be Langen (Hessen). Should any present or future provision of the Agreement, in whole or in part, become invalid, for reasons other than the § § 305-310 of the Civil Code (BGB), the validity of the remaining provisions of the agreement will not be affected. The parties shall replace the ineffective, invalid or unenforceable provision by a valid one that will be void in its legal and economic substance, of the ineffective or not feasible provision, and also in compliance with the overall purpose of the agreement. The same applies, if after the conclusion of the agreement, there are gaps or loopholes found in the agreement. The provision of § 139 BGB (severability) is totally excluded.
