@@ -20,7 +20,7 @@
     },
     "require": {
         "php": ">=7.2.0",
-        "axytos/ecommerce-sdk": "^1.3.0"
+        "axytos/ecommerce-sdk": "^1.4.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
@@ -40,15 +40,21 @@
     },
     "scripts": {
         "test": [
-            "@phpunit",
+            "@test-unit",
+            "@test-integration",
             "@shopware-cache-clear",
             "@shopware-lint-container",
             "@phpstan"
         ],
+        "test-unit": [
+            "@phpunit --testsuite Unit"
+        ],
+        "test-integration": [
+            "@phpunit --testsuite Integration"
+        ],
         "clean": [
-            "rm -rf ./packages/ecommerce-sdk/vendor",
-            "rm -rf ./packages/financial-services-api-sdk/vendor",
-            "rm -rf ./packages/shopware6-sdk/vendor",
+            "rm -rf ./packages/core/ecommerce-sdk/vendor",
+            "rm -rf ./packages/api/financial-services-api-sdk/vendor",
             "rm -rf ./vendor"
         ],
         "phpunit": "./vendor/bin/phpunit --colors=always",
