@@ -44,7 +44,7 @@ class AccountEditOrderPageLoadedEventSubscriberTest extends TestCase
 
     public function test_onAccountEditOrderPageLoaded_is_subscribed_to_AccountEditOrderPageLoadedEvent(): void
     {
-        $subscribedEvents = $this->sut->getSubscribedEvents();
+        $subscribedEvents = AccountEditOrderPageLoadedEventSubscriber::getSubscribedEvents();
 
         $this->assertEquals(
             $subscribedEvents[AccountEditOrderPageLoadedEvent::class],

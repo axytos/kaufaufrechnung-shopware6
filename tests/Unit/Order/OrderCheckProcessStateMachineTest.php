@@ -51,6 +51,9 @@ class OrderCheckProcessStateMachineTest extends TestCase
             ->willReturn($this->context);
     }
 
+    /**
+     * @param array<string,string> $customFields
+     */
     private function setUpCustomFields(array $customFields): void
     {
         $this->orderEntityRepository
@@ -59,6 +62,9 @@ class OrderCheckProcessStateMachineTest extends TestCase
             ->willReturn($customFields);
     }
 
+    /**
+     * @param array<string,string> $expectedCustomFields
+     */
     private function expectCustomFieldsUpdate(array $expectedCustomFields): void
     {
         $this->orderEntityRepository
@@ -90,6 +96,9 @@ class OrderCheckProcessStateMachineTest extends TestCase
         $this->assertEquals($state, $actual);
     }
 
+    /**
+     * @return array<array<string>>
+     */
     public function dataProvider_test_getState(): array
     {
         return [

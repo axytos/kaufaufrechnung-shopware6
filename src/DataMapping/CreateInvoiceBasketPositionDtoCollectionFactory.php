@@ -22,7 +22,7 @@ class CreateInvoiceBasketPositionDtoCollectionFactory
 
     public function create(?OrderEntity $orderEntity): CreateInvoiceBasketPositionDtoCollection
     {
-        if (is_null($orderEntity) || is_null($orderEntity->getLineItems()) || count($orderEntity->getLineItems()) == 0) {
+        if (is_null($orderEntity) || is_null($orderEntity->getLineItems()) || count($orderEntity->getLineItems()) === 0) {
             return new CreateInvoiceBasketPositionDtoCollection();
         }
 

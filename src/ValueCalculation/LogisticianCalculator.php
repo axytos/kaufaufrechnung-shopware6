@@ -13,19 +13,19 @@ class LogisticianCalculator
     {
         $deliveries = $orderEntity->getDeliveries();
 
-        if ($deliveries) {
+        if (!is_null($deliveries)) {
             $deliveryElements = $deliveries->getElements();
 
-            if (is_array($deliveryElements) && !empty($deliveryElements)) {
+            if ($deliveryElements !== []) {
                 reset($deliveryElements);
                 /** @var OrderDeliveryEntity */
                 $deliveryElement = $deliveryElements[key($deliveryElements)];
 
                 $shippingMethod = $deliveryElement->getShippingMethod();
 
-                if ($shippingMethod) {
+                if (!is_null($shippingMethod)) {
                     $shippingMethodName = $shippingMethod->getName();
-                    if ($shippingMethodName) {
+                    if (!is_null($shippingMethodName)) {
                         return $shippingMethodName;
                     }
                 }

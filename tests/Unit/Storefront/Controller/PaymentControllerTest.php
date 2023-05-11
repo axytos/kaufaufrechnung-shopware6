@@ -80,6 +80,9 @@ class PaymentControllerTest extends TestCase
         $this->assertEquals($expectedStatusCode, $response->getStatusCode());
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function dataProvider_test_responses(): array
     {
         return [
@@ -123,6 +126,9 @@ class PaymentControllerTest extends TestCase
         $this->paymentController->payment($paymentId, $request, $context);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function dataProvider_test_order_state_updates(): array
     {
         return [

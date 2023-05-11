@@ -20,6 +20,9 @@ class AfterCheckoutOrderStatusTest extends TestCase
         $this->assertEquals($expectedValue, $afterCheckoutOrderStatus->getStateMachineTransactionAction());
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public static function getStateMachineTransactionActionTestCases(): array
     {
         return [

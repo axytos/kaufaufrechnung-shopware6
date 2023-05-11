@@ -65,6 +65,9 @@ class PaymentMethodPredicatesTest extends TestCase
         $this->assertEquals($expectedOutcome, $result);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function isAllowedFallbackTestDataProvider(): array
     {
         // FallbackMode, PaymentMethodConfig, ExpectedOutcome
@@ -104,6 +107,9 @@ class PaymentMethodPredicatesTest extends TestCase
         $this->assertEquals($expectedOutcome, $actual);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function dataProvider_test_usesHandler(): array
     {
         return [

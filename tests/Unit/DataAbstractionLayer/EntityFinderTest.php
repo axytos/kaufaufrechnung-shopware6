@@ -21,7 +21,7 @@ class EntityFinderTest extends TestCase
     private $entityRepository;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\EntityFinder
+     * @var \Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\EntityFinder<Entity>
      */
     private $sut;
 

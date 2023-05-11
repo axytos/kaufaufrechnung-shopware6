@@ -44,7 +44,7 @@ class CheckoutConfirmPageLoadedEventSubscriberTest extends TestCase
 
     public function test_onCheckoutConfirmPageLoaded_is_subscribed_to_CheckoutConfirmPageLoadedEvent(): void
     {
-        $subscribedEvents = $this->sut->getSubscribedEvents();
+        $subscribedEvents = CheckoutConfirmPageLoadedEventSubscriber::getSubscribedEvents();
 
         $this->assertEquals(
             $subscribedEvents[CheckoutConfirmPageLoadedEvent::class],

@@ -104,7 +104,7 @@ class ShippingOrderEventsSubscriberTest extends TestCase
 
     public function test_getSubscribedEvents_registers_onShipped(): void
     {
-        $subscribedEvents = $this->sut->getSubscribedEvents();
+        $subscribedEvents = ShippingOrderEventsSubscriber::getSubscribedEvents();
 
         $this->assertContains('onShipped', $subscribedEvents);
     }
@@ -125,6 +125,9 @@ class ShippingOrderEventsSubscriberTest extends TestCase
         $this->sut->onShipped($this->event);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function dataProvider_test_onShipped_reports_shipping(): array
     {
         return [

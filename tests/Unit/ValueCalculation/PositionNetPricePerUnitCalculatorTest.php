@@ -47,6 +47,9 @@ class PositionNetPricePerUnitCalculatorTest extends TestCase
         $this->assertEquals($expectedNetPricePerUnit, $actual);
     }
 
+    /**
+     * @return array<array<float>>
+     */
     public function dataProvider_test_calculate_returns_net_price_per_unit(): array
     {
         return [

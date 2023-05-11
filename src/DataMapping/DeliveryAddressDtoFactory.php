@@ -15,16 +15,16 @@ class DeliveryAddressDtoFactory
 
         $deliveries = $orderEntity->getDeliveries();
 
-        if ($deliveries) {
+        if (!is_null($deliveries)) {
             $deliveryElements = $deliveries->getElements();
 
-            if (is_array($deliveryElements) && !empty($deliveryElements)) {
+            if ($deliveryElements !== []) {
                 reset($deliveryElements);
                 $deliveryElement = $deliveryElements[key($deliveryElements)];
 
                 $shippingOrderAddress = $deliveryElement->getShippingOrderAddress();
 
-                if ($shippingOrderAddress) {
+                if (!is_null($shippingOrderAddress)) {
                     $deliveryAddress->addressLine1 = $shippingOrderAddress->getStreet();
                     $deliveryAddress->city = $shippingOrderAddress->getCity();
                     $deliveryAddress->company = $shippingOrderAddress->getCompany();
@@ -34,17 +34,17 @@ class DeliveryAddressDtoFactory
                     $deliveryAddress->vatId = $shippingOrderAddress->getVatId();
 
                     $country = $shippingOrderAddress->getCountry();
-                    if ($country && $country->getIso()) {
+                    if (!is_null($country) && !is_null($country->getIso())) {
                         $deliveryAddress->country = $country->getIso();
                     }
 
                     $countryState = $shippingOrderAddress->getCountryState();
-                    if ($countryState) {
+                    if (!is_null($countryState)) {
                         $deliveryAddress->region = $countryState->getName();
                     }
 
                     $salutation = $shippingOrderAddress->getSalutation();
-                    if ($salutation) {
+                    if (!is_null($salutation)) {
                         $deliveryAddress->salutation = $salutation->getDisplayName();
                     }
                 }

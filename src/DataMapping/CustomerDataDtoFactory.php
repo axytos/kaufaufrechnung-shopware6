@@ -17,14 +17,14 @@ class CustomerDataDtoFactory
 
         $orderCustomer = $orderEntity->getOrderCustomer();
 
-        if ($orderCustomer) {
+        if (!is_null($orderCustomer)) {
             $personalData->email = $orderCustomer->getEmail();
-            if ($orderCustomer->getCustomerNumber() && $orderCustomer->getCustomerId()) {
+            if (!is_null($orderCustomer->getCustomerNumber()) && !is_null($orderCustomer->getCustomerId())) {
                 $personalData->externalCustomerId = $orderCustomer->getCustomerNumber() . '-' . $orderCustomer->getCustomerId();
             }
 
 
-            if ($orderCustomer->getCompany()) {
+            if (!is_null($orderCustomer->getCompany())) {
                 $personalData->company = new CompanyDto();
 
                 $personalData->company->name = $orderCustomer->getCompany();
@@ -32,9 +32,9 @@ class CustomerDataDtoFactory
 
             $customer = $orderCustomer->getCustomer();
 
-            if ($customer) {
+            if (!is_null($customer)) {
                 $birthDay = $customer->getBirthday();
-                if ($birthDay) {
+                if (!is_null($birthDay)) {
                     $personalData->dateOfBirth = new DateTimeImmutable('@' . $birthDay->getTimestamp(), $birthDay->getTimezone());
                 }
             }

@@ -86,12 +86,10 @@ class PaymentController extends StorefrontController
         $orderId = $invoiceOrderPaymentUpdate->orderId;
         $paymentStatus = $invoiceOrderPaymentUpdate->paymentStatus;
 
-        /** @phpstan-ignore-next-line */
         if ($paymentStatus === PaymentStatus::PAID || $paymentStatus === PaymentStatus::OVERPAID) {
             $this->orderStateMachine->payOrder($orderId, $context);
         }
 
-        /** @phpstan-ignore-next-line */
         if ($paymentStatus === PaymentStatus::PARTIALLY_PAID) {
             $this->orderStateMachine->payOrderPartially($orderId, $context);
         }

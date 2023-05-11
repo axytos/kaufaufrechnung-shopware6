@@ -15,7 +15,7 @@ class InvoiceAddressDtoFactory
 
         $billingAddress = $orderEntity->getBillingAddress();
 
-        if ($billingAddress) {
+        if (!is_null($billingAddress)) {
             $invoiceAddress->addressLine1 = $billingAddress->getStreet();
             $invoiceAddress->city = $billingAddress->getCity();
             $invoiceAddress->company = $billingAddress->getCompany();
@@ -25,17 +25,17 @@ class InvoiceAddressDtoFactory
             $invoiceAddress->vatId = $billingAddress->getVatId();
 
             $country = $billingAddress->getCountry();
-            if ($country && $country->getIso()) {
+            if (!is_null($country) && !is_null($country->getIso())) {
                 $invoiceAddress->country = $country->getIso();
             }
 
             $countryState = $billingAddress->getCountryState();
-            if ($countryState) {
+            if (!is_null($countryState)) {
                 $invoiceAddress->region = $countryState->getName();
             }
 
             $salutation = $billingAddress->getSalutation();
-            if ($salutation) {
+            if (!is_null($salutation)) {
                 $invoiceAddress->salutation = $salutation->getDisplayName();
             }
         }

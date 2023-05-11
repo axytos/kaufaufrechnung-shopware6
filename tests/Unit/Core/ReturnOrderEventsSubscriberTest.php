@@ -53,7 +53,7 @@ class ReturnOrderEventsSubscriberTest extends TestCase
 
     public function test_getSubscribedEvents_subscribes_onReturned_method(): void
     {
-        $subscription = $this->sut->getSubscribedEvents();
+        $subscription = ReturnOrderEventsSubscriber::getSubscribedEvents();
 
         $subscribedMethod = array_values($subscription)[0];
 
@@ -96,6 +96,9 @@ class ReturnOrderEventsSubscriberTest extends TestCase
         $this->sut->onReturned($event);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function dataProvider_test_onReturned_invokes_invoice_client(): array
     {
         return [

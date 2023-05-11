@@ -62,6 +62,9 @@ class OrderEntityRepository
         return $this->findFirst($criteria, $context);
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getCustomFields(string $orderId, Context $context): array
     {
         $criteria = new Criteria([$orderId]);
@@ -76,6 +79,12 @@ class OrderEntityRepository
         return $orderEntity->getCustomFields();
     }
 
+    /**
+     * @param string $orderId
+     * @param array<mixed> $customFields
+     * @param Context $context
+     * @return void
+     */
     public function updateCustomFields(string $orderId, array $customFields, Context $context): void
     {
         $orderData = [

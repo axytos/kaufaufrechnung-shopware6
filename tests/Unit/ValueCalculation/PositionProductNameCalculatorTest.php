@@ -53,6 +53,9 @@ class PositionProductNameCalculatorTest extends TestCase
         $this->assertEquals($expectedResult, $actualResult);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function dataProvider_test_calculate(): array
     {
         return [

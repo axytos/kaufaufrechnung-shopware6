@@ -165,6 +165,9 @@ class RefundOrderEventsSubscriberTest extends TestCase
         $this->sut->onDocumentWritten($this->event);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function dataProvider_test_onOrderStateNotConfirmend(): array
     {
         return [

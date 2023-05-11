@@ -22,7 +22,7 @@ class BasketPositionDtoCollectionFactory
 
     public function create(?OrderEntity $orderEntity): BasketPositionDtoCollection
     {
-        if (is_null($orderEntity) || is_null($orderEntity->getLineItems()) || count($orderEntity->getLineItems()) == 0) {
+        if (is_null($orderEntity) || is_null($orderEntity->getLineItems()) || count($orderEntity->getLineItems()) === 0) {
             return new BasketPositionDtoCollection();
         }
 

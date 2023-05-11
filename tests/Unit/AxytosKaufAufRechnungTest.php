@@ -14,7 +14,7 @@ class AxytosKaufAufRechnungTest extends TestCase
      */
     private $sut;
 
-    public function setup(): void
+    public function setUp(): void
     {
         $this->sut = new AxytosKaufAufRechnung(true, 'basePath');
     }

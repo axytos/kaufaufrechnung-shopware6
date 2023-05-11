@@ -105,7 +105,7 @@ class BasketPositionDtoCollectionFactoryTest extends TestCase
 
     private function createBasketPositionDtoCollection(int $count): BasketPositionDtoCollection
     {
-        /** @var array */
+        /** @var BasketPositionDto[] */
         $elements = array_fill(0, $count, null);
         $elements = array_map([$this, 'createBasketPositionDto'], $elements);
 
@@ -119,7 +119,7 @@ class BasketPositionDtoCollectionFactoryTest extends TestCase
 
     private function createOrderLineItemCollection(int $count): OrderLineItemCollection
     {
-        /** @var array */
+        /** @var OrderLineItemEntity[] */
         $elements = array_fill(0, $count, null);
         $elements = array_map([$this,'createOrderLineItem'], $elements);
         return new OrderLineItemCollection($elements);

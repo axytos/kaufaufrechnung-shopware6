@@ -9,14 +9,17 @@ use Shopware\Core\Checkout\Order\OrderEntity;
 
 class TrackingIdCalculator
 {
+    /**
+     * @return array<string>
+     */
     public function calculate(OrderEntity $orderEntity): array
     {
         $deliveries = $orderEntity->getDeliveries();
 
-        if ($deliveries) {
+        if (!is_null($deliveries)) {
             $deliveryElements = $deliveries->getElements();
 
-            if (is_array($deliveryElements) && !empty($deliveryElements)) {
+            if ($deliveryElements !== []) {
                 reset($deliveryElements);
                 /** @var OrderDeliveryEntity */
                 $deliveryElement = $deliveryElements[key($deliveryElements)];

@@ -47,9 +47,9 @@ class RefundBasketPositionDtoCollectionFactory
 
         $positions = [];
 
-        foreach ($groupedCredits as $taxRate => $credits) {
-            $grossRefundTotal = $this->calculateGrossRefundTotal($credits);
-            $netRefundTotal = $this->calculateNetRefundTotal($credits);
+        foreach ($groupedCredits as $taxRate => $creditGroup) {
+            $grossRefundTotal = $this->calculateGrossRefundTotal($creditGroup);
+            $netRefundTotal = $this->calculateNetRefundTotal($creditGroup);
             $productNumber = $this->findProductNumberForTaxRate($products, (string) $taxRate);
 
             $position = $this->refundBasketPositionDtoFactory->create($productNumber, $grossRefundTotal, $netRefundTotal);
@@ -119,11 +119,13 @@ class RefundBasketPositionDtoCollectionFactory
     private function findProductNumberForTaxRate(OrderLineItemCollection $products, string $taxRate): string
     {
         foreach ($products as $product) {
+            /** @var ?\Shopware\Core\Checkout\Cart\Price\Struct\CalculatedPrice */
             $price = $product->getPrice();
             if (!is_null($price)) {
+                /** @var ?\Shopware\Core\Checkout\Cart\Tax\Struct\CalculatedTax */
                 $calculatedTax = $price->getCalculatedTaxes()->first();
                 if (!is_null($calculatedTax)) {
-                    if ($calculatedTax->getTaxRate() == $taxRate) {
+                    if ($calculatedTax->getTaxRate() === floatval($taxRate)) {
                         $product = $product->getProduct();
                         if (!is_null($product)) {
                             return $product->getProductNumber();

@@ -121,6 +121,9 @@ class CancelOrderEventSubscriberTest extends TestCase
         $this->sut->onOrderStateCancelled($this->event);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function dataProvider_test_onOrderStateCancelled_calls_invoiceClient(): array
     {
         return [

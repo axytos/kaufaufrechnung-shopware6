@@ -41,6 +41,9 @@ class PromotionIdentifierCalculatorTest extends TestCase
         $this->assertEquals($expectedIdentifier, $actualIdentifier);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function dataProvider_test_calculate(): array
     {
         return [

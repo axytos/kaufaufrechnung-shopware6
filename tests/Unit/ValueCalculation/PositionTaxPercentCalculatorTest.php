@@ -30,6 +30,7 @@ class PositionTaxPercentCalculatorTest extends TestCase
 
     /**
      * @dataProvider dataProvider_test_calculate_returns_sum_of_caclulated_taxes
+     * @param array<float> $taxRates
      */
     public function test_calculate_returns_sum_of_caclulated_taxes(array $taxRates, float $expectedTaxPercent): void
     {
@@ -44,6 +45,9 @@ class PositionTaxPercentCalculatorTest extends TestCase
         $this->assertEquals($expectedTaxPercent, $actual);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function dataProvider_test_calculate_returns_sum_of_caclulated_taxes(): array
     {
         return [
@@ -54,6 +58,9 @@ class PositionTaxPercentCalculatorTest extends TestCase
         ];
     }
 
+    /**
+     * @param array<float> $taxRates
+     */
     private function createCalculatedTaxes(array $taxRates): CalculatedTaxCollection
     {
         $elements = array_map([$this, 'createCalculatedTax'], $taxRates);

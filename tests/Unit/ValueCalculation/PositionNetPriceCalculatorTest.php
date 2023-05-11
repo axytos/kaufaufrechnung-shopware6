@@ -46,6 +46,9 @@ class PositionNetPriceCalculatorTest extends TestCase
         $this->assertEquals($expectedNetPrice, $actual);
     }
 
+    /**
+     * @return array<array<float>>
+     */
     public function dataProvider_test_calculate_returns_net_price(): array
     {
         return [

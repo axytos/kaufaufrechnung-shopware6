@@ -217,6 +217,9 @@ class InvoiceEntityWrittenSubscriberTest extends TestCase
         $this->sut->onEntityWritten($this->event);
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function dataProvider_test_onEntityWritten_calls_invoiceClient(): array
     {
         return [
