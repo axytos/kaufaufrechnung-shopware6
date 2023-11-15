@@ -12,6 +12,7 @@ use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\DeactivateContext;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once(__DIR__ . '/../vendor/autoload.php');
@@ -71,6 +72,8 @@ class AxytosKaufAufRechnung extends Plugin
 
     private function createPluginInstaller(): PluginInstaller
     {
-        return PluginInstallerFactory::createInstaller(AxytosKaufAufRechnung::class, $this->container);
+        /** @var ContainerInterface  */
+        $container = $this->container;
+        return PluginInstallerFactory::createInstaller(AxytosKaufAufRechnung::class, $container);
     }
 }
