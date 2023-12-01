@@ -1,0 +1,21 @@
+{% sw_extends '@Storefront/storefront/page/account/order/index.html.twig' %}
+
+{% block page_checkout_confirm_header %}
+    {% if page.errorCode == 'AXYTOS-TECHNICAL-ERROR' %}
+        {% if config('AxytosKaufAufRechnung.config.errorMessage') %}
+            {% set payment_rejected_message = config('AxytosKaufAufRechnung.config.errorMessage') %}
+        {% else %}
+            {% set payment_rejected_message = 'axytos.kauf_auf_rechnung.payment_rejected_message' | trans %}
+        {% endif %}
+        {% sw_include '@Storefront/storefront/utilities/alert.html.twig' with {
+            type: "danger",
+            content: payment_rejected_message
+        } %}
+
+        <h1 class="confirm-main-header">
+            {{ "account.completePayment"|trans|sw_sanitize }}
+        </h1>
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}

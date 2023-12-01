@@ -85,6 +85,14 @@
             </options>
         </input-field>
 
+        <input-field type="textarea">
+            <name>errorMessage</name>
+            <label>Errormessage on rejection</label>
+            <label lang="de-DE">Fehlermeldung bei Ablehnung</label>
+            <helpText>Default: The payment option Buy Now Pay Later is currently not available.</helpText>
+            <helpText lang="de-DE">Standardtext: Die Bezahlmethode Kauf auf Rechnung steht aktuell nicht zur Verfügung.</helpText>
+        </input-field>
+
         <component name="credentials-validation-button">
             <name>CredentialsValidationButton</name>
         </component>

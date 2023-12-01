@@ -1,7 +1,11 @@
 {% sw_extends '@Storefront/storefront/page/checkout/_page.html.twig' %}
 
 {% block base_content %}
-{% set payment_rejected_message = 'axytos.kauf_auf_rechnung.payment_rejected_message' | trans %}
+{% if config('AxytosKaufAufRechnung.config.errorMessage') %}
+    {% set payment_rejected_message = config('AxytosKaufAufRechnung.config.errorMessage') %}
+{% else %}
+    {% set payment_rejected_message = 'axytos.kauf_auf_rechnung.payment_rejected_message' | trans %}
+{% endif %}
 {% sw_include '@Storefront/storefront/utilities/alert.html.twig' with {
     type: "danger",
     content: payment_rejected_message
