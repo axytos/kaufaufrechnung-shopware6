@@ -18,6 +18,9 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once(__DIR__ . '/../vendor/autoload.php');
 }
 
+/**
+ * @phpstan-property \Symfony\Component\DependencyInjection\ContainerInterface $container
+ */
 class AxytosKaufAufRechnung extends Plugin
 {
     /**
@@ -72,7 +75,7 @@ class AxytosKaufAufRechnung extends Plugin
 
     private function createPluginInstaller(): PluginInstaller
     {
-        /** @var ContainerInterface  */
+        /** @var \Symfony\Component\DependencyInjection\ContainerInterface */
         $container = $this->container;
         return PluginInstallerFactory::createInstaller(AxytosKaufAufRechnung::class, $container);
     }
