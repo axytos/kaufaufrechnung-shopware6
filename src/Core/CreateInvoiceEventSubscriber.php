@@ -101,6 +101,7 @@ class CreateInvoiceEventSubscriber implements EventSubscriberInterface
 
             $invoiceOrderContext = $this->invoiceOrderContextFactory->getInvoiceOrderContext($orderId, $context);
 
+            /** @var string */
             $documentNumber = $document->getConfig()['documentNumber'];
 
             $invoiceOrderContext->setOrderInvoiceNumber($documentNumber);

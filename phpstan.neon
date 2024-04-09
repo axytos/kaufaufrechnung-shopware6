@@ -28,5 +28,7 @@ parameters:
         - '#imagettftext#'
         - '#class Redis#'
         - '#Constant STARTTIME#'
+        - '#Parameter \#1 \$var of function (strval|intval|floatval) expects .+, mixed given.#'   # <= PHP 8.1
+        - '#Parameter \#1 \$value of function (strval|intval|floatval) expects .+, mixed given.#' # >= PHP 8.2
 
     editorUrl: 'vscode://file/%%file%%:%%line%%'

@@ -6,17 +6,17 @@ namespace Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer;
 
 use Shopware\Core\Checkout\Document\DocumentEntity;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 
 class DocumentEntityRepository
 {
     /**
-     * @var \Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface
+     * @var \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository
      */
     private $documentRepository;
 
-    public function __construct(EntityRepositoryInterface $documentRepository)
+    public function __construct(EntityRepository $documentRepository)
     {
         $this->documentRepository = $documentRepository;
     }

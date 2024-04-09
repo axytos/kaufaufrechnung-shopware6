@@ -1,7 +1,7 @@
 {% block axytos_credit_check %}
-    <div class="custom-control custom-checkbox axytos-control">
+    <div class="form-check custom-control custom-checkbox axytos-control">
         <input type="checkbox"
-                class="checkout-confirm-tos-checkbox custom-control-input{% if formViolations.getViolations('/tos') is not empty %} is-invalid{% endif %}"
+                class="checkout-confirm-tos-checkbox form-check-input {% if formViolations.getViolations('/tos') is not empty %} is-invalid{% endif %}"
                 required="required"
                 id="axytos-credit-check"
                 form="confirmOrderForm"
@@ -13,7 +13,7 @@
                 {{ 'axytos.kauf_auf_rechnung.credit_check_agreement_text' | trans }}
             </p>
             <p>
-                <a href="#" data-toggle="modal" data-target="#axytosCreditCheck">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#axytosCreditCheck">
                     {{ 'axytos.kauf_auf_rechnung.credit_check_agreement_info_link_text' | trans }}
                 </a>
             </p> 
@@ -24,7 +24,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="axytosCreditCheckLabel">Bonitätsprüfung Hinweistext</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\Installer;
 
 use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\PaymentMethodEntityRepository;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class PluginInstallerFactory
@@ -19,7 +19,7 @@ class PluginInstallerFactory
 
     private static function createPaymentMethodRepository(ContainerInterface $container): PaymentMethodEntityRepository
     {
-        /** @var EntityRepositoryInterface */
+        /** @var EntityRepository */
         $paymentMethodEntityRepository = $container->get('payment_method.repository');
         return new PaymentMethodEntityRepository($paymentMethodEntityRepository);
     }

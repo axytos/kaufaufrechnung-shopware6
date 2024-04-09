@@ -9,7 +9,7 @@ use Axytos\KaufAufRechnung\Shopware\Installer\PluginInstaller;
 use Axytos\KaufAufRechnung\Shopware\Installer\PluginInstallerFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\Plugin\Util\PluginIdProvider;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -23,7 +23,7 @@ class PluginInstallerFactoryTest extends TestCase
         $container->method('get')->willReturnCallback(function ($name) {
             switch ($name) {
                 case 'payment_method.repository':
-                    return $this->createMock(EntityRepositoryInterface::class);
+                    return $this->createMock(EntityRepository::class);
                 case PluginIdProvider::class:
                     return $this->createMock(PluginIdProvider::class);
                 default:

@@ -11,13 +11,13 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 
 class EntityFinderTest extends TestCase
 {
-    /** @var EntityRepositoryInterface&MockObject */
+    /** @var EntityRepository&MockObject */
     private $entityRepository;
 
     /**
@@ -27,7 +27,7 @@ class EntityFinderTest extends TestCase
 
     public function setUp(): void
     {
-        $this->entityRepository = $this->createMock(EntityRepositoryInterface::class);
+        $this->entityRepository = $this->createMock(EntityRepository::class);
 
         $this->sut = new EntityFinder($this->entityRepository);
     }

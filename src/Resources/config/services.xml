@@ -6,9 +6,6 @@
     <services>
         <!-- Installer Integration-->
         <service id="Axytos\KaufAufRechnung\Shopware\AxytosKaufAufRechnung">
-            <call method="setErrorHandler">
-                <argument type="service" id="Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler"/>
-            </call>
         </service>
 
         <!-- Logger Configuration -->

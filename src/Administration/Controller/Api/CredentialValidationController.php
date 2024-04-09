@@ -11,6 +11,7 @@ use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 /**
  * @RouteScope(scopes={"administration"})
  */
+#[Route(defaults: ['_routeScope' => ['administration']])]
 class CredentialValidationController
 {
     /**

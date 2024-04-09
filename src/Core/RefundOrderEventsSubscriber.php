@@ -104,7 +104,10 @@ class RefundOrderEventsSubscriber implements EventSubscriberInterface
 
     private function extractInvoiceNumber(DocumentEntity $document): string
     {
+        /** @var array<array<string,mixed>> */
         $config = $document->getConfig();
+
+        /** @var string */
         return $config['custom']['invoiceNumber'];
     }
 

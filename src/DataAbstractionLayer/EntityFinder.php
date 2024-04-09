@@ -7,7 +7,7 @@ namespace Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer;
 use LogicException;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 
 /**
@@ -16,11 +16,11 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 class EntityFinder
 {
     /**
-     * @var \Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface
+     * @var \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository
      */
     private $entityRepository;
 
-    public function __construct(EntityRepositoryInterface $entityRepository)
+    public function __construct(EntityRepository $entityRepository)
     {
         $this->entityRepository = $entityRepository;
     }
@@ -37,6 +37,7 @@ class EntityFinder
             throw new LogicException('Given criteria did not find any entities!');
         }
 
+        /** @var TEntity */
         return $entitySearchResult->first();
     }
 }

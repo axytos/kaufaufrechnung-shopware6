@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @RouteScope(scopes={"storefront"})
  */
+#[Route(defaults: ['_routeScope' => ['storefront']])]
 class PaymentController extends StorefrontController
 {
     /**

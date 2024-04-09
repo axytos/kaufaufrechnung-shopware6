@@ -7,18 +7,18 @@ namespace Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer;
 use Shopware\Core\Checkout\Payment\PaymentMethodCollection;
 use Shopware\Core\Checkout\Payment\PaymentMethodEntity;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 
 class PaymentMethodEntityRepository
 {
     /**
-     * @var \Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface
+     * @var \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository
      */
     private $paymentMethodRepository;
 
-    public function __construct(EntityRepositoryInterface $paymentMethodRepository)
+    public function __construct(EntityRepository $paymentMethodRepository)
     {
         $this->paymentMethodRepository = $paymentMethodRepository;
     }
@@ -62,6 +62,7 @@ class PaymentMethodEntityRepository
     ): void {
         $paymentMethods = $this->findAllByHandlerIdentifier($handlerIdentifier, $context);
 
+        /** @var array<array<string, mixed>> */
         $data = array_values($paymentMethods->map(function (PaymentMethodEntity $entity) use ($isActive) {
             return [
                 'id' => $entity->getId(),

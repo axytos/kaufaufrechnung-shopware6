@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @RouteScope(scopes={"storefront"})
  */
+#[Route(defaults: ['_routeScope' => ['storefront']])]
 class CheckoutFailedController extends StorefrontController
 {
     const CHECKOUT_FAILED_VIEW = '@AxytosKaufAufRechnung/storefront/page/checkout/failed/index.html.twig';
