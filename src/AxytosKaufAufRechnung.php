@@ -6,12 +6,18 @@ namespace Axytos\KaufAufRechnung\Shopware;
 
 use Axytos\KaufAufRechnung\Shopware\Installer\PluginInstaller;
 use Axytos\KaufAufRechnung\Shopware\Installer\PluginInstallerFactory;
-use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\DeactivateContext;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\DelegatingLoader;
+use Symfony\Component\Config\Loader\LoaderResolver;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\DirectoryLoader;
+use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once(__DIR__ . '/../vendor/autoload.php');
@@ -51,5 +57,24 @@ class AxytosKaufAufRechnung extends Plugin
         /** @var \Symfony\Component\DependencyInjection\ContainerInterface */
         $container = $this->container;
         return PluginInstallerFactory::createInstaller(AxytosKaufAufRechnung::class, $container);
+    }
+
+    public function build(ContainerBuilder $container): void
+    {
+        parent::build($container);
+
+        $locator = new FileLocator('Resources/config');
+
+        $resolver = new LoaderResolver([
+            new YamlFileLoader($container, $locator),
+            new GlobFileLoader($container, $locator),
+            new DirectoryLoader($container, $locator),
+        ]);
+
+        $configLoader = new DelegatingLoader($resolver);
+
+        $confDir = \rtrim($this->getPath(), '/') . '/Resources/config';
+
+        $configLoader->load($confDir . '/{packages}/*.yaml', 'glob');
     }
 }

@@ -54,6 +54,7 @@ class CheckoutFailedController extends StorefrontController
     /**
      * @Route("/checkout/failed", name="frontend.checkout.failed.page", options={"seo"="false"}, methods={"GET"})
      */
+    #[Route(path: '/checkout/failed', name: 'frontend.checkout.failed.page', options: ['seo' => false], methods: ['GET'])]
     public function failed(Request $request, SalesChannelContext $context): Response
     {
         try {

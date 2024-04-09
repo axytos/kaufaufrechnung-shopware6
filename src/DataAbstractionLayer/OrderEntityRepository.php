@@ -12,6 +12,7 @@ use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionColl
 use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionDefinition;
 use Shopware\Core\Checkout\Order\OrderDefinition;
 use Shopware\Core\Checkout\Order\OrderEntity;
+use Shopware\Core\Checkout\Order\OrderCollection;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -22,7 +23,7 @@ use Shopware\Core\System\StateMachine\Transition;
 class OrderEntityRepository
 {
     /**
-     * @var \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository
+     * @var \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository<OrderCollection>
      */
     private $orderRepository;
     /**
@@ -30,6 +31,10 @@ class OrderEntityRepository
      */
     private $stateMachineRegistry;
 
+    /**
+     * @param \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository<OrderCollection> $orderRepository
+     * @param \Shopware\Core\System\StateMachine\StateMachineRegistry $stateMachineRegistry
+     */
     public function __construct(
         EntityRepository $orderRepository,
         StateMachineRegistry $stateMachineRegistry
@@ -161,7 +166,7 @@ class OrderEntityRepository
 
     private function findFirst(Criteria $criteria, Context $context): OrderEntity
     {
-        /** @var EntityFinder<OrderEntity> */
+        /** @var EntityFinder<OrderEntity,OrderCollection> */
         $entityFinder = new EntityFinder($this->orderRepository);
         return $entityFinder->findFirst($criteria, $context);
     }

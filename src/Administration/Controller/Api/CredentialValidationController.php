@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface;
 use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
+use Psr\Container\ContainerInterface;
 
 /**
  * @RouteScope(scopes={"administration"})
@@ -34,6 +35,7 @@ class CredentialValidationController
     /**
      * @Route(path="/api/v1/AxytosKaufAufRechnung/Credentials/validate")
      */
+    #[Route(path: '/api/v1/AxytosKaufAufRechnung/Credentials/validate', name: 'axytos.credentials.validate', methods: ['POST'])]
     public function validateCredentials(): JsonResponse
     {
         try {

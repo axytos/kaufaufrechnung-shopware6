@@ -61,6 +61,7 @@ class PaymentController extends StorefrontController
     /**
      * @Route("/AxytosKaufAufRechnung/Payment/{paymentId}", name="axytos.kaufaufrechnung.payment", options={"seo"="false"}, defaults={"csrf_protected"=false}, methods={"POST"})
      */
+    #[Route(path: '/AxytosKaufAufRechnung/Payment/{paymentId}', name: 'axytos.kaufaufrechnung.payment', options: ['seo' => false], methods: ['POST'])]
     public function payment(string $paymentId, Request $request, SalesChannelContext $context): Response
     {
         try {

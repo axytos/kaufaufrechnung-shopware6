@@ -4,8 +4,10 @@
         xsi:schemaLocation="http://symfony.com/schema/routing
         https://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <import resource="@AxytosKaufAufRechnung/Administration/Controller/Api/CredentialValidationController.php" type="annotation" />
-    <import resource="@AxytosKaufAufRechnung/Storefront/Controller/CheckoutFailedController.php" type="annotation" />
-    <import resource="@AxytosKaufAufRechnung/Storefront/Controller/PaymentController.php" type="annotation" />
+    <import resource="@AxytosKaufAufRechnung/Administration/Controller/Api/CredentialValidationController.php" type="attribute" />
+    <import resource="@AxytosKaufAufRechnung/Storefront/Controller/CheckoutFailedController.php" type="attribute" />
+    <import resource="@AxytosKaufAufRechnung/Storefront/Controller/PaymentController.php" type="attribute" />
 
+    <!-- <import resource="../../Administration/Controller/**/*Controller.php" type="attribute" />
+    <import resource="../../Storefront/Controller/**/*Controller.php" type="attribute" /> -->
 </routes>

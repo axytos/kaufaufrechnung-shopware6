@@ -10,13 +10,8 @@
 
         <!-- Logger Configuration -->
 
-        <service id="axytos.kauf_auf_rechnung.plugin.logger" class="Monolog\Logger">
-            <factory service="Shopware\Core\Framework\Log\LoggerFactory" method="createRotating"/>
-            <argument type="string">axytos.kauf_auf_rechnung.plugin</argument>
-        </service>
-
         <service id="Axytos\KaufAufRechnung\Shopware\Logging\LoggerAdapter">
-            <argument type="service" id="axytos.kauf_auf_rechnung.plugin.logger"/>
+            <argument type="service" id="monolog.logger.axytos.kauf_auf_rechnung.plugin.channel"/>
         </service>
 
         <service id="Axytos\ECommerce\Logging\LoggerAdapterInterface" alias="Axytos\KaufAufRechnung\Shopware\Logging\LoggerAdapter"/>

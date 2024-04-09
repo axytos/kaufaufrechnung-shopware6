@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer;
 
 use Shopware\Core\Checkout\Document\DocumentEntity;
+use Shopware\Core\Checkout\Document\DocumentCollection;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -12,10 +13,13 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 class DocumentEntityRepository
 {
     /**
-     * @var \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository
+     * @var \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository<DocumentCollection>
      */
     private $documentRepository;
 
+    /**
+     * @param \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository<DocumentCollection> $documentRepository
+     */
     public function __construct(EntityRepository $documentRepository)
     {
         $this->documentRepository = $documentRepository;
@@ -32,7 +36,7 @@ class DocumentEntityRepository
 
     private function findFirst(Criteria $criteria, Context $context): DocumentEntity
     {
-        /** @var EntityFinder<DocumentEntity> */
+        /** @var EntityFinder<DocumentEntity,DocumentCollection> */
         $entityFinder = new EntityFinder($this->documentRepository);
         return $entityFinder->findFirst($criteria, $context);
     }

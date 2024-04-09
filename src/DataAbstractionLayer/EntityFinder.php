@@ -7,19 +7,24 @@ namespace Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer;
 use LogicException;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 
 /**
  * @phpstan-template TEntity of Entity
+ * @phpstan-template TEntityCollection of EntityCollection<TEntity>
  */
 class EntityFinder
 {
     /**
-     * @var \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository
+     * @var \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository<TEntityCollection>
      */
     private $entityRepository;
 
+    /**
+     * @param \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository<TEntityCollection> $entityRepository
+     */
     public function __construct(EntityRepository $entityRepository)
     {
         $this->entityRepository = $entityRepository;

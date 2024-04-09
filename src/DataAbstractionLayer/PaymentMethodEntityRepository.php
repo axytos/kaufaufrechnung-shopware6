@@ -14,10 +14,13 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 class PaymentMethodEntityRepository
 {
     /**
-     * @var \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository
+     * @var \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository<PaymentMethodCollection>
      */
     private $paymentMethodRepository;
 
+    /**
+     * @param \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository<PaymentMethodCollection> $paymentMethodRepository
+     */
     public function __construct(EntityRepository $paymentMethodRepository)
     {
         $this->paymentMethodRepository = $paymentMethodRepository;

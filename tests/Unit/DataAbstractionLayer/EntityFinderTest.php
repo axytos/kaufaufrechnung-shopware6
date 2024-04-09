@@ -17,11 +17,11 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 
 class EntityFinderTest extends TestCase
 {
-    /** @var EntityRepository&MockObject */
+    /** @var EntityRepository<EntityCollection<Entity>>&MockObject */
     private $entityRepository;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\EntityFinder<Entity>
+     * @var \Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\EntityFinder<Entity,EntityCollection<Entity>>
      */
     private $sut;
 
@@ -38,7 +38,7 @@ class EntityFinderTest extends TestCase
         $criteria = $this->createMock(Criteria::class);
         $context = $this->createMock(Context::class);
 
-        /** @var EntitySearchResult&MockObject */
+        /** @var EntityCollection<Entity>&MockObject */
         $searchResult = $this->createMock(EntitySearchResult::class);
         $searchResult->method('count')->willReturn(1);
         $searchResult->method('first')->willReturn($entity);
@@ -56,7 +56,7 @@ class EntityFinderTest extends TestCase
         $criteria = $this->createMock(Criteria::class);
         $context = $this->createMock(Context::class);
 
-        /** @var EntitySearchResult&MockObject */
+        /** @var EntityCollection<Entity>&MockObject */
         $searchResult = $this->createMock(EntitySearchResult::class);
         $searchResult->method('count')->willReturn(1);
         $searchResult->method('first')->willReturn($entity);
@@ -73,7 +73,7 @@ class EntityFinderTest extends TestCase
         $criteria = $this->createMock(Criteria::class);
         $context = $this->createMock(Context::class);
 
-        /** @var EntitySearchResult&MockObject */
+        /** @var EntityCollection<Entity>&MockObject */
         $searchResult = $this->createMock(EntitySearchResult::class);
         $searchResult->method('count')->willReturn(0);
         $searchResult->method('first')->willReturn($entity);
