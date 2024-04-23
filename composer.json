@@ -20,11 +20,10 @@
     },
     "require": {
         "php": ">=7.2.0",
-        "axytos/ecommerce-sdk": "1.6.1"
+        "axytos/ecommerce-sdk": "1.6.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5",
-        "phpmetrics/phpmetrics": "^2.7",
+        "phpunit/phpunit": "^9.5 || ^10.5 || ^11.1",
         "phpstan/phpstan": "^1.4",
         "phpstan/phpstan-phpunit": "^1.0"
     },
@@ -59,7 +58,6 @@
         ],
         "phpunit": "./vendor/bin/phpunit --colors=always",
         "coverage": "./vendor/bin/phpunit --colors=always --coverage-html coverage ",
-        "metrics": "./vendor/bin/phpmetrics --report-html=metrics src",
         "phpstan": "./vendor/bin/phpstan analyse --memory-limit=1G",
         "phpstan-pro": "./vendor/bin/phpstan analyse --memory-limit=1G --pro",
         "shopware-console": "../../../bin/console",

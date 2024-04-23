@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit\ValueCalculation;
 
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PromotionIdentifierCalculator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
@@ -25,6 +26,7 @@ class PromotionIdentifierCalculatorTest extends TestCase
     /**
      * @dataProvider dataProvider_test_calculate
      */
+    #[DataProvider('dataProvider_test_calculate')]
     public function test_calculate(string $promotionName, string $promotionCode, string $expectedIdentifier): void
     {
         /** @var PromotionEntity&MockObject */
@@ -44,7 +46,7 @@ class PromotionIdentifierCalculatorTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function dataProvider_test_calculate(): array
+    public static function dataProvider_test_calculate(): array
     {
         return [
             ['', '', ' '],

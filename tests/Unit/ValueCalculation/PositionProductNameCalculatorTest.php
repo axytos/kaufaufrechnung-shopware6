@@ -7,6 +7,7 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit\ValueCalculation;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionProductNameCalculator;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PromotionIdentifierCalculator;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
@@ -32,6 +33,7 @@ class PositionProductNameCalculatorTest extends TestCase
     /**
      * @dataProvider dataProvider_test_calculate
      */
+    #[DataProvider('dataProvider_test_calculate')]
     public function test_calculate(
         string $orderLineItemType,
         string $orderLineItemLabel,
@@ -56,7 +58,7 @@ class PositionProductNameCalculatorTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function dataProvider_test_calculate(): array
+    public static function dataProvider_test_calculate(): array
     {
         return [
             [ LineItem::PRODUCT_LINE_ITEM_TYPE, 'Label', 'PromotionIdentifier', 'Label'],

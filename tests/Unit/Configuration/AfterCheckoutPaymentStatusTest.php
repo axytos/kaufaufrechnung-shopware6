@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit\Configuration;
 
 use Axytos\KaufAufRechnung\Shopware\Configuration\AfterCheckoutPaymentStatus;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\System\StateMachine\Aggregation\StateMachineTransition\StateMachineTransitionActions;
 
@@ -13,6 +14,7 @@ class AfterCheckoutPaymentStatusTest extends TestCase
     /**
      * @dataProvider getStateMachineTransactionActionCases
      */
+    #[DataProvider('getStateMachineTransactionActionCases')]
     public function test_getStateMachineTransactionActionCases_returns_correct_value(string $value, string $expectedStatusCode): void
     {
         $afterCheckoutOrderStatus = new AfterCheckoutPaymentStatus($value);

@@ -8,6 +8,7 @@ use Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDto;
 use Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
@@ -32,6 +33,7 @@ class ReturnPositionModelDtoCollectionFactoryTest extends TestCase
     /**
      * @dataProvider dataProvider_test_create
      */
+    #[DataProvider('dataProvider_test_create')]
     public function test_create(OrderLineItemCollection $orderLineItemCollection): void
     {
         /** @var array<int, array<int, mixed>> */
@@ -56,15 +58,15 @@ class ReturnPositionModelDtoCollectionFactoryTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function dataProvider_test_create(): array
+    public static function dataProvider_test_create(): array
     {
         return [
-            [$this->createOrderLineItemCollection(0)],
-            [$this->createOrderLineItemCollection(1)],
-            [$this->createOrderLineItemCollection(2)],
-            [$this->createOrderLineItemCollection(3)],
-            [$this->createOrderLineItemCollection(4)],
-            [$this->createOrderLineItemCollection(5)],
+            [self::createOrderLineItemCollection(0)],
+            [self::createOrderLineItemCollection(1)],
+            [self::createOrderLineItemCollection(2)],
+            [self::createOrderLineItemCollection(3)],
+            [self::createOrderLineItemCollection(4)],
+            [self::createOrderLineItemCollection(5)],
         ];
     }
 
@@ -76,21 +78,20 @@ class ReturnPositionModelDtoCollectionFactoryTest extends TestCase
         $this->assertCount(0, $actual);
     }
 
-    private function createOrderLineItemCollection(int $count): OrderLineItemCollection
+    private static function createOrderLineItemCollection(int $count): OrderLineItemCollection
     {
         /** @var OrderLineItemEntity[] */
         $elements = array_fill(0, $count, null);
-        $elements = array_map([$this,'createOrderLineItem'], $elements);
+        $elements = array_map([self::class,'createOrderLineItem'], $elements);
         return new OrderLineItemCollection($elements);
     }
 
-    private function createOrderLineItem(): OrderLineItemEntity
+    private static function createOrderLineItem(): OrderLineItemEntity
     {
         $id = bin2hex(random_bytes(64));
 
-        /** @var OrderLineItemEntity&MockObject */
-        $entity = $this->createMock(OrderLineItemEntity::class);
-        $entity->method('getUniqueIdentifier')->willReturn($id);
+        $entity = new OrderLineItemEntity();
+        $entity->setUniqueIdentifier($id);
 
         return $entity;
     }

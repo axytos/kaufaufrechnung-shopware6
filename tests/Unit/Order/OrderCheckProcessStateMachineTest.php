@@ -7,6 +7,7 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit\Order;
 use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository;
 use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
 use Axytos\ECommerce\Order\OrderCheckProcessStates;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Shopware\Core\Framework\Context;
@@ -85,6 +86,7 @@ class OrderCheckProcessStateMachineTest extends TestCase
     /**
      * @dataProvider dataProvider_test_getState
      */
+    #[DataProvider('dataProvider_test_getState')]
     public function test_getState(string $state): void
     {
         $this->setUpCustomFields([
@@ -99,7 +101,7 @@ class OrderCheckProcessStateMachineTest extends TestCase
     /**
      * @return array<array<string>>
      */
-    public function dataProvider_test_getState(): array
+    public static function dataProvider_test_getState(): array
     {
         return [
             [OrderCheckProcessStates::UNCHECKED],

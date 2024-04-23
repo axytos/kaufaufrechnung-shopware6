@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit\ValueCalculation;
 
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionTaxPercentCalculator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Shopware\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
@@ -32,6 +33,7 @@ class PositionTaxPercentCalculatorTest extends TestCase
      * @dataProvider dataProvider_test_calculate_returns_sum_of_caclulated_taxes
      * @param array<float> $taxRates
      */
+    #[DataProvider('dataProvider_test_calculate_returns_sum_of_caclulated_taxes')]
     public function test_calculate_returns_sum_of_caclulated_taxes(array $taxRates, float $expectedTaxPercent): void
     {
         $calculatedTaxes = $this->createCalculatedTaxes($taxRates);
@@ -48,7 +50,7 @@ class PositionTaxPercentCalculatorTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function dataProvider_test_calculate_returns_sum_of_caclulated_taxes(): array
+    public static function dataProvider_test_calculate_returns_sum_of_caclulated_taxes(): array
     {
         return [
             [[], 0],

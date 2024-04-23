@@ -13,8 +13,8 @@ use Axytos\ECommerce\Order\OrderCheckProcessStates;
 use Axytos\KaufAufRechnung\Shopware\Core\ShippingOrderEventsSubscriber;
 use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Rule\InvocationOrder;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\Framework\Context;
@@ -112,13 +112,14 @@ class ShippingOrderEventsSubscriberTest extends TestCase
     /**
      * @dataProvider dataProvider_test_onShipped_reports_shipping
      */
-    public function test_onShipped_reports_shipping(bool $configIsInvalid, string $orderState, InvocationOrder $expectedInvocationOrder): void
+    #[DataProvider('dataProvider_test_onShipped_reports_shipping')]
+    public function test_onShipped_reports_shipping(bool $configIsInvalid, string $orderState, int $expectedInvocationCount): void
     {
         $this->setUpPluginConfigurationValidation($configIsInvalid);
         $this->setUpOrderState($orderState);
 
         $this->invoiceClient
-            ->expects($expectedInvocationOrder)
+            ->expects($this->exactly($expectedInvocationCount))
             ->method('reportShipping')
             ->with($this->invoiceOrderContext);
 
@@ -128,18 +129,18 @@ class ShippingOrderEventsSubscriberTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function dataProvider_test_onShipped_reports_shipping(): array
+    public static function dataProvider_test_onShipped_reports_shipping(): array
     {
         return [
-            [true, OrderCheckProcessStates::UNCHECKED, $this->never()],
-            [true, OrderCheckProcessStates::CHECKED, $this->never()],
-            [true, OrderCheckProcessStates::FAILED, $this->never()],
-            [true, OrderCheckProcessStates::CONFIRMED, $this->never()],
+            [true, OrderCheckProcessStates::UNCHECKED, 0],
+            [true, OrderCheckProcessStates::CHECKED, 0],
+            [true, OrderCheckProcessStates::FAILED, 0],
+            [true, OrderCheckProcessStates::CONFIRMED, 0],
 
-            [false, OrderCheckProcessStates::UNCHECKED, $this->never()],
-            [false, OrderCheckProcessStates::CHECKED, $this->never()],
-            [false, OrderCheckProcessStates::FAILED, $this->never()],
-            [false, OrderCheckProcessStates::CONFIRMED, $this->once()]
+            [false, OrderCheckProcessStates::UNCHECKED, 0],
+            [false, OrderCheckProcessStates::CHECKED, 0],
+            [false, OrderCheckProcessStates::FAILED, 0],
+            [false, OrderCheckProcessStates::CONFIRMED, 1]
         ];
     }
 

@@ -8,6 +8,7 @@ use Axytos\ECommerce\Abstractions\FallbackModeConfigurationInterface;
 use Axytos\ECommerce\Abstractions\FallbackModes;
 use Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface;
 use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Payment\Cart\PaymentHandler\CashPayment;
@@ -43,6 +44,7 @@ class PaymentMethodPredicatesTest extends TestCase
     /**
      * @dataProvider isAllowedFallbackTestDataProvider
      */
+    #[DataProvider('isAllowedFallbackTestDataProvider')]
     public function test_isAllowedFallback(
         string $fallbackMode,
         string $paymentMethodConfig,
@@ -68,7 +70,7 @@ class PaymentMethodPredicatesTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function isAllowedFallbackTestDataProvider(): array
+    public static function isAllowedFallbackTestDataProvider(): array
     {
         // FallbackMode, PaymentMethodConfig, ExpectedOutcome
         return [
@@ -94,6 +96,7 @@ class PaymentMethodPredicatesTest extends TestCase
     /**
      * @dataProvider dataProvider_test_usesHandler
      */
+    #[DataProvider('dataProvider_test_usesHandler')]
     public function test_usesHandler(string $handlerIdentifier, string $handlerClass, bool $expectedOutcome): void
     {
         /** @var PaymentMethodEntity&MockObject */
@@ -110,7 +113,7 @@ class PaymentMethodPredicatesTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function dataProvider_test_usesHandler(): array
+    public static function dataProvider_test_usesHandler(): array
     {
         return [
             [InvoicePayment::class, InvoicePayment::class, true],

@@ -44,17 +44,22 @@ class CreateInvoiceTaxGroupDtoCollectionFactoryTest extends TestCase
         $expected = new CreateInvoiceTaxGroupDtoCollection(new CreateInvoiceTaxGroupDto(), new CreateInvoiceTaxGroupDto());
         $calculatedTaxCollection = new CalculatedTaxCollection();
         for ($i = 0; $i < $expected->count(); $i++) {
-            $orderLineItemEntity = new CalculatedTax($i, $i, $i);
-            $calculatedTaxCollection->add($orderLineItemEntity);
+            $caluatedTax = new CalculatedTax($i, $i, $i);
+            $calculatedTaxCollection->add($caluatedTax);
         }
 
         $this->createInvoiceTaxGroupDtoFactory
             ->expects($this->exactly($expected->count()))
             ->method('create')
-            ->withConsecutive(...$calculatedTaxCollection->map(function (CalculatedTax $orderLineItemEntity) {
-                return [$orderLineItemEntity];
-            }))
-            ->willReturnOnConsecutiveCalls(...$expected->getElements());
+            ->willReturnCallback(function (CalculatedTax $caluatedTax) use ($calculatedTaxCollection, $expected) {
+                if ($caluatedTax === $calculatedTaxCollection->get(0)) {
+                    return $expected[0];
+                }
+                if ($caluatedTax === $calculatedTaxCollection->get(1)) {
+                    return $expected[1];
+                }
+                return null;
+            });
 
         $actual = $this->sut->create($calculatedTaxCollection);
 

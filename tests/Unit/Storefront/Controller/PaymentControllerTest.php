@@ -14,8 +14,8 @@ use Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine;
 use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Error;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\HeaderBag;
@@ -62,6 +62,7 @@ class PaymentControllerTest extends TestCase
     /**
      * @dataProvider dataProvider_test_responses
      */
+    #[DataProvider('dataProvider_test_responses')]
     public function test_responses(bool $configInvalid, string $xSecretHeader, string $clientSecret, int $expectedStatusCode): void
     {
         $orderId = 'orderId';
@@ -83,7 +84,7 @@ class PaymentControllerTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function dataProvider_test_responses(): array
+    public static function dataProvider_test_responses(): array
     {
         return [
             [true, 'secret', 'other secret', 500],
@@ -96,13 +97,14 @@ class PaymentControllerTest extends TestCase
     /**
      * @dataProvider dataProvider_test_order_state_updates
      */
+    #[DataProvider('dataProvider_test_order_state_updates')]
     public function test_order_state_updates(
         bool $configInvalid,
         string $xSecretHeader,
         string $clientSecret,
         string $paymentStatus,
-        InvokedCount $expectedPayOrderCount,
-        InvokedCount $expectedPayOrderPartially
+        int $expectedPayOrderCount,
+        int $expectedPayOrderPartiallyCount
     ): void {
         $orderId = 'orderId';
         $paymentId = 'paymentId';
@@ -114,12 +116,12 @@ class PaymentControllerTest extends TestCase
         $this->setUpClientSecret($clientSecret);
 
         $this->orderStateMachine
-            ->expects($expectedPayOrderCount)
+            ->expects($this->exactly($expectedPayOrderCount))
             ->method('payOrder')
             ->with($orderId, $context);
 
         $this->orderStateMachine
-            ->expects($expectedPayOrderPartially)
+            ->expects($this->exactly($expectedPayOrderPartiallyCount))
             ->method('payOrderPartially')
             ->with($orderId, $context);
 
@@ -129,23 +131,23 @@ class PaymentControllerTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function dataProvider_test_order_state_updates(): array
+    public static function dataProvider_test_order_state_updates(): array
     {
         return [
-            [true, 'secret', 'other secret', PaymentStatus::PAID, $this->never(), $this->never()],
-            [true, 'secret', 'secret', PaymentStatus::PAID, $this->never(), $this->never()],
-            [false, 'secret', 'other secret', PaymentStatus::PAID, $this->never(), $this->never()],
-            [false, 'secret', 'secret', PaymentStatus::PAID, $this->once(), $this->never()],
+            [true, 'secret', 'other secret', PaymentStatus::PAID, 0, 0],
+            [true, 'secret', 'secret', PaymentStatus::PAID, 0, 0],
+            [false, 'secret', 'other secret', PaymentStatus::PAID, 0, 0],
+            [false, 'secret', 'secret', PaymentStatus::PAID, 1, 0],
 
-            [true, 'secret', 'other secret', PaymentStatus::OVERPAID, $this->never(), $this->never()],
-            [true, 'secret', 'secret', PaymentStatus::OVERPAID, $this->never(), $this->never()],
-            [false, 'secret', 'other secret', PaymentStatus::OVERPAID, $this->never(), $this->never()],
-            [false, 'secret', 'secret', PaymentStatus::OVERPAID, $this->once(), $this->never()],
+            [true, 'secret', 'other secret', PaymentStatus::OVERPAID, 0, 0],
+            [true, 'secret', 'secret', PaymentStatus::OVERPAID, 0, 0],
+            [false, 'secret', 'other secret', PaymentStatus::OVERPAID, 0, 0],
+            [false, 'secret', 'secret', PaymentStatus::OVERPAID, 1, 0],
 
-            [true, 'secret', 'other secret', PaymentStatus::PARTIALLY_PAID, $this->never(), $this->never()],
-            [true, 'secret', 'secret', PaymentStatus::PARTIALLY_PAID, $this->never(), $this->never()],
-            [false, 'secret', 'other secret', PaymentStatus::PARTIALLY_PAID, $this->never(), $this->never()],
-            [false, 'secret', 'secret', PaymentStatus::PARTIALLY_PAID, $this->never(), $this->once()],
+            [true, 'secret', 'other secret', PaymentStatus::PARTIALLY_PAID, 0, 0],
+            [true, 'secret', 'secret', PaymentStatus::PARTIALLY_PAID, 0, 0],
+            [false, 'secret', 'other secret', PaymentStatus::PARTIALLY_PAID, 0, 0],
+            [false, 'secret', 'secret', PaymentStatus::PARTIALLY_PAID, 0, 1],
         ];
     }
 

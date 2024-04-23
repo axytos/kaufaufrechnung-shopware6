@@ -44,17 +44,22 @@ class RefundBasketTaxGroupDtoCollectionFactoryTest extends TestCase
         $expected = new RefundBasketTaxGroupDtoCollection(new RefundBasketTaxGroupDto(), new RefundBasketTaxGroupDto());
         $calculatedTaxCollection = new CalculatedTaxCollection();
         for ($i = 0; $i < $expected->count(); $i++) {
-            $orderLineItemEntity = new CalculatedTax($i, $i, $i);
-            $calculatedTaxCollection->add($orderLineItemEntity);
+            $caluatedTax = new CalculatedTax($i, $i, $i);
+            $calculatedTaxCollection->add($caluatedTax);
         }
 
         $this->refundBasketTaxGroupDtoFactory
             ->expects($this->exactly($expected->count()))
             ->method('create')
-            ->withConsecutive(...$calculatedTaxCollection->map(function (CalculatedTax $orderLineItemEntity) {
-                return [$orderLineItemEntity];
-            }))
-            ->willReturnOnConsecutiveCalls(...$expected->getElements());
+            ->willReturnCallback(function (CalculatedTax $caluatedTax) use ($calculatedTaxCollection, $expected) {
+                if ($caluatedTax === $calculatedTaxCollection->get(0)) {
+                    return $expected[0];
+                }
+                if ($caluatedTax === $calculatedTaxCollection->get(1)) {
+                    return $expected[1];
+                }
+                return null;
+            });
 
         $actual = $this->sut->create($calculatedTaxCollection);
 

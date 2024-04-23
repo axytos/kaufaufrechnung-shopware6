@@ -13,6 +13,7 @@ use Axytos\ECommerce\Order\OrderCheckProcessStates;
 use Axytos\KaufAufRechnung\Shopware\Core\RefundOrderEventsSubscriber;
 use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\DocumentEntityRepository;
 use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Document\Aggregate\DocumentType\DocumentTypeEntity;
@@ -154,6 +155,7 @@ class RefundOrderEventsSubscriberTest extends TestCase
     /**
      * @dataProvider dataProvider_test_onOrderStateNotConfirmend
      */
+    #[DataProvider('dataProvider_test_onOrderStateNotConfirmend')]
     public function test_onDocumentWritten_does_not_call_invoiceClient_when_event_document_name_credit_note_and_order_not_confirmed(string $orderState): void
     {
         $this->setupWriteResultPayload('credit_note');
@@ -168,7 +170,7 @@ class RefundOrderEventsSubscriberTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function dataProvider_test_onOrderStateNotConfirmend(): array
+    public static function dataProvider_test_onOrderStateNotConfirmend(): array
     {
         return [
             [OrderCheckProcessStates::UNCHECKED],

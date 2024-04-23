@@ -13,9 +13,9 @@ use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
 use Axytos\ECommerce\Order\OrderCheckProcessStates;
 use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\DocumentEntityRepository;
 use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Rule\InvocationOrder;
 use Shopware\Core\Checkout\Document\Aggregate\DocumentType\DocumentTypeEntity;
 use Shopware\Core\Checkout\Document\DocumentEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
@@ -23,7 +23,7 @@ use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 
-class InvoiceEntityWrittenSubscriberTest extends TestCase
+class CreateInvoiceEventSubscriberTest extends TestCase
 {
     const ORDER_ID = 'orderId';
     const DOCUMENT_ID = 'documentId';
@@ -180,7 +180,7 @@ class InvoiceEntityWrittenSubscriberTest extends TestCase
         return $order;
     }
 
-    private function setUpOrderContext(string $documentNumber, InvocationOrder $expectedInvocationOrder): void
+    private function setUpOrderContext(string $documentNumber, int $expectedInvocationCount): void
     {
         $this->invoiceOrderContextFactory
             ->method('getInvoiceOrderContext')
@@ -188,7 +188,7 @@ class InvoiceEntityWrittenSubscriberTest extends TestCase
             ->willReturn($this->invoiceOrderContext);
 
         $this->invoiceOrderContext
-            ->expects($expectedInvocationOrder)
+            ->expects($this->exactly($expectedInvocationCount))
             ->method('setOrderInvoiceNumber')
             ->with($documentNumber);
     }
@@ -196,7 +196,8 @@ class InvoiceEntityWrittenSubscriberTest extends TestCase
     /**
      * @dataProvider dataProvider_test_onEntityWritten_calls_invoiceClient
      */
-    public function test_onEntityWritten_calls_invoiceClient(bool $configIsInvalid, bool $hasDocumentType, bool $hasOrder, string $documentTypeTechnicalName, string $orderState, InvocationOrder $invoiceOrderContextInvocationOrder, InvocationOrder $createInvoiceInvocationOrder): void
+    #[DataProvider('dataProvider_test_onEntityWritten_calls_invoiceClient')]
+    public function test_onEntityWritten_calls_invoiceClient(bool $configIsInvalid, bool $hasDocumentType, bool $hasOrder, string $documentTypeTechnicalName, string $orderState, int $invoiceOrderContextInvocationCount, int $createInvoiceInvocationCount): void
     {
         $documentNumber = 'documentNumber';
         $this->setUpPluginConfigurationIsInvalid($configIsInvalid);
@@ -207,10 +208,10 @@ class InvoiceEntityWrittenSubscriberTest extends TestCase
             $this->setUpDocument($hasDocumentType, null, $documentTypeTechnicalName, $documentNumber);
         }
         $this->setUpOrderState($orderState);
-        $this->setUpOrderContext($documentNumber, $invoiceOrderContextInvocationOrder);
+        $this->setUpOrderContext($documentNumber, $invoiceOrderContextInvocationCount);
 
         $this->invoiceClient
-            ->expects($createInvoiceInvocationOrder)
+            ->expects($this->exactly($createInvoiceInvocationCount))
             ->method('createInvoice')
             ->with($this->invoiceOrderContext);
 
@@ -220,15 +221,15 @@ class InvoiceEntityWrittenSubscriberTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function dataProvider_test_onEntityWritten_calls_invoiceClient(): array
+    public static function dataProvider_test_onEntityWritten_calls_invoiceClient(): array
     {
         return [
-            [true, true, true, 'invoice', OrderCheckProcessStates::CONFIRMED, $this->never(), $this->never()],
-            [false, false, true, 'invoice', OrderCheckProcessStates::CONFIRMED, $this->never(), $this->never()],
-            [false, true, false, 'invoice', OrderCheckProcessStates::CONFIRMED, $this->never(), $this->never()],
-            [false, true, true, 'notinvoice', OrderCheckProcessStates::CONFIRMED, $this->never(), $this->never()],
-            [false, true, true, 'invoice', OrderCheckProcessStates::CHECKED, $this->never(), $this->never()],
-            [false, true, true, 'invoice', OrderCheckProcessStates::CONFIRMED, $this->once(), $this->once()],
+            [true, true, true, 'invoice', OrderCheckProcessStates::CONFIRMED, 0, 0],
+            [false, false, true, 'invoice', OrderCheckProcessStates::CONFIRMED, 0, 0],
+            [false, true, false, 'invoice', OrderCheckProcessStates::CONFIRMED, 0, 0],
+            [false, true, true, 'notinvoice', OrderCheckProcessStates::CONFIRMED, 0, 0],
+            [false, true, true, 'invoice', OrderCheckProcessStates::CHECKED, 0, 0],
+            [false, true, true, 'invoice', OrderCheckProcessStates::CONFIRMED, 1, 1],
         ];
     }
 }

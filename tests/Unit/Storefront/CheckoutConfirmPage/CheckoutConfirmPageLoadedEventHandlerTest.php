@@ -12,6 +12,7 @@ use Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage\CheckoutConfi
 use Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage\CheckoutConfirmPageLoadedEventHandler;
 use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates;
 use Exception;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Shopware\Core\Checkout\Payment\PaymentMethodCollection;
@@ -122,6 +123,7 @@ class CheckoutConfirmPageLoadedEventHandlerTest extends TestCase
     /**
      * @group legacy
      */
+    #[Group('legacy')]
     public function test_handle_adds_CheckoutConfirmPageExtension(): void
     {
         $matchExtension = $this->callback(function ($extension) {
@@ -139,6 +141,7 @@ class CheckoutConfirmPageLoadedEventHandlerTest extends TestCase
     /**
      * @group legacy
      */
+    #[Group('legacy')]
     public function test_handle_sets_ShowCreditCheckAgreement(): void
     {
         $this->setUpCheckout(true, 'CreditCheckAgreementInfo');
@@ -158,6 +161,7 @@ class CheckoutConfirmPageLoadedEventHandlerTest extends TestCase
     /**
      * @group legacy
      */
+    #[Group('legacy')]
     public function test_handle_sets_CreditCheckAgreementInfo(): void
     {
         $this->setUpCheckout(true, 'CreditCheckAgreementInfo');
@@ -177,6 +181,7 @@ class CheckoutConfirmPageLoadedEventHandlerTest extends TestCase
     /**
      * @group legacy
      */
+    #[Group('legacy')]
     public function test_handle_does_not_show_CreditCheckAgreement_if_CreditCheckAgreement_cannot_be_loaded(): void
     {
         $this->setUpCheckoutFailed();
@@ -197,6 +202,7 @@ class CheckoutConfirmPageLoadedEventHandlerTest extends TestCase
     /**
      * @group legacy
      */
+    #[Group('legacy')]
     public function test_handle_only_shows_fallback_payment_methods_if_CreditCheckAgreement_cannot_be_loaded(): void
     {
         $this->setUpCheckoutFailed();

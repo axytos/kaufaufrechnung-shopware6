@@ -12,8 +12,8 @@ use Axytos\ECommerce\Order\OrderCheckProcessStates;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
 use Axytos\KaufAufRechnung\Shopware\Core\ReturnOrderEventsSubscriber;
 use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\Framework\Context;
@@ -63,7 +63,8 @@ class ReturnOrderEventsSubscriberTest extends TestCase
     /**
      * @dataProvider dataProvider_test_onReturned_invokes_invoice_client
      */
-    public function test_onReturned_invokes_invoice_client(bool $pluginConfigIsInvalid, string $orderCheckState, InvokedCount $expectedInvocationCount): void
+    #[DataProvider('dataProvider_test_onReturned_invokes_invoice_client')]
+    public function test_onReturned_invokes_invoice_client(bool $pluginConfigIsInvalid, string $orderCheckState, int $expectedInvocationCount): void
     {
         $orderId = 'orderId';
         $context = $this->createMock(Context::class);
@@ -89,7 +90,7 @@ class ReturnOrderEventsSubscriberTest extends TestCase
             ->willReturn($orderCheckState);
 
         $this->invoiceClient
-            ->expects($expectedInvocationCount)
+            ->expects($this->exactly($expectedInvocationCount))
             ->method('returnOrder')
             ->with($invoiceOrderContext);
 
@@ -99,18 +100,18 @@ class ReturnOrderEventsSubscriberTest extends TestCase
     /**
      * @return array<array<mixed>>
      */
-    public function dataProvider_test_onReturned_invokes_invoice_client(): array
+    public static function dataProvider_test_onReturned_invokes_invoice_client(): array
     {
         return [
-            [true, OrderCheckProcessStates::UNCHECKED, $this->never()],
-            [true, OrderCheckProcessStates::CHECKED, $this->never()],
-            [true, OrderCheckProcessStates::CONFIRMED, $this->never()],
-            [true, OrderCheckProcessStates::FAILED, $this->never()],
+            [true, OrderCheckProcessStates::UNCHECKED, 0],
+            [true, OrderCheckProcessStates::CHECKED, 0],
+            [true, OrderCheckProcessStates::CONFIRMED, 0],
+            [true, OrderCheckProcessStates::FAILED, 0],
 
-            [false, OrderCheckProcessStates::UNCHECKED, $this->never()],
-            [false, OrderCheckProcessStates::CHECKED, $this->never()],
-            [false, OrderCheckProcessStates::CONFIRMED, $this->once()],
-            [false, OrderCheckProcessStates::FAILED, $this->never()],
+            [false, OrderCheckProcessStates::UNCHECKED, 0],
+            [false, OrderCheckProcessStates::CHECKED, 0],
+            [false, OrderCheckProcessStates::CONFIRMED, 1],
+            [false, OrderCheckProcessStates::FAILED, 0],
         ];
     }
 

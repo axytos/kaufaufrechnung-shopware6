@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit\ValueCalculation;
 
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionNetPriceCalculator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Shopware\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
@@ -30,6 +31,7 @@ class PositionNetPriceCalculatorTest extends TestCase
     /**
      * @dataProvider dataProvider_test_calculate_returns_net_price
      */
+    #[DataProvider('dataProvider_test_calculate_returns_net_price')]
     public function test_calculate_returns_net_price(float $totalPrice, float $taxAmount, float $expectedNetPrice): void
     {
         /** @var CalculatedTaxCollection&MockObject */
@@ -49,7 +51,7 @@ class PositionNetPriceCalculatorTest extends TestCase
     /**
      * @return array<array<float>>
      */
-    public function dataProvider_test_calculate_returns_net_price(): array
+    public static function dataProvider_test_calculate_returns_net_price(): array
     {
         return [
             [0, 0, 0],
