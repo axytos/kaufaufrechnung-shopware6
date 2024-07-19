@@ -89,11 +89,11 @@ class PaymentController extends StorefrontController
         $paymentStatus = $invoiceOrderPaymentUpdate->paymentStatus;
 
         if ($paymentStatus === PaymentStatus::PAID || $paymentStatus === PaymentStatus::OVERPAID) {
-            $this->orderStateMachine->payOrder($orderId, $context);
+            $this->orderStateMachine->payOrder($orderId, $context->getContext());
         }
 
         if ($paymentStatus === PaymentStatus::PARTIALLY_PAID) {
-            $this->orderStateMachine->payOrderPartially($orderId, $context);
+            $this->orderStateMachine->payOrderPartially($orderId, $context->getContext());
         }
     }
 

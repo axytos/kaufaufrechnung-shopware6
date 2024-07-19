@@ -8,6 +8,10 @@ use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Invoice\ShopActions;
 use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
+use Axytos\KaufAufRechnung\Core\Model\AxytosOrder;
+use Axytos\KaufAufRechnung\Core\Model\AxytosOrderFactory;
+use Axytos\KaufAufRechnung\Shopware\Adapter\PluginOrder;
+use Axytos\KaufAufRechnung\Shopware\Adapter\PluginOrderFactory;
 use Axytos\KaufAufRechnung\Shopware\Core\AxytosInvoicePaymentHandler;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory;
@@ -50,11 +54,11 @@ class PaymentServiceDecoratorTest extends TestCase
     /** @var ErrorHandler&MockObject */
     private $errorHandler;
 
-    /** @var InvoiceClientInterface&MockObject */
-    private $invoiceClient;
+    /** @var PluginOrderFactory&MockObject */
+    private $pluginOrderFactory;
 
-    /** @var InvoiceOrderContextFactory&MockObject */
-    private $invoiceOrderContextFactory;
+    /** @var AxytosOrderFactory&MockObject */
+    private $axytosOrderFactory;
 
     /**
      * @var \Axytos\KaufAufRechnung\Shopware\Core\PaymentServiceDecorator
@@ -71,6 +75,9 @@ class PaymentServiceDecoratorTest extends TestCase
     /** @var SalesChannelContext&MockObject */
     private $salesChannelContext;
 
+    /** @var Context&MockObject */
+    private $context;
+
     /** @var PaymentMethodEntity&MockObject */
     private $paymentMethod;
 
@@ -86,8 +93,11 @@ class PaymentServiceDecoratorTest extends TestCase
     /** @var RedirectResponse&MockObject */
     private $changePaymentMethodWithErrorResponse;
 
-    /** @var InvoiceOrderContext&MockObject */
-    private $invoiceOrderContext;
+    /** @var PluginOrder&MockObject */
+    private $pluginOrder;
+
+    /** @var AxytosOrder&MockObject */
+    private $axytosOrder;
 
     public function setUp(): void
     {
@@ -98,8 +108,8 @@ class PaymentServiceDecoratorTest extends TestCase
         $this->orderCheckProcessStateMachine = $this->createMock(OrderCheckProcessStateMachine::class);
         $this->paymentMethodPredicates = $this->createMock(PaymentMethodPredicates::class);
         $this->errorHandler = $this->createMock(ErrorHandler::class);
-        $this->invoiceClient = $this->createMock(InvoiceClientInterface::class);
-        $this->invoiceOrderContextFactory = $this->createMock(InvoiceOrderContextFactory::class);
+        $this->pluginOrderFactory = $this->createMock(PluginOrderFactory::class);
+        $this->axytosOrderFactory = $this->createMock(AxytosOrderFactory::class);
 
         $this->sut = new PaymentServiceDecorator(
             $this->decorated,
@@ -109,8 +119,8 @@ class PaymentServiceDecoratorTest extends TestCase
             $this->orderCheckProcessStateMachine,
             $this->paymentMethodPredicates,
             $this->errorHandler,
-            $this->invoiceClient,
-            $this->invoiceOrderContextFactory
+            $this->pluginOrderFactory,
+            $this->axytosOrderFactory
         );
 
         $this->requestDataBag = $this->createMock(RequestDataBag::class);
@@ -122,7 +132,12 @@ class PaymentServiceDecoratorTest extends TestCase
         $this->changePaymentMethodResponse = $this->createMock(RedirectResponse::class);
         $this->changePaymentMethodWithErrorResponse = $this->createMock(RedirectResponse::class);
 
-        $this->invoiceOrderContext = $this->createMock(InvoiceOrderContext::class);
+        $this->pluginOrder = $this->createMock(PluginOrder::class);
+        $this->axytosOrder = $this->createMock(AxytosOrder::class);
+        $this->context = $this->createMock(Context::class);
+        $this->salesChannelContext
+            ->method('getContext')
+            ->willReturn($this->context);
 
         $this->setUpResponses();
     }
@@ -163,69 +178,19 @@ class PaymentServiceDecoratorTest extends TestCase
 
     private function setUpInvoicePrecheckShopAction(string $shopAction): void
     {
-        $this->salesChannelContext
-            ->method('getContext')
-            ->willReturn($this->createMock(Context::class));
+        $this->pluginOrderFactory
+            ->method('create')
+            ->with(self::ORDER_ID, $this->context)
+            ->willReturn($this->pluginOrder);
 
-        $this->invoiceOrderContextFactory
-            ->method('getInvoiceOrderContext')
-            ->with(self::ORDER_ID, $this->salesChannelContext->getContext())
-            ->willReturn($this->invoiceOrderContext);
+        $this->axytosOrderFactory
+            ->method('create')
+            ->with($this->pluginOrder)
+            ->willReturn($this->axytosOrder);
 
-        $this->invoiceClient
-            ->method('precheck')
-            ->with($this->invoiceOrderContext)
+        $this->axytosOrder
+            ->method('getOrderCheckoutAction')
             ->willReturn($shopAction);
-    }
-
-    public function test_handlePaymentByOrder_invoice_sets_order_unchecked(): void
-    {
-        $this->setUpAxytosInvoicPaymentMethodUsed(true);
-
-        $this->orderCheckProcessStateMachine
-            ->expects($this->once())
-            ->method('setUnchecked')
-            ->with(self::ORDER_ID, $this->salesChannelContext);
-
-        $this->sut->handlePaymentByOrder(self::ORDER_ID, $this->requestDataBag, $this->salesChannelContext, self::FINISH_URL, self::ERROR_URL);
-    }
-
-    public function test_handlePaymentByOrder_invoice_sets_order_checked(): void
-    {
-        $this->setUpAxytosInvoicPaymentMethodUsed(true);
-
-        $this->orderCheckProcessStateMachine
-            ->expects($this->once())
-            ->method('setChecked')
-            ->with(self::ORDER_ID, $this->salesChannelContext);
-
-        $this->sut->handlePaymentByOrder(self::ORDER_ID, $this->requestDataBag, $this->salesChannelContext, self::FINISH_URL, self::ERROR_URL);
-    }
-
-    public function test_hanldePaymentByOrder_invoice_sets_order_confirmed_if_action_is_to_complete_order(): void
-    {
-        $this->setUpAxytosInvoicPaymentMethodUsed(true);
-        $this->setUpInvoicePrecheckShopAction(ShopActions::COMPLETE_ORDER);
-
-        $this->orderCheckProcessStateMachine
-            ->expects($this->once())
-            ->method('setConfirmed')
-            ->with(self::ORDER_ID, $this->salesChannelContext);
-
-        $this->sut->handlePaymentByOrder(self::ORDER_ID, $this->requestDataBag, $this->salesChannelContext, self::FINISH_URL, self::ERROR_URL);
-    }
-
-    public function test_hanldePaymentByOrder_invoice_confirms_order_if_action_is_to_complete_order(): void
-    {
-        $this->setUpAxytosInvoicPaymentMethodUsed(true);
-        $this->setUpInvoicePrecheckShopAction(ShopActions::COMPLETE_ORDER);
-
-        $this->invoiceClient
-            ->expects($this->once())
-            ->method('confirmOrder')
-            ->with($this->invoiceOrderContext);
-
-        $this->sut->handlePaymentByOrder(self::ORDER_ID, $this->requestDataBag, $this->salesChannelContext, self::FINISH_URL, self::ERROR_URL);
     }
 
     public function test_hanldePaymentByOrder_invoice_delegates_to_decorated_if_action_is_to_complete_order(): void
@@ -259,7 +224,7 @@ class PaymentServiceDecoratorTest extends TestCase
         $this->orderStateMachine
             ->expects($this->once())
             ->method('failPayment')
-            ->with(self::ORDER_ID, $this->salesChannelContext);
+            ->with(self::ORDER_ID, $this->context);
 
         $this->sut->handlePaymentByOrder(self::ORDER_ID, $this->requestDataBag, $this->salesChannelContext, self::FINISH_URL, self::ERROR_URL);
     }

@@ -12,6 +12,7 @@ use Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto;
 use Axytos\ECommerce\DataTransferObjects\RefundBasketDto;
 use Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
+use Axytos\KaufAufRechnung\Shopware\Data\AxytosOrderAttributesEntity;
 use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\BasketDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketDtoFactory;
@@ -203,46 +204,48 @@ class InvoiceOrderContextTest extends TestCase
         $this->assertSame($basketDto, $actual);
     }
 
-    public function test_getPreCheckResponseData_returns_precheck_response_data_if_key_exists(): void
+    public function test_getPreCheckResponseData_returns_precheck_response_data(): void
     {
         $preCheckResponseData = ['key' => 42];
-        $customFields = [
-            'axytos_invoice_order_check_response' => $preCheckResponseData
-        ];
+        $attributes = $this->createMock(AxytosOrderAttributesEntity::class);
+
+        $attributes
+            ->method('getOrderPreCheckResult')
+            ->willReturn($preCheckResponseData);
 
         $this->orderEntityRepository
-            ->method('getCustomFields')
+            ->method('getAxytosOrderAttributes')
             ->with(self::ORDER_ID, $this->context)
-            ->willReturn($customFields);
+            ->willReturn($attributes);
 
         $actual = $this->sut->getPreCheckResponseData();
 
         $this->assertSame($preCheckResponseData, $actual);
     }
 
-    public function test_getPreCheckResponseData_returns_empty_array_if_key_does_not_exists(): void
-    {
-        $this->orderEntityRepository
-            ->method('getCustomFields')
-            ->with(self::ORDER_ID, $this->context)
-            ->willReturn([]);
-
-        $actual = $this->sut->getPreCheckResponseData();
-
-        $this->assertSame([], $actual);
-    }
-
-    public function test_setPreCheckResponseData_saves_precheck_response_data_as_custom_field_for_order(): void
+    public function test_setPreCheckResponseData_saves_precheck_response_data_in_custom_extension_for_order(): void
     {
         $preCheckResponseData = ['key' => 42];
-        $customFields = [
-            'axytos_invoice_order_check_response' => $preCheckResponseData
-        ];
+        $attributes = $this->createMock(AxytosOrderAttributesEntity::class);
+
+        $attributes
+            ->method('getOrderPreCheckResult')
+            ->willReturn($preCheckResponseData);
+
+        $this->orderEntityRepository
+            ->method('getAxytosOrderAttributes')
+            ->with(self::ORDER_ID, $this->context)
+            ->willReturn($attributes);
+
+        $attributes
+            ->expects($this->once())
+            ->method('setOrderPreCheckResult')
+            ->with($preCheckResponseData);
 
         $this->orderEntityRepository
             ->expects($this->once())
-            ->method('updateCustomFields')
-            ->with(self::ORDER_ID, $customFields, $this->context);
+            ->method('updateAxytosOrderAttributes')
+            ->with(self::ORDER_ID, $attributes, $this->context);
 
         $this->sut->setPreCheckResponseData($preCheckResponseData);
     }

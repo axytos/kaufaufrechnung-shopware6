@@ -33,9 +33,9 @@ class CredentialValidationController
     }
 
     /**
-     * @Route(path="/api/v1/AxytosKaufAufRechnung/Credentials/validate")
+     * @Route(path="/api/AxytosKaufAufRechnung/v1/Credentials/validate")
      */
-    #[Route(path: '/api/v1/AxytosKaufAufRechnung/Credentials/validate', name: 'axytos.credentials.validate', methods: ['POST'])]
+    #[Route(path: '/api/AxytosKaufAufRechnung/v1/Credentials/validate', name: 'axytos.kaufaufrechnung.credentials.validate', methods: ['POST'])]
     public function validateCredentials(): JsonResponse
     {
         try {

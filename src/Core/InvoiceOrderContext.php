@@ -26,6 +26,7 @@ use Axytos\KaufAufRechnung\Shopware\ValueCalculation\LogisticianCalculator;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\TrackingIdCalculator;
 use DateTimeInterface;
 use Exception;
+use Shopware\Core\Checkout\Document\DocumentEntity;
 use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
@@ -85,11 +86,6 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
      */
     private $logisticianCalculator;
 
-    /**
-     * @var string
-     */
-    private $invoiceNumber;
-
     public function __construct(
         string $orderId,
         Context $context,
@@ -120,6 +116,22 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
         $this->logisticianCalculator = $logisticianCalculator;
     }
 
+    /**
+     * @return string
+     */
+    public function getOrderId()
+    {
+        return $this->orderId;
+    }
+
+    /**
+     * @return Context
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
+
     private function getOrder(): OrderEntity
     {
         return $this->orderEntityRepository->findOrder($this->orderId, $this->context);
@@ -145,16 +157,18 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
      */
     public function getOrderInvoiceNumber()
     {
-        return $this->invoiceNumber;
-    }
-
-    /**
-     * @param string $invoiceNumber
-     * @return void
-     */
-    public function setOrderInvoiceNumber($invoiceNumber)
-    {
-        $this->invoiceNumber = $invoiceNumber;
+        $orderEntity = $this->getOrder();
+        $documents = $orderEntity->getDocuments();
+        if (!is_null($documents)) {
+            /** @var DocumentEntity $document */
+            foreach ($documents as $document) {
+                $documentType = $document->getDocumentType();
+                if (!is_null($documentType) && $documentType->getTechnicalName() === 'invoice') {
+                    return strval($document->getDocumentNumber());
+                }
+            }
+        }
+        return '';
     }
 
     /**
@@ -225,13 +239,8 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
      */
     public function getPreCheckResponseData()
     {
-        $customFields = $this->orderEntityRepository->getCustomFields($this->orderId, $this->context);
-
-        if (!array_key_exists('axytos_invoice_order_check_response', $customFields)) {
-            return [];
-        }
-
-        return $customFields['axytos_invoice_order_check_response'];
+        $attributes = $this->orderEntityRepository->getAxytosOrderAttributes($this->orderId, $this->context);
+        return $attributes->getOrderPreCheckResult();
     }
 
     /**
@@ -240,8 +249,9 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
      */
     public function setPreCheckResponseData($data)
     {
-        $customFields = ['axytos_invoice_order_check_response' => $data];
-        $this->orderEntityRepository->updateCustomFields($this->orderId, $customFields, $this->context);
+        $attributes = $this->orderEntityRepository->getAxytosOrderAttributes($this->orderId, $this->context);
+        $attributes->setOrderPreCheckResult($data);
+        $this->orderEntityRepository->updateAxytosOrderAttributes($this->orderId, $attributes, $this->context);
     }
 
     /**

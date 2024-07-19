@@ -85,6 +85,30 @@
             </options>
         </input-field>
 
+        <input-field type="single-select">
+            <name>orderSyncCronJobInterval</name>
+            <label>Order Sync CronJob Interval</label>
+            <label lang="de-DE">Order Sync CronJob Interval</label>
+            <defaultValue>ORDER_SYNC_CRONJOB_INTERVAL_NEVER</defaultValue>
+            <options>
+                <option>
+                    <id>ORDER_SYNC_CRONJOB_INTERVAL_NEVER</id>
+                    <name lang="de-DE">Niemals</name>
+                    <name>Never</name>
+                </option>
+                <option>
+                    <id>ORDER_SYNC_CRONJOB_INTERVAL_ONCE_EVERY_24_HOURS_AT_MIDNIGHT</id>
+                    <name lang="de-DE">Einmal Alle 24 Stunden um Mitternacht</name>
+                    <name>Once Every 24 Hours at Midnight</name>
+                </option>
+                <option>
+                    <id>ORDER_SYNC_CRONJOB_INTERVAL_ONCE_EVERY_10_SECONDS</id>
+                    <name lang="de-DE">Einmal Alle 10 Sekunden</name>
+                    <name>Once Every 10 Seconds</name>
+                </option>
+            </options>
+        </input-field>
+
         <input-field type="textarea">
             <name>errorMessage</name>
             <label>Errormessage on rejection</label>

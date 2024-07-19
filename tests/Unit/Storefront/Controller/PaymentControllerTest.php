@@ -17,6 +17,7 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Shopware\Core\Framework\Context;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request;
@@ -69,13 +70,15 @@ class PaymentControllerTest extends TestCase
         $paymentStatus = 'paymentStatus';
         $paymentId = 'paymentId';
         $request = $this->createRequest($xSecretHeader);
-        $context = $this->createMock(SalesChannelContext::class);
+        $salesChannelContext = $this->createMock(SalesChannelContext::class);
+        $context = $this->createMock(Context::class);
+        $salesChannelContext->method('getContext')->willReturn($context);
 
         $this->setUpPluginConfigurationValidator($configInvalid);
         $this->setUpInvoiceOrderPaymentUpdate($paymentId, $orderId, $paymentStatus);
         $this->setUpClientSecret($clientSecret);
 
-        $response = $this->paymentController->payment($paymentId, $request, $context);
+        $response = $this->paymentController->payment($paymentId, $request, $salesChannelContext);
 
         $this->assertEmpty($response->getContent());
         $this->assertEquals($expectedStatusCode, $response->getStatusCode());
@@ -109,7 +112,9 @@ class PaymentControllerTest extends TestCase
         $orderId = 'orderId';
         $paymentId = 'paymentId';
         $request = $this->createRequest($xSecretHeader);
-        $context = $this->createMock(SalesChannelContext::class);
+        $salesChannelContext = $this->createMock(SalesChannelContext::class);
+        $context = $this->createMock(Context::class);
+        $salesChannelContext->method('getContext')->willReturn($context);
 
         $this->setUpPluginConfigurationValidator($configInvalid);
         $this->setUpInvoiceOrderPaymentUpdate($paymentId, $orderId, $paymentStatus);
@@ -125,7 +130,7 @@ class PaymentControllerTest extends TestCase
             ->method('payOrderPartially')
             ->with($orderId, $context);
 
-        $this->paymentController->payment($paymentId, $request, $context);
+        $this->paymentController->payment($paymentId, $request, $salesChannelContext);
     }
 
     /**

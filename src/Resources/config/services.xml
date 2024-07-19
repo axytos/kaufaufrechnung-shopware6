@@ -141,26 +141,6 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
-        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Core\CancelOrderEventSubscriber">
-            <tag name="kernel.event_subscriber"/>
-        </service>
-
-        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Core\CreateInvoiceEventSubscriber">
-            <tag name="kernel.event_subscriber"/>
-        </service>
-
-        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Core\ShippingOrderEventsSubscriber">
-            <tag name="kernel.event_subscriber"/>
-        </service>
-
-        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Core\RefundOrderEventsSubscriber">
-            <tag name="kernel.event_subscriber"/>
-        </service>
-
-        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Core\ReturnOrderEventsSubscriber">
-            <tag name="kernel.event_subscriber"/>
-        </service>
-
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Storefront\Controller\PaymentController" public="true">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
@@ -170,6 +150,68 @@
         <!-- Administration =========================================================================================================== -->
 
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Administration\Controller\Api\CredentialValidationController" public="true"/>
+
+        <!-- Store API ================================================================================================================ -->
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\StoreApi\Controller\ActionCallbackController" public="true"/>
+
+        <!-- Adapter ================================================================================================================== -->
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Core\Model\Actions\ActionExecutor"/>
+        <service id="Axytos\KaufAufRechnung\Core\Abstractions\Model\Actions\ActionExecutorInterface" alias="Axytos\KaufAufRechnung\Core\Model\Actions\ActionExecutor"/>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Adapter\Logging\LoggerAdapter"/>
+        <service id="Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface" alias="Axytos\KaufAufRechnung\Shopware\Adapter\Logging\LoggerAdapter"/>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Adapter\Configuration\ClientSecretProvider"/>
+        <service id="Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Configuration\ClientSecretProviderInterface" alias="Axytos\KaufAufRechnung\Shopware\Adapter\Configuration\ClientSecretProvider"/>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Core\OrderSyncWorker"/>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Adapter\OrderSyncRepository"/>
+        <service id="Axytos\KaufAufRechnung\Core\Plugin\Abstractions\OrderSyncRepositoryInterface" alias="Axytos\KaufAufRechnung\Shopware\Adapter\OrderSyncRepository"/>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Core\Model\AxytosOrderFactory"/>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Adapter\Database\DatabaseTransactionFactory"/>
+        <service id="Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Database\DatabaseTransactionFactoryInterface" alias="Axytos\KaufAufRechnung\Shopware\Adapter\Database\DatabaseTransactionFactory"/>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Core\Model\AxytosOrderCommandFacade"/>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Adapter\PluginOrderFactory"/>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Data\AxytosOrderAttributesEntityDefinition">
+            <tag name="shopware.entity.definition" entity="axytos_kaufaufrechnung_order_attributes" />
+        </service>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Data\AxytosOrderAttributesEntityExtension">
+            <tag name="shopware.entity.extension"/>
+        </service>
+
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Adapter\HashCalculation\HashCalculator"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Adapter\HashCalculation\SHA256HashAlgorithm"/>
+        <service id="Axytos\KaufAufRechnung\Shopware\Adapter\HashCalculation\HashAlgorithmInterface" alias="Axytos\KaufAufRechnung\Shopware\Adapter\HashCalculation\SHA256HashAlgorithm"/>
+
+        <!-- CronJob ================================================================================================================== -->
+        
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\CronJob\OrderSyncCronJobScheduler"/>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\CronJob\OrderSyncCronJobTask">
+            <tag name="shopware.scheduled.task" />
+        </service>
+        <service id="Axytos\KaufAufRechnung\Shopware\CronJob\OrderSyncCronJobTaskHandler">
+            <argument type="service" id="scheduled_task.repository" />
+            <argument type="service" id="monolog.logger.axytos.kauf_auf_rechnung.plugin.channel" /> <!-- ScheduledTaskHandler requires \Psr\Log\LoggerInterface -->
+            <argument type="service" id="Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator" />
+            <argument type="service" id="Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler" />
+            <argument type="service" id="Axytos\KaufAufRechnung\Core\OrderSyncWorker" />
+            <argument type="service" id="Axytos\KaufAufRechnung\Shopware\CronJob\OrderSyncCronJobScheduler" />
+            <tag name="messenger.message_handler" />
+        </service>
+        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\CronJob\OrderSyncCronJobConfigSubscriber">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+
 
     </services>
 

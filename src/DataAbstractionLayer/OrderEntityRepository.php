@@ -6,6 +6,8 @@ namespace Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer;
 
 use Axytos\KaufAufRechnung\Shopware\Configuration\AfterCheckoutOrderStatus;
 use Axytos\KaufAufRechnung\Shopware\Configuration\AfterCheckoutPaymentStatus;
+use Axytos\KaufAufRechnung\Shopware\Core\AxytosInvoicePaymentHandler;
+use Axytos\KaufAufRechnung\Shopware\Data\AxytosOrderAttributesEntity;
 use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryCollection;
 use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryDefinition;
 use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionCollection;
@@ -16,6 +18,11 @@ use Shopware\Core\Checkout\Order\OrderCollection;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
+use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\StateMachine\Aggregation\StateMachineTransition\StateMachineTransitionActions;
 use Shopware\Core\System\StateMachine\StateMachineRegistry;
 use Shopware\Core\System\StateMachine\Transition;
@@ -50,7 +57,6 @@ class OrderEntityRepository
         $criteria->addAssociation('transactions.paymentMethod');
         $criteria->addAssociation('orderCustomer.customer');
         $criteria->addAssociation('orderCustomer.salutation');
-        $criteria->addAssociation('salutation');
         $criteria->addAssociation('transactions.paymentMethod.appPaymentMethod.app');
         $criteria->addAssociation('language');
         $criteria->addAssociation('currency');
@@ -65,8 +71,56 @@ class OrderEntityRepository
         $criteria->addAssociation('lineItems.product');
         $criteria->addAssociation('lineItems.promotion');
         $criteria->getAssociation('transactions');
+        $criteria->getAssociation('documents');
+        $criteria->getAssociation('documents.documentType');
 
         return $this->findFirst($criteria, $context);
+    }
+
+    public function getAxytosOrderAttributes(string $orderId, Context $context): AxytosOrderAttributesEntity
+    {
+        $criteria = new Criteria([$orderId]);
+        $criteria->addAssociation('axytosKaufAufRechnungOrderAttributes');
+
+        /** @var \Shopware\Core\Checkout\Order\OrderEntity */
+        $orderEntity = $this->findFirst($criteria, $context);
+        /** @var \Axytos\KaufAufRechnung\Shopware\Data\AxytosOrderAttributesEntity */
+        $attributes = $orderEntity->getExtension('axytosKaufAufRechnungOrderAttributes');
+
+        if (is_null($attributes)) {
+            $attributes = new AxytosOrderAttributesEntity();
+            $attributes->setId(Uuid::randomHex());
+            $attributes->setShopwareOrderEntityId($orderEntity->getId());
+            $attributes->setShopwareOrderNumber($orderEntity->getOrderNumber());
+            $this->updateAxytosOrderAttributes($orderId, $attributes, $context);
+        }
+
+        return $attributes;
+    }
+
+    public function updateAxytosOrderAttributes(string $orderId, AxytosOrderAttributesEntity $axytosOrderAttributes, Context $context): void
+    {
+        $orderEntity = $this->orderRepository->search(new Criteria([$orderId]), $context)->first();
+
+        $orderEntityId = $orderId;
+        $orderEntityVersionId = is_null($orderEntity) ? null : $orderEntity->getVersionId();
+
+        $orderData = [
+            'id' => $orderId,
+            'axytosKaufAufRechnungOrderAttributes' => [
+                'id' => $axytosOrderAttributes->getId(),
+                'shopwareOrderEntityId' => $orderEntityId,
+                'shopwareOrderEntityVersionId' => $orderEntityVersionId,
+                'shopwareOrderNumber' => $axytosOrderAttributes->getShopwareOrderNumber(),
+                'orderPreCheckResult' => $axytosOrderAttributes->getOrderPreCheckResult(),
+                'shippingReported' => $axytosOrderAttributes->getShippingReported(),
+                'reportedTrackingCode' => $axytosOrderAttributes->getReportedTrackingCode(),
+                'orderBasketHash' => $axytosOrderAttributes->getOrderBasketHash(),
+                'orderState' => $axytosOrderAttributes->getOrderState(),
+                'orderStateData' => $axytosOrderAttributes->getOrderStateData()
+            ]
+        ];
+        $this->orderRepository->upsert([$orderData], $context);
     }
 
     /**
@@ -220,5 +274,56 @@ class OrderEntityRepository
                 'stateId'
             ), $context);
         }
+    }
+
+    /**
+     * @param string[] $orderStates
+     * @param int|null $limit
+     * @param string|null $startId
+     * @param Context $context
+     * @return string[]
+     */
+    public function getOrderIdsByStates($orderStates, Context $context, $limit = null, $startId = null)
+    {
+        $criteria = new Criteria();
+        $criteria
+            ->addAssociation('transactions.paymentMethod')
+            ->addFilter(new EqualsFilter('transactions.paymentMethod.handlerIdentifier', AxytosInvoicePaymentHandler::class));
+        $criteria
+            ->addAssociation('axytosKaufAufRechnungOrderAttributes')
+            ->addFilter(new EqualsAnyFilter('axytosKaufAufRechnungOrderAttributes.orderState', $orderStates));
+
+        $criteria->addSorting(new FieldSorting('orderNumber', FieldSorting::ASCENDING));
+
+        if (!is_null($limit)) {
+            $criteria->setLimit($limit);
+        }
+
+        if (!is_null($startId)) {
+            $criteria->addFilter(new RangeFilter('orderNumber', [
+                RangeFilter::GTE => $startId
+            ]));
+        }
+
+        $orderIds = $this->orderRepository->searchIds($criteria, $context)->getIds();
+        /** @var string[] */
+        $orderIds = array_values($orderIds);
+
+        return $orderIds;
+    }
+
+    /**
+     * @param string $orderNumber
+     * @param Context $context
+     * @return string|null
+     */
+    public function getOrderIdByOrderNumber($orderNumber, Context $context)
+    {
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('orderNumber', $orderNumber));
+
+        $orderId = $this->orderRepository->searchIds($criteria, $context)->firstId();
+
+        return $orderId;
     }
 }

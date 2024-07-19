@@ -12,7 +12,7 @@ class AxytosCredentalsValidatior extends ApiService {
         const headers = this.getBasicHeaders({});
 
         return this.httpClient
-            .post('/v1/' + this.getApiBasePath() + '/Credentials/validate', values,{
+            .post('/' + this.getApiBasePath() + '/v1/Credentials/validate', values,{
                 headers
             })
             .then((response) => {

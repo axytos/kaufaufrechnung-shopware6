@@ -7,6 +7,7 @@
     <import resource="@AxytosKaufAufRechnung/Administration/Controller/Api/CredentialValidationController.php" type="attribute" />
     <import resource="@AxytosKaufAufRechnung/Storefront/Controller/CheckoutFailedController.php" type="attribute" />
     <import resource="@AxytosKaufAufRechnung/Storefront/Controller/PaymentController.php" type="attribute" />
+    <import resource="@AxytosKaufAufRechnung/StoreApi/Controller/ActionCallbackController.php" type="attribute" />
 
     <!-- <import resource="../../Administration/Controller/**/*Controller.php" type="attribute" />
     <import resource="../../Storefront/Controller/**/*Controller.php" type="attribute" /> -->

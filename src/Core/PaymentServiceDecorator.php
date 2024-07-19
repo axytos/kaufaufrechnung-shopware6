@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Core;
 
-use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Invoice\ShopActions;
 use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
+use Axytos\KaufAufRechnung\Core\Model\AxytosOrderFactory;
+use Axytos\KaufAufRechnung\Shopware\Adapter\PluginOrderFactory;
 use Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine;
 use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
@@ -51,13 +52,13 @@ class PaymentServiceDecorator extends PaymentService
      */
     private $errorHandler;
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface
+     * @var \Axytos\KaufAufRechnung\Shopware\Adapter\PluginOrderFactory
      */
-    private $invoiceClient;
+    private $pluginOrderFactory;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory
+     * @var \Axytos\KaufAufRechnung\Core\Model\AxytosOrderFactory
      */
-    private $invoiceOrderContextFactory;
+    private $axytosOrderFactory;
 
     public function __construct(
         PaymentService $decorated,
@@ -67,8 +68,8 @@ class PaymentServiceDecorator extends PaymentService
         OrderCheckProcessStateMachine $orderCheckProcessStateMachine,
         PaymentMethodPredicates $paymentMethodPredicates,
         ErrorHandler $errorHandler,
-        InvoiceClientInterface $invoiceClient,
-        InvoiceOrderContextFactory $invoiceOrderContextFactory
+        PluginOrderFactory $pluginOrderFactory,
+        AxytosOrderFactory $axytosOrderFactory
     ) {
         $this->decorated = $decorated;
         $this->pluginConfigurationValidator = $pluginConfigurationValidator;
@@ -77,8 +78,8 @@ class PaymentServiceDecorator extends PaymentService
         $this->orderCheckProcessStateMachine = $orderCheckProcessStateMachine;
         $this->paymentMethodPredicates = $paymentMethodPredicates;
         $this->errorHandler = $errorHandler;
-        $this->invoiceClient = $invoiceClient;
-        $this->invoiceOrderContextFactory = $invoiceOrderContextFactory;
+        $this->pluginOrderFactory = $pluginOrderFactory;
+        $this->axytosOrderFactory = $axytosOrderFactory;
     }
 
     public function handlePaymentByOrder(
@@ -118,29 +119,24 @@ class PaymentServiceDecorator extends PaymentService
         ?string $finishUrl = null,
         ?string $errorUrl = null
     ): ?RedirectResponse {
-        $this->orderCheckProcessStateMachine->setUnchecked($orderId, $context);
+        $pluginOrder = $this->pluginOrderFactory->create($orderId, $context->getContext());
+        $axytosOrder = $this->axytosOrderFactory->create($pluginOrder);
+        $axytosOrder->checkout();
 
-        $invoiceOrderContext = $this->invoiceOrderContextFactory->getInvoiceOrderContext($orderId, $context->getContext());
-        $action = $this->invoiceClient->precheck($invoiceOrderContext);
-
-        $this->orderCheckProcessStateMachine->setChecked($orderId, $context);
-
+        $action = $axytosOrder->getOrderCheckoutAction();
         if ($action === ShopActions::CHANGE_PAYMENT_METHOD) {
             return $this->changePaymentMethodWithError($orderId, $context);
         }
 
-        $this->invoiceClient->confirmOrder($invoiceOrderContext);
-        $this->orderCheckProcessStateMachine->setConfirmed($orderId, $context);
-
-        $this->orderStateMachine->setConfiguredAfterCheckoutOrderStatus($orderId, $context);
-        $this->orderStateMachine->setConfiguredAfterCheckoutPaymentStatus($orderId, $context);
+        $this->orderStateMachine->setConfiguredAfterCheckoutOrderStatus($orderId, $context->getContext());
+        $this->orderStateMachine->setConfiguredAfterCheckoutPaymentStatus($orderId, $context->getContext());
 
         return $this->completeOrder($orderId, $dataBag, $context, $finishUrl, $errorUrl);
     }
 
     private function changePaymentMethodWithError(string $orderId, SalesChannelContext $context): RedirectResponse
     {
-        $this->orderStateMachine->failPayment($orderId, $context);
+        $this->orderStateMachine->failPayment($orderId, $context->getContext());
         return $this->router->redirectToEditOrderPageWithError($orderId);
     }
 
