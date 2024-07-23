@@ -91,5 +91,6 @@
         "remove-shopware-core": "@php ./scripts/remove_shopware_core.php",
         "require-shopware-core": "@php ./scripts/require_shopware_core.php",
         "set-version": "@php ./scripts/set_version.php"
-    }
+    },
+    "minimum-stability": "alpha"
 }
