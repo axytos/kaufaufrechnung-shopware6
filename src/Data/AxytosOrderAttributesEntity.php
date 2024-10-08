@@ -8,12 +8,10 @@ use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
- * reference: https://developer.shopware.com/docs/guides/plugins/plugins/framework/data-handling/add-custom-complex-data.html#entity-class
+ * reference: https://developer.shopware.com/docs/guides/plugins/plugins/framework/data-handling/add-custom-complex-data.html#entity-class.
  *
  * WARNING
  * The properties of the entity class have to be at least protected, otherwise the data abstraction layer won't be able to set the values.
- *
- * @package Axytos\KaufAufRechnung\Shopware\Data
  */
 class AxytosOrderAttributesEntity extends Entity implements AxytosOrderAttributesInterface
 {
@@ -22,12 +20,12 @@ class AxytosOrderAttributesEntity extends Entity implements AxytosOrderAttribute
     /**
      * @var string|null
      */
-    protected $shopwareOrderEntityId = null;
+    protected $shopwareOrderEntityId;
 
     /**
      * @var string|null
      */
-    protected $shopwareOrderNumber = null;
+    protected $shopwareOrderNumber;
 
     /**
      * @var array<mixed>
@@ -69,6 +67,7 @@ class AxytosOrderAttributesEntity extends Entity implements AxytosOrderAttribute
 
     /**
      * @param string|null $shopwareOrderEntityId
+     *
      * @return void
      */
     public function setShopwareOrderEntityId($shopwareOrderEntityId)
@@ -86,6 +85,7 @@ class AxytosOrderAttributesEntity extends Entity implements AxytosOrderAttribute
 
     /**
      * @param string|null $shopwareOrderNumber
+     *
      * @return void
      */
     public function setShopwareOrderNumber($shopwareOrderNumber)
@@ -103,6 +103,7 @@ class AxytosOrderAttributesEntity extends Entity implements AxytosOrderAttribute
 
     /**
      * @param array<mixed> $orderPreCheckResult
+     *
      * @return void
      */
     public function setOrderPreCheckResult($orderPreCheckResult)
@@ -120,6 +121,7 @@ class AxytosOrderAttributesEntity extends Entity implements AxytosOrderAttribute
 
     /**
      * @param bool $shippingReported
+     *
      * @return void
      */
     public function setShippingReported($shippingReported)
@@ -137,6 +139,7 @@ class AxytosOrderAttributesEntity extends Entity implements AxytosOrderAttribute
 
     /**
      * @param string|null $reportedTrackingCode
+     *
      * @return void
      */
     public function setReportedTrackingCode($reportedTrackingCode)
@@ -154,6 +157,7 @@ class AxytosOrderAttributesEntity extends Entity implements AxytosOrderAttribute
 
     /**
      * @param string $orderBasketHash
+     *
      * @return void
      */
     public function setOrderBasketHash($orderBasketHash)
@@ -171,6 +175,7 @@ class AxytosOrderAttributesEntity extends Entity implements AxytosOrderAttribute
 
     /**
      * @param string $orderState
+     *
      * @return void
      */
     public function setOrderState($orderState)
@@ -188,6 +193,7 @@ class AxytosOrderAttributesEntity extends Entity implements AxytosOrderAttribute
 
     /**
      * @param string $orderStateData
+     *
      * @return void
      */
     public function setOrderStateData($orderStateData)

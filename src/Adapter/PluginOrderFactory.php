@@ -11,19 +11,19 @@ use Shopware\Core\Framework\Context;
 class PluginOrderFactory
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory
+     * @var InvoiceOrderContextFactory
      */
     private $invoiceOrderContextFactory;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository
+     * @var OrderEntityRepository
      */
     private $orderEntityRepository;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine
+     * @var OrderStateMachine
      */
     private $orderStateMachine;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Adapter\HashCalculation\HashCalculator
+     * @var HashCalculator
      */
     private $hashCalculator;
 
@@ -40,13 +40,12 @@ class PluginOrderFactory
     }
 
     /**
-     * @param string $orderId
-     * @param \Shopware\Core\Framework\Context $context
-     * @return \Axytos\KaufAufRechnung\Shopware\Adapter\PluginOrder
+     * @return PluginOrder
      */
     public function create(string $orderId, Context $context)
     {
         $invoiceOrderContext = $this->invoiceOrderContextFactory->getInvoiceOrderContext($orderId, $context);
+
         return new PluginOrder(
             $invoiceOrderContext,
             $this->orderEntityRepository,
@@ -57,7 +56,7 @@ class PluginOrderFactory
 
     /**
      * @param string[] $orderIds
-     * @param \Shopware\Core\Framework\Context $context
+     *
      * @return \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface[]
      */
     public function createMany(array $orderIds, Context $context)

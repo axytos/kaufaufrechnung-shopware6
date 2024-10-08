@@ -8,8 +8,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\BasketUpdate\Bas
 class Basket implements BasketInterface
 {
     /**
-     *
-     * @var \Axytos\ECommerce\DataTransferObjects\BasketDto
+     * @var BasketDto
      */
     private $dto;
 
@@ -41,7 +40,6 @@ class Basket implements BasketInterface
     {
         return floatval($this->dto->grossTotal);
     }
-
 
     /**
      * @return \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\BasketUpdate\BasketPositionInterface[]

@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit;
 
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Axytos\KaufAufRechnung\Shopware\Storefront\AccountEditOrderPage\AccountEditOrderPageLoadedEventHandler;
 use Axytos\KaufAufRechnung\Shopware\Storefront\AccountEditOrderPage\AccountEditOrderPageLoadedEventSubscriber;
-use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
-use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shopware\Storefront\Page\Account\Order\AccountEditOrderPageLoadedEvent;
 
+/**
+ * @internal
+ */
 class AccountEditOrderPageLoadedEventSubscriberTest extends TestCase
 {
     /** @var PluginConfigurationValidator&MockObject */
@@ -25,7 +27,7 @@ class AccountEditOrderPageLoadedEventSubscriberTest extends TestCase
     private $errorHandler;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Storefront\AccountEditOrderPage\AccountEditOrderPageLoadedEventSubscriber
+     * @var AccountEditOrderPageLoadedEventSubscriber
      */
     private $sut;
 
@@ -42,7 +44,7 @@ class AccountEditOrderPageLoadedEventSubscriberTest extends TestCase
         );
     }
 
-    public function test_onAccountEditOrderPageLoaded_is_subscribed_to_AccountEditOrderPageLoadedEvent(): void
+    public function test_on_account_edit_order_page_loaded_is_subscribed_to_account_edit_order_page_loaded_event(): void
     {
         $subscribedEvents = AccountEditOrderPageLoadedEventSubscriber::getSubscribedEvents();
 
@@ -52,7 +54,7 @@ class AccountEditOrderPageLoadedEventSubscriberTest extends TestCase
         );
     }
 
-    public function test_onAccountEditOrderPageLoaded_plugin_configuraton_is_valid_executes_handler(): void
+    public function test_on_account_edit_order_page_loaded_plugin_configuraton_is_valid_executes_handler(): void
     {
         $event = $this->createMock(AccountEditOrderPageLoadedEvent::class);
 
@@ -61,12 +63,13 @@ class AccountEditOrderPageLoadedEventSubscriberTest extends TestCase
         $this->accountEditOrderPageLoadedEventHandler
             ->expects($this->once())
             ->method('handle')
-            ->with($event);
+            ->with($event)
+        ;
 
         $this->sut->onAccountEditOrderPageLoaded($event);
     }
 
-    public function test_onAccountEditOrderPageLoaded_plugin_configuraton_is_invalid_does_not_execute_handler(): void
+    public function test_on_account_edit_order_page_loaded_plugin_configuraton_is_invalid_does_not_execute_handler(): void
     {
         $event = $this->createMock(AccountEditOrderPageLoadedEvent::class);
 
@@ -75,26 +78,29 @@ class AccountEditOrderPageLoadedEventSubscriberTest extends TestCase
         $this->accountEditOrderPageLoadedEventHandler
             ->expects($this->never())
             ->method('handle')
-            ->with($event);
+            ->with($event)
+        ;
 
         $this->sut->onAccountEditOrderPageLoaded($event);
     }
 
-    public function test_onAccountEditOrderPageLoaded_reprots_errors(): void
+    public function test_on_account_edit_order_page_loaded_reprots_errors(): void
     {
         $event = $this->createMock(AccountEditOrderPageLoadedEvent::class);
-        $exception = new Exception();
+        $exception = new \Exception();
 
         $this->pluginConfigurationValidator->method('isInvalid')->willReturn(false);
 
         $this->accountEditOrderPageLoadedEventHandler
             ->method('handle')
-            ->willThrowException($exception);
+            ->willThrowException($exception)
+        ;
 
         $this->errorHandler
             ->expects($this->once())
             ->method('handle')
-            ->with($exception);
+            ->with($exception)
+        ;
 
         $this->sut->onAccountEditOrderPageLoaded($event);
     }

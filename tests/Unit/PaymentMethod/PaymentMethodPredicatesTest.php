@@ -17,6 +17,9 @@ use Shopware\Core\Checkout\Payment\Cart\PaymentHandler\InvoicePayment;
 use Shopware\Core\Checkout\Payment\Cart\PaymentHandler\PrePayment;
 use Shopware\Core\Checkout\Payment\PaymentMethodEntity;
 
+/**
+ * @internal
+ */
 class PaymentMethodPredicatesTest extends TestCase
 {
     /** @var PaymentMethodConfigurationInterface&MockObject */
@@ -26,7 +29,7 @@ class PaymentMethodPredicatesTest extends TestCase
     private $fallbackModeConfiguration;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates
+     * @var PaymentMethodPredicates
      */
     private $sut;
 
@@ -45,7 +48,7 @@ class PaymentMethodPredicatesTest extends TestCase
      * @dataProvider isAllowedFallbackTestDataProvider
      */
     #[DataProvider('isAllowedFallbackTestDataProvider')]
-    public function test_isAllowedFallback(
+    public function test_is_allowed_fallback(
         string $fallbackMode,
         string $paymentMethodConfig,
         bool $expectedOutcome
@@ -55,12 +58,14 @@ class PaymentMethodPredicatesTest extends TestCase
 
         $this->fallbackModeConfiguration
             ->method('getFallbackMode')
-            ->willReturn($fallbackMode);
+            ->willReturn($fallbackMode)
+        ;
 
         $this->paymentMethodConfiguration
             ->method($paymentMethodConfig)
             ->with($paymentMethodId)
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
 
         $result = $this->sut->isAllowedFallback($paymentMethodEntity);
 
@@ -97,13 +102,14 @@ class PaymentMethodPredicatesTest extends TestCase
      * @dataProvider dataProvider_test_usesHandler
      */
     #[DataProvider('dataProvider_test_usesHandler')]
-    public function test_usesHandler(string $handlerIdentifier, string $handlerClass, bool $expectedOutcome): void
+    public function test_uses_handler(string $handlerIdentifier, string $handlerClass, bool $expectedOutcome): void
     {
         /** @var PaymentMethodEntity&MockObject */
         $paymentMethodEntity = $this->createMock(PaymentMethodEntity::class);
         $paymentMethodEntity
             ->method('getHandlerIdentifier')
-            ->willReturn($handlerIdentifier);
+            ->willReturn($handlerIdentifier)
+        ;
 
         $actual = $this->sut->usesHandler($paymentMethodEntity, $handlerClass);
 
@@ -144,10 +150,12 @@ class PaymentMethodPredicatesTest extends TestCase
         $paymentMethodEntity = $this->createMock(PaymentMethodEntity::class);
         $paymentMethodEntity
             ->method('getId')
-            ->willReturn($paymentMethodId);
+            ->willReturn($paymentMethodId)
+        ;
         $paymentMethodEntity
             ->method('getUniqueIdentifier')
-            ->willReturn($paymentMethodId);
+            ->willReturn($paymentMethodId)
+        ;
 
         return $paymentMethodEntity;
     }

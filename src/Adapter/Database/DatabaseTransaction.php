@@ -8,7 +8,7 @@ use Doctrine\DBAL\Connection;
 class DatabaseTransaction implements DatabaseTransactionInterface
 {
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     private $connection;
 

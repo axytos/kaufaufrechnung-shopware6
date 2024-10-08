@@ -12,15 +12,15 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class CheckoutConfirmPageLoadedEventSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator
+     * @var PluginConfigurationValidator
      */
     private $pluginConfigurationValidator;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage\CheckoutConfirmPageLoadedEventHandler
+     * @var CheckoutConfirmPageLoadedEventHandler
      */
     private $checkoutConfirmPageLoadedEventHandler;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler
+     * @var ErrorHandler
      */
     private $errorHandler;
 
@@ -37,7 +37,7 @@ class CheckoutConfirmPageLoadedEventSubscriber implements EventSubscriberInterfa
     public static function getSubscribedEvents(): array
     {
         return [
-            CheckoutConfirmPageLoadedEvent::class => 'onCheckoutConfirmPageLoaded'
+            CheckoutConfirmPageLoadedEvent::class => 'onCheckoutConfirmPageLoaded',
         ];
     }
 

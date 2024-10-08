@@ -6,9 +6,9 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit\DataMapping;
 
 use Axytos\ECommerce\DataTransferObjects\RefundBasketPositionDto;
 use Axytos\ECommerce\DataTransferObjects\RefundBasketPositionDtoCollection;
-use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionNetPriceCalculator;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketPositionDtoCollectionFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketPositionDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionNetPriceCalculator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
@@ -19,10 +19,13 @@ use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Content\Product\ProductEntity;
 
+/**
+ * @internal
+ */
 class RefundBasketPositionDtoCollectionFactoryTest extends TestCase
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketPositionDtoCollectionFactory
+     * @var RefundBasketPositionDtoCollectionFactory
      */
     private $sut;
 
@@ -33,7 +36,7 @@ class RefundBasketPositionDtoCollectionFactoryTest extends TestCase
     private $positionNetPriceCalculator;
 
     /**
-     * @var \Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection
+     * @var OrderLineItemCollection
      */
     private $orderLineItems;
 
@@ -55,22 +58,22 @@ class RefundBasketPositionDtoCollectionFactoryTest extends TestCase
         $productNumber3 = 'productNumber3';
         $productNumber4 = 'productNumber4';
 
-        $this->orderLineItems->add($this->createCreditOrderLineItem(7, -10.00, "credit 1"));
-        $this->orderLineItems->add($this->createCreditOrderLineItem(19, -30.00, "credit 2"));
-        $this->orderLineItems->add($this->createCreditOrderLineItem(19, -20.00, "credit 3"));
+        $this->orderLineItems->add($this->createCreditOrderLineItem(7, -10.00, 'credit 1'));
+        $this->orderLineItems->add($this->createCreditOrderLineItem(19, -30.00, 'credit 2'));
+        $this->orderLineItems->add($this->createCreditOrderLineItem(19, -20.00, 'credit 3'));
 
-        $this->orderLineItems->add($this->createProductOrderLineItem(7, $productNumber1, "product 1"));
-        $this->orderLineItems->add($this->createProductOrderLineItem(7, $productNumber2, "product 2"));
-        $this->orderLineItems->add($this->createProductOrderLineItem(19, $productNumber3, "product 3"));
-        $this->orderLineItems->add($this->createProductOrderLineItem(19, $productNumber4, "product 4"));
-
-
+        $this->orderLineItems->add($this->createProductOrderLineItem(7, $productNumber1, 'product 1'));
+        $this->orderLineItems->add($this->createProductOrderLineItem(7, $productNumber2, 'product 2'));
+        $this->orderLineItems->add($this->createProductOrderLineItem(19, $productNumber3, 'product 3'));
+        $this->orderLineItems->add($this->createProductOrderLineItem(19, $productNumber4, 'product 4'));
 
         $this->positionNetPriceCalculator
-            ->method('calculate')->willReturnOnConsecutiveCalls(-9.35, -25.21, -16.81);
+            ->method('calculate')->willReturnOnConsecutiveCalls(-9.35, -25.21, -16.81)
+        ;
 
         $this->refundBasketPositionDtoFactory
-            ->method('create')->willReturnOnConsecutiveCalls($this->createUpRefundBasketPositionDto($productNumber1, 10.00, 9.35), $this->createUpRefundBasketPositionDto($productNumber3, 50.00, 42.02));
+            ->method('create')->willReturnOnConsecutiveCalls($this->createUpRefundBasketPositionDto($productNumber1, 10.00, 9.35), $this->createUpRefundBasketPositionDto($productNumber3, 50.00, 42.02))
+        ;
     }
 
     private function createUpRefundBasketPositionDto(string $productNumber, float $grossRefundTotal, float $netRefundTotal): RefundBasketPositionDto
@@ -102,31 +105,38 @@ class RefundBasketPositionDtoCollectionFactoryTest extends TestCase
 
         $orderLineItemEntity
             ->method('getType')
-            ->willReturn(LineItem::CREDIT_LINE_ITEM_TYPE);
+            ->willReturn(LineItem::CREDIT_LINE_ITEM_TYPE)
+        ;
 
         $orderLineItemEntity
             ->method('getPrice')
-            ->willReturn($price);
+            ->willReturn($price)
+        ;
 
         $orderLineItemEntity
             ->method('getUniqueIdentifier')
-            ->willReturn($uniqueIdentifier);
+            ->willReturn($uniqueIdentifier)
+        ;
 
         $price
             ->method('getCalculatedTaxes')
-            ->willReturn($calculatedTaxes);
+            ->willReturn($calculatedTaxes)
+        ;
 
         $calculatedTaxes
             ->method('first')
-            ->willReturn($calculatedTax);
+            ->willReturn($calculatedTax)
+        ;
 
         $calculatedTax
             ->method('getTaxRate')
-            ->willReturn($taxRate);
+            ->willReturn($taxRate)
+        ;
 
         $price
             ->method('getTotalPrice')
-            ->willReturn($totalPrice);
+            ->willReturn($totalPrice)
+        ;
 
         return $orderLineItemEntity;
     }
@@ -153,40 +163,48 @@ class RefundBasketPositionDtoCollectionFactoryTest extends TestCase
 
         $orderLineItemEntity
             ->method('getType')
-            ->willReturn(LineItem::PRODUCT_LINE_ITEM_TYPE);
+            ->willReturn(LineItem::PRODUCT_LINE_ITEM_TYPE)
+        ;
 
         $orderLineItemEntity
             ->method('getPrice')
-            ->willReturn($price);
+            ->willReturn($price)
+        ;
 
         $price
             ->method('getCalculatedTaxes')
-            ->willReturn($calculatedTaxes);
+            ->willReturn($calculatedTaxes)
+        ;
 
         $calculatedTaxes
             ->method('first')
-            ->willReturn($calculatedTax);
+            ->willReturn($calculatedTax)
+        ;
 
         $calculatedTax
             ->method('getTaxRate')
-            ->willReturn($taxRate);
+            ->willReturn($taxRate)
+        ;
 
         $orderLineItemEntity
             ->method('getProduct')
-            ->willReturn($product);
+            ->willReturn($product)
+        ;
 
         $orderLineItemEntity
             ->method('getUniqueIdentifier')
-            ->willReturn($uniqueIdentifier);
+            ->willReturn($uniqueIdentifier)
+        ;
 
         $product
             ->method('getProductNumber')
-            ->willReturn($productNumber);
+            ->willReturn($productNumber)
+        ;
 
         return $orderLineItemEntity;
     }
 
-    public function test_with_null_orderLineItems(): void
+    public function test_with_null_order_line_items(): void
     {
         $expected = new RefundBasketPositionDtoCollection();
         $orderLineItems = null;
@@ -196,22 +214,22 @@ class RefundBasketPositionDtoCollectionFactoryTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function test_creates_RefundBasketPositions_for_credit_taxRates(): void
+    public function test_creates_refund_basket_positions_for_credit_tax_rates(): void
     {
         $actual = $this->sut->create($this->orderLineItems);
 
         $this->assertEquals(2, $actual->count());
     }
 
-    public function test_creates_maps_productNumber_for_RefundBasketPositions(): void
+    public function test_creates_maps_product_number_for_refund_basket_positions(): void
     {
         $actual = $this->sut->create($this->orderLineItems);
 
-        $this->assertEquals("productNumber1", $actual->getElements()[0]->productId);
-        $this->assertEquals("productNumber3", $actual->getElements()[1]->productId);
+        $this->assertEquals('productNumber1', $actual->getElements()[0]->productId);
+        $this->assertEquals('productNumber3', $actual->getElements()[1]->productId);
     }
 
-    public function test_creates_maps_grossRefundTotals_for_RefundBasketPositions(): void
+    public function test_creates_maps_gross_refund_totals_for_refund_basket_positions(): void
     {
         $actual = $this->sut->create($this->orderLineItems);
 
@@ -219,7 +237,7 @@ class RefundBasketPositionDtoCollectionFactoryTest extends TestCase
         $this->assertEquals(50, $actual->getElements()[1]->grossRefundTotal);
     }
 
-    public function test_creates_maps_netRefundTotals_for_RefundBasketPositions(): void
+    public function test_creates_maps_net_refund_totals_for_refund_basket_positions(): void
     {
         $actual = $this->sut->create($this->orderLineItems);
 

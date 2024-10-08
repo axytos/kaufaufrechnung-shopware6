@@ -10,7 +10,7 @@ use Shopware\Core\System\SystemConfig\SystemConfigService;
 class PluginConfiguration
 {
     /**
-     * @var \Shopware\Core\System\SystemConfig\SystemConfigService
+     * @var SystemConfigService
      */
     private $systemConfigService;
 

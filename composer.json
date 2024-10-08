@@ -54,11 +54,6 @@
         "test-integration": [
             "@phpunit --testsuite Integration"
         ],
-        "clean": [
-            "rm -rf ./packages/core/ecommerce-sdk/vendor",
-            "rm -rf ./packages/api/financial-services-api-sdk/vendor",
-            "rm -rf ./vendor"
-        ],
         "phpunit": "./vendor/bin/phpunit --colors=always",
         "coverage": "./vendor/bin/phpunit --colors=always --coverage-html coverage ",
         "phpstan": "./vendor/bin/phpstan analyse --memory-limit=1G",

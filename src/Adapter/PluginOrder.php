@@ -2,8 +2,8 @@
 
 namespace Axytos\KaufAufRechnung\Shopware\Adapter;
 
-use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Model\AxytosOrderStateInfo;
+use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\PluginOrderInterface;
 use Axytos\KaufAufRechnung\Shopware\Adapter\HashCalculation\HashCalculator;
 use Axytos\KaufAufRechnung\Shopware\Adapter\Information\BasketUpdateInformation;
 use Axytos\KaufAufRechnung\Shopware\Adapter\Information\CancelInformation;
@@ -13,34 +13,34 @@ use Axytos\KaufAufRechnung\Shopware\Adapter\Information\PaymentInformation;
 use Axytos\KaufAufRechnung\Shopware\Adapter\Information\RefundInformation;
 use Axytos\KaufAufRechnung\Shopware\Adapter\Information\ShippingInformation;
 use Axytos\KaufAufRechnung\Shopware\Adapter\Information\TrackingInformation;
-use Axytos\KaufAufRechnung\Shopware\Adapter\Information\Refund\BasketFactory as RefundBasketFactory;
 use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
 use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository;
 use Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine;
-use OpenSearch\Endpoints\Tasks\Cancel;
 use Shopware\Core\Checkout\Document\DocumentCollection;
 use Shopware\Core\Checkout\Document\DocumentEntity;
+use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryEntity;
+use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryStates;
 use Shopware\Core\Checkout\Order\OrderStates;
 
 class PluginOrder implements PluginOrderInterface
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext
+     * @var InvoiceOrderContext
      */
     private $invoiceOrderContext;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository
+     * @var OrderEntityRepository
      */
     private $orderEntityRepository;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine
+     * @var OrderStateMachine
      */
     private $orderStateMachine;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Adapter\HashCalculation\HashCalculator
+     * @var HashCalculator
      */
     private $hashCalculator;
 
@@ -65,7 +65,7 @@ class PluginOrder implements PluginOrderInterface
     }
 
     /**
-     * @return \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Model\AxytosOrderStateInfo|null
+     * @return AxytosOrderStateInfo|null
      */
     public function loadState()
     {
@@ -74,12 +74,14 @@ class PluginOrder implements PluginOrderInterface
         $attributes = $this->orderEntityRepository->getAxytosOrderAttributes($orderId, $context);
         $state = $attributes->getOrderState();
         $data = $attributes->getOrderStateData();
+
         return new AxytosOrderStateInfo($state, $data);
     }
 
     /**
-     * @param string $state
+     * @param string      $state
      * @param string|null $data
+     *
      * @return void
      */
     public function saveState($state, $data = null)
@@ -124,7 +126,7 @@ class PluginOrder implements PluginOrderInterface
         $orderEntity = $this->orderEntityRepository->findOrder($orderId, $context);
         $state = $orderEntity->getStateMachineState();
 
-        return !is_null($state) && $state->getTechnicalName() === OrderStates::STATE_CANCELLED;
+        return !is_null($state) && OrderStates::STATE_CANCELLED === $state->getTechnicalName();
     }
 
     public function cancelInformation()
@@ -137,7 +139,21 @@ class PluginOrder implements PluginOrderInterface
      */
     public function hasBeenInvoiced()
     {
-        return $this->hasDocumentOfType('invoice');
+        // check if order status is completed
+        // one order may have multiple invoices
+        // when invoices are created with an ERP system and synced back to shopware we cannot know the final number of all invoices
+        // so we assume that the order is completely invoiced when:
+        // a) there is at least one invoice, because we need the number of the invoice
+        // b) the order status is completed
+
+        $orderId = $this->invoiceOrderContext->getOrderId();
+        $context = $this->invoiceOrderContext->getContext();
+        $orderEntity = $this->orderEntityRepository->findOrder($orderId, $context);
+        $state = $orderEntity->getStateMachineState();
+
+        return $this->hasDocumentOfType('invoice')
+            && !is_null($state)
+            && OrderStates::STATE_COMPLETED === $state->getTechnicalName();
     }
 
     public function invoiceInformation()
@@ -150,7 +166,10 @@ class PluginOrder implements PluginOrderInterface
      */
     public function hasBeenRefunded()
     {
-        return $this->hasDocumentOfType('credit_note');
+        // disable refund detection for now
+        // refund detection does not work reliably because the refund is neither always created in shopware nor synced back from ERP systems
+        // need to discuss whether we need this feature or remove it
+        return false;
     }
 
     public function refundInformation()
@@ -166,6 +185,7 @@ class PluginOrder implements PluginOrderInterface
         $orderId = $this->invoiceOrderContext->getOrderId();
         $context = $this->invoiceOrderContext->getContext();
         $attributes = $this->orderEntityRepository->getAxytosOrderAttributes($orderId, $context);
+
         return $attributes->getShippingReported();
     }
 
@@ -174,7 +194,30 @@ class PluginOrder implements PluginOrderInterface
      */
     public function hasBeenShipped()
     {
-        return $this->hasDocumentOfType('delivery_note');
+        $orderId = $this->invoiceOrderContext->getOrderId();
+        $context = $this->invoiceOrderContext->getContext();
+        $orderEntity = $this->orderEntityRepository->findOrder($orderId, $context);
+        $deliveries = $orderEntity->getDeliveries();
+
+        if (is_null($deliveries)) {
+            return false;
+        }
+
+        if (0 === $deliveries->count()) {
+            return false;
+        }
+
+        /** @var array<OrderDeliveryEntity> */
+        $orderDeliveryEntities = $deliveries->getElements();
+
+        foreach ($orderDeliveryEntities as $orderDeliveryEntity) {
+            $state = $orderDeliveryEntity->getStateMachineState();
+            if (is_null($state) || OrderDeliveryStates::STATE_SHIPPED !== $state->getTechnicalName()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -205,6 +248,7 @@ class PluginOrder implements PluginOrderInterface
 
         $serializedTrackingIds = $this->serializedTrackingIds();
         $reportedTrackingCode = $attributes->getReportedTrackingCode();
+
         return $serializedTrackingIds !== $reportedTrackingCode;
     }
 
@@ -227,6 +271,7 @@ class PluginOrder implements PluginOrderInterface
     {
         $trackingInformation = $this->trackingInformation();
         $trackingIds = $trackingInformation->getTrackingIds();
+
         return serialize($trackingIds);
     }
 
@@ -291,11 +336,13 @@ class PluginOrder implements PluginOrderInterface
     private function calculateOrderBasketHash()
     {
         $basket = $this->checkoutInformation()->getBasket();
+
         return $this->hashCalculator->calculateBasketHash($basket);
     }
 
     /**
      * @param string $documentTypeTechnicalName
+     *
      * @return bool
      */
     private function hasDocumentOfType($documentTypeTechnicalName)

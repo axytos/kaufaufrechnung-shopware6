@@ -11,7 +11,7 @@ use Shopware\Core\Checkout\Order\OrderEntity;
 class BasketPositionDtoCollectionFactory
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\BasketPositionDtoFactory
+     * @var BasketPositionDtoFactory
      */
     private $basketPositionFactory;
 
@@ -22,7 +22,7 @@ class BasketPositionDtoCollectionFactory
 
     public function create(?OrderEntity $orderEntity): BasketPositionDtoCollection
     {
-        if (is_null($orderEntity) || is_null($orderEntity->getLineItems()) || count($orderEntity->getLineItems()) === 0) {
+        if (is_null($orderEntity) || is_null($orderEntity->getLineItems()) || 0 === count($orderEntity->getLineItems())) {
             return new BasketPositionDtoCollection();
         }
 
@@ -35,8 +35,6 @@ class BasketPositionDtoCollectionFactory
         $positions = array_values($positions);
         array_push($positions, $this->basketPositionFactory->createShippingPosition($orderEntity));
 
-        $result = new BasketPositionDtoCollection(...$positions);
-
-        return $result;
+        return new BasketPositionDtoCollection(...$positions);
     }
 }

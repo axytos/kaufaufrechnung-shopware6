@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit;
 
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Axytos\KaufAufRechnung\Shopware\Storefront\Controller\CheckoutFailedController;
 use Axytos\KaufAufRechnung\Shopware\Storefront\Controller\StorefrontViewRenderer;
-use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Controller\ErrorController;
 use Shopware\Storefront\Page\GenericPageLoader;
@@ -16,6 +16,9 @@ use Shopware\Storefront\Page\Page;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @internal
+ */
 class CheckoutFailedControllerTest extends TestCase
 {
     /** @var GenericPageLoader&MockObject */
@@ -31,7 +34,7 @@ class CheckoutFailedControllerTest extends TestCase
     private $errorHandler;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Storefront\Controller\CheckoutFailedController
+     * @var CheckoutFailedController
      */
     private $sut;
 
@@ -60,14 +63,16 @@ class CheckoutFailedControllerTest extends TestCase
         $this->genericPageLoader
             ->method('load')
             ->with($request, $context)
-            ->willReturn($page);
+            ->willReturn($page)
+        ;
 
         $this->storefrontViewRenderer
             ->method('renderStoreFrontView')
             ->with(CheckoutFailedController::CHECKOUT_FAILED_VIEW, [
-                'page' => $page
+                'page' => $page,
             ])
-            ->willReturn($response);
+            ->willReturn($response)
+        ;
 
         $actual = $this->sut->failed($request, $context);
 
@@ -102,7 +107,8 @@ class CheckoutFailedControllerTest extends TestCase
         $this->errorHandler
             ->expects($this->once())
             ->method('handle')
-            ->with($exception);
+            ->with($exception)
+        ;
 
         $this->sut->failed($request, $context);
     }

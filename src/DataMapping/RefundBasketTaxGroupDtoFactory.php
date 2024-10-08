@@ -15,6 +15,7 @@ class RefundBasketTaxGroupDtoFactory
         $refundBasketTaxGroup->taxPercent = $calculatedTax->getTaxRate();
         $refundBasketTaxGroup->valueToTax = $calculatedTax->getPrice();
         $refundBasketTaxGroup->total = $calculatedTax->getTax();
+
         return $refundBasketTaxGroup;
     }
 }

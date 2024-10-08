@@ -7,8 +7,7 @@ namespace Axytos\KaufAufRechnung\Shopware\Data;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 
 /**
- * reference: https://developer.shopware.com/docs/guides/plugins/plugins/framework/data-handling/add-custom-complex-data.html#entitycollection
- * @package Axytos\KaufAufRechnung\Shopware\Data
+ * reference: https://developer.shopware.com/docs/guides/plugins/plugins/framework/data-handling/add-custom-complex-data.html#entitycollection.
  *
  * @extends EntityCollection<AxytosOrderAttributesEntity>
  *

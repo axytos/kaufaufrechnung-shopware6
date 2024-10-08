@@ -2,12 +2,10 @@
 
 namespace Axytos\KaufAufRechnung\Shopware\Adapter\HashCalculation;
 
-use Axytos\KaufAufRechnung\Shopware\Adapter\HashCalculation\HashAlgorithmInterface;
-
 class HashCalculator
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Adapter\HashCalculation\HashAlgorithmInterface
+     * @var HashAlgorithmInterface
      */
     private $hashAlgorithm;
 
@@ -18,16 +16,19 @@ class HashCalculator
 
     /**
      * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\BasketUpdate\BasketInterface|\Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Checkout\BasketInterface $basket
+     *
      * @return string
      */
     public function calculateBasketHash($basket)
     {
         $serializedBasket = $this->serializeBasket($basket);
+
         return $this->hashAlgorithm->compute($serializedBasket);
     }
 
     /**
      * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\BasketUpdate\BasketInterface|\Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Checkout\BasketInterface $basket
+     *
      * @return string
      */
     private function serializeBasket($basket)
@@ -43,6 +44,7 @@ class HashCalculator
 
     /**
      * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\BasketUpdate\BasketInterface|\Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Checkout\BasketInterface $basket
+     *
      * @return mixed
      */
     private function createBasketArray($basket)
@@ -57,6 +59,7 @@ class HashCalculator
 
     /**
      * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\BasketUpdate\BasketPositionInterface|\Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Checkout\BasketPositionInterface $basketPosition
+     *
      * @return mixed
      */
     private function createBasketPositionArray($basketPosition)

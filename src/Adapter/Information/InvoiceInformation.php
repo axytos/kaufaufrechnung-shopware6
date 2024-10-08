@@ -2,14 +2,14 @@
 
 namespace Axytos\KaufAufRechnung\Shopware\Adapter\Information;
 
-use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\InvoiceInformationInterface;
 use Axytos\KaufAufRechnung\Shopware\Adapter\Information\Invoice\Basket;
+use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
 
 class InvoiceInformation implements InvoiceInformationInterface
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext
+     * @var InvoiceOrderContext
      */
     private $invoiceOrderContext;
 
@@ -31,6 +31,7 @@ class InvoiceInformation implements InvoiceInformationInterface
     public function getBasket()
     {
         $basket = $this->invoiceOrderContext->getCreateInvoiceBasket();
+
         return new Basket($basket);
     }
 }

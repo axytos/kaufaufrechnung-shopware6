@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Order;
 
+use Axytos\ECommerce\Order\OrderCheckProcessStates;
 use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
-use Axytos\ECommerce\Order\OrderCheckProcessStates;
 
 class OrderCheckProcessStateMachine
 {
     private const CUSTOM_FIELD_NAME = 'axytos_order_check_process_state';
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository
+     * @var OrderEntityRepository
      */
     private $orderEntityRepository;
 
@@ -57,7 +57,7 @@ class OrderCheckProcessStateMachine
     private function updateState(string $orderId, string $orderCheckProcessState, SalesChannelContext $context): void
     {
         $customFields = [
-            self::CUSTOM_FIELD_NAME => $orderCheckProcessState
+            self::CUSTOM_FIELD_NAME => $orderCheckProcessState,
         ];
 
         $this->orderEntityRepository->updateCustomFields($orderId, $customFields, $context->getContext());

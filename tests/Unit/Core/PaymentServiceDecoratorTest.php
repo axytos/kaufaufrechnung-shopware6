@@ -4,24 +4,21 @@ declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit\Core;
 
-use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
-use Axytos\ECommerce\Clients\Invoice\ShopActions;
-use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
+use Axytos\ECommerce\Clients\Invoice\ShopActions;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrder;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrderFactory;
 use Axytos\KaufAufRechnung\Shopware\Adapter\PluginOrder;
 use Axytos\KaufAufRechnung\Shopware\Adapter\PluginOrderFactory;
 use Axytos\KaufAufRechnung\Shopware\Core\AxytosInvoicePaymentHandler;
-use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
-use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory;
-use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
 use Axytos\KaufAufRechnung\Shopware\Core\PaymentServiceDecorator;
-use Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine;
 use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine;
+use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates;
 use Axytos\KaufAufRechnung\Shopware\Routing\Router;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Payment\Cart\Token\TokenStruct;
 use Shopware\Core\Checkout\Payment\PaymentMethodEntity;
 use Shopware\Core\Checkout\Payment\PaymentService;
@@ -31,6 +28,9 @@ use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @internal
+ */
 class PaymentServiceDecoratorTest extends TestCase
 {
     /** @var PaymentService&MockObject */
@@ -61,7 +61,7 @@ class PaymentServiceDecoratorTest extends TestCase
     private $axytosOrderFactory;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Core\PaymentServiceDecorator
+     * @var PaymentServiceDecorator
      */
     private $sut;
 
@@ -137,7 +137,8 @@ class PaymentServiceDecoratorTest extends TestCase
         $this->context = $this->createMock(Context::class);
         $this->salesChannelContext
             ->method('getContext')
-            ->willReturn($this->context);
+            ->willReturn($this->context)
+        ;
 
         $this->setUpResponses();
     }
@@ -147,33 +148,39 @@ class PaymentServiceDecoratorTest extends TestCase
         $this->decorated
             ->method('handlePaymentByOrder')
             ->with(self::ORDER_ID, $this->requestDataBag, $this->salesChannelContext, self::FINISH_URL, self::ERROR_URL)
-            ->willReturn($this->completeOrderResponse);
+            ->willReturn($this->completeOrderResponse)
+        ;
 
         $this->router
             ->method('redirectToCheckoutFailedPage')
-            ->willReturn($this->cancelOrderResponse);
+            ->willReturn($this->cancelOrderResponse)
+        ;
 
         $this->router
             ->method('redirectToEditOrderPage')
             ->with(self::ORDER_ID)
-            ->willReturn($this->changePaymentMethodResponse);
+            ->willReturn($this->changePaymentMethodResponse)
+        ;
 
         $this->router
             ->method('redirectToEditOrderPageWithError')
             ->with(self::ORDER_ID)
-            ->willReturn($this->changePaymentMethodWithErrorResponse);
+            ->willReturn($this->changePaymentMethodWithErrorResponse)
+        ;
     }
 
     private function setUpAxytosInvoicPaymentMethodUsed(bool $used): void
     {
         $this->salesChannelContext
             ->method('getPaymentMethod')
-            ->willReturn($this->paymentMethod);
+            ->willReturn($this->paymentMethod)
+        ;
 
         $this->paymentMethodPredicates
             ->method('usesHandler')
             ->with($this->paymentMethod, AxytosInvoicePaymentHandler::class)
-            ->willReturn($used);
+            ->willReturn($used)
+        ;
     }
 
     private function setUpInvoicePrecheckShopAction(string $shopAction): void
@@ -181,19 +188,22 @@ class PaymentServiceDecoratorTest extends TestCase
         $this->pluginOrderFactory
             ->method('create')
             ->with(self::ORDER_ID, $this->context)
-            ->willReturn($this->pluginOrder);
+            ->willReturn($this->pluginOrder)
+        ;
 
         $this->axytosOrderFactory
             ->method('create')
             ->with($this->pluginOrder)
-            ->willReturn($this->axytosOrder);
+            ->willReturn($this->axytosOrder)
+        ;
 
         $this->axytosOrder
             ->method('getOrderCheckoutAction')
-            ->willReturn($shopAction);
+            ->willReturn($shopAction)
+        ;
     }
 
-    public function test_hanldePaymentByOrder_invoice_delegates_to_decorated_if_action_is_to_complete_order(): void
+    public function test_hanlde_payment_by_order_invoice_delegates_to_decorated_if_action_is_to_complete_order(): void
     {
         $this->setUpAxytosInvoicPaymentMethodUsed(true);
         $this->setUpInvoicePrecheckShopAction(ShopActions::COMPLETE_ORDER);
@@ -203,7 +213,7 @@ class PaymentServiceDecoratorTest extends TestCase
         $this->assertSame($this->completeOrderResponse, $actual);
     }
 
-    public function test_hanldePaymentByOrder_invoice_does_not_set_order_confirmed_if_action_is_to_change_payment_method(): void
+    public function test_hanlde_payment_by_order_invoice_does_not_set_order_confirmed_if_action_is_to_change_payment_method(): void
     {
         $this->setUpAxytosInvoicPaymentMethodUsed(true);
         $this->setUpInvoicePrecheckShopAction(ShopActions::CHANGE_PAYMENT_METHOD);
@@ -211,12 +221,13 @@ class PaymentServiceDecoratorTest extends TestCase
         $this->orderCheckProcessStateMachine
             ->expects($this->never())
             ->method('setConfirmed')
-            ->with(self::ORDER_ID, $this->salesChannelContext);
+            ->with(self::ORDER_ID, $this->salesChannelContext)
+        ;
 
         $this->sut->handlePaymentByOrder(self::ORDER_ID, $this->requestDataBag, $this->salesChannelContext, self::FINISH_URL, self::ERROR_URL);
     }
 
-    public function test_handlePaymentByOrder_invoice_fails_payment_if_action_is_to_change_payment_method(): void
+    public function test_handle_payment_by_order_invoice_fails_payment_if_action_is_to_change_payment_method(): void
     {
         $this->setUpAxytosInvoicPaymentMethodUsed(true);
         $this->setUpInvoicePrecheckShopAction(ShopActions::CHANGE_PAYMENT_METHOD);
@@ -224,12 +235,13 @@ class PaymentServiceDecoratorTest extends TestCase
         $this->orderStateMachine
             ->expects($this->once())
             ->method('failPayment')
-            ->with(self::ORDER_ID, $this->context);
+            ->with(self::ORDER_ID, $this->context)
+        ;
 
         $this->sut->handlePaymentByOrder(self::ORDER_ID, $this->requestDataBag, $this->salesChannelContext, self::FINISH_URL, self::ERROR_URL);
     }
 
-    public function test_handlePaymentByOrder_invoice_redirects_to_edit_order_page_if_action_is_to_change_payment_method(): void
+    public function test_handle_payment_by_order_invoice_redirects_to_edit_order_page_if_action_is_to_change_payment_method(): void
     {
         $this->setUpAxytosInvoicPaymentMethodUsed(true);
         $this->setUpInvoicePrecheckShopAction(ShopActions::CHANGE_PAYMENT_METHOD);
@@ -239,7 +251,7 @@ class PaymentServiceDecoratorTest extends TestCase
         $this->assertSame($this->changePaymentMethodWithErrorResponse, $actual);
     }
 
-    public function test_finalizeTransaction_delecates_to_decorated(): void
+    public function test_finalize_transaction_delecates_to_decorated(): void
     {
         $paymentToken = 'paymentToken';
         $request = $this->createMock(Request::class);
@@ -248,7 +260,8 @@ class PaymentServiceDecoratorTest extends TestCase
         $this->decorated
             ->method('finalizeTransaction')
             ->with($paymentToken, $request, $this->salesChannelContext)
-            ->willReturn($tokenStruct);
+            ->willReturn($tokenStruct)
+        ;
 
         $acutal = $this->sut->finalizeTransaction($paymentToken, $request, $this->salesChannelContext);
 

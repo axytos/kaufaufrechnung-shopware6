@@ -8,8 +8,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Refund\BasketInt
 class Basket implements BasketInterface
 {
     /**
-     *
-     * @var \Axytos\ECommerce\DataTransferObjects\RefundBasketDto
+     * @var RefundBasketDto
      */
     private $dto;
 
@@ -34,18 +33,17 @@ class Basket implements BasketInterface
         return floatval($this->dto->grossTotal);
     }
 
-
     /**
      * @return \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Refund\BasketPositionInterface[]
      */
     public function getPositions()
     {
         $positions = is_null($this->dto->positions) ? [] : $this->dto->positions->getElements();
+
         return array_map(function ($position) {
             return new BasketPosition($position);
         }, $positions);
     }
-
 
     /**
      * @return \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Refund\TaxGroupInterface[]
@@ -53,6 +51,7 @@ class Basket implements BasketInterface
     public function getTaxGroups()
     {
         $taxGroups = is_null($this->dto->taxGroups) ? [] : $this->dto->taxGroups->getElements();
+
         return array_map(function ($taxGroup) {
             return new TaxGroup($taxGroup);
         }, $taxGroups);

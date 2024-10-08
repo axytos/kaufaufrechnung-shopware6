@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Core;
 
-use Axytos\ECommerce\Clients\Invoice\ShopActions;
-use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
+use Axytos\ECommerce\Clients\Invoice\ShopActions;
 use Axytos\KaufAufRechnung\Core\Model\AxytosOrderFactory;
 use Axytos\KaufAufRechnung\Shopware\Adapter\PluginOrderFactory;
-use Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine;
 use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine;
+use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates;
 use Axytos\KaufAufRechnung\Shopware\Routing\Router;
 use Shopware\Core\Checkout\Payment\Cart\Token\TokenStruct;
 use Shopware\Core\Checkout\Payment\PaymentService;
@@ -19,44 +19,43 @@ use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Throwable;
 
 class PaymentServiceDecorator extends PaymentService
 {
     /**
-     * @var \Shopware\Core\Checkout\Payment\PaymentService
+     * @var PaymentService
      */
     private $decorated;
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator
+     * @var PluginConfigurationValidator
      */
     private $pluginConfigurationValidator;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine
+     * @var OrderStateMachine
      */
     private $orderStateMachine;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Routing\Router
+     * @var Router
      */
     private $router;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine
+     * @var OrderCheckProcessStateMachine
      */
     private $orderCheckProcessStateMachine;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates
+     * @var PaymentMethodPredicates
      */
     private $paymentMethodPredicates;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler
+     * @var ErrorHandler
      */
     private $errorHandler;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Adapter\PluginOrderFactory
+     * @var PluginOrderFactory
      */
     private $pluginOrderFactory;
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Model\AxytosOrderFactory
+     * @var AxytosOrderFactory
      */
     private $axytosOrderFactory;
 
@@ -99,9 +98,10 @@ class PaymentServiceDecorator extends PaymentService
             }
 
             return $this->completeOrder($orderId, $dataBag, $context, $finishUrl, $errorUrl);
-        } catch (Throwable $t) {
+        } catch (\Throwable $t) {
             $this->orderCheckProcessStateMachine->setFailed($orderId, $context);
             $this->errorHandler->handle($t);
+
             return $this->completeOrder($orderId, $dataBag, $context, $finishUrl, $errorUrl);
         }
     }
@@ -109,6 +109,7 @@ class PaymentServiceDecorator extends PaymentService
     private function usesAxytosInvoicePaymentMethod(SalesChannelContext $context): bool
     {
         $paymentMethod = $context->getPaymentMethod();
+
         return $this->paymentMethodPredicates->usesHandler($paymentMethod, AxytosInvoicePaymentHandler::class);
     }
 
@@ -124,7 +125,7 @@ class PaymentServiceDecorator extends PaymentService
         $axytosOrder->checkout();
 
         $action = $axytosOrder->getOrderCheckoutAction();
-        if ($action === ShopActions::CHANGE_PAYMENT_METHOD) {
+        if (ShopActions::CHANGE_PAYMENT_METHOD === $action) {
             return $this->changePaymentMethodWithError($orderId, $context);
         }
 
@@ -137,6 +138,7 @@ class PaymentServiceDecorator extends PaymentService
     private function changePaymentMethodWithError(string $orderId, SalesChannelContext $context): RedirectResponse
     {
         $this->orderStateMachine->failPayment($orderId, $context->getContext());
+
         return $this->router->redirectToEditOrderPageWithError($orderId);
     }
 

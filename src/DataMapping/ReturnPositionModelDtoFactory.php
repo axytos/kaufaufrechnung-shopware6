@@ -11,7 +11,7 @@ use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 class ReturnPositionModelDtoFactory
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionProductIdCalculator
+     * @var PositionProductIdCalculator
      */
     private $positionProductIdCalcualtor;
 
@@ -25,6 +25,7 @@ class ReturnPositionModelDtoFactory
         $position = new ReturnPositionModelDto();
         $position->quantityToReturn = $orderLineItemEntity->getQuantity();
         $position->productId = $this->positionProductIdCalcualtor->calculate($orderLineItemEntity);
+
         return $position;
     }
 

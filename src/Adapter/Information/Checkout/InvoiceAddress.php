@@ -8,7 +8,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Checkout\Invoice
 class InvoiceAddress implements InvoiceAddressInterface
 {
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto
+     * @var InvoiceAddressDto
      */
     private $dto;
 

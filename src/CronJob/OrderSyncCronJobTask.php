@@ -8,9 +8,7 @@ use Axytos\KaufAufRechnung\Shopware\Configuration\OrderSyncCronJobInterval;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 
 /**
- * reference: https://developer.shopware.com/docs/guides/plugins/plugins/plugin-fundamentals/add-scheduled-task.html#scheduledtask-and-its-handler
- *
- * @package Axytos\KaufAufRechnung\Shopware\CronJob
+ * reference: https://developer.shopware.com/docs/guides/plugins/plugins/plugin-fundamentals/add-scheduled-task.html#scheduledtask-and-its-handler.
  */
 class OrderSyncCronJobTask extends ScheduledTask
 {

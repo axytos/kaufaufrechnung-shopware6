@@ -6,15 +6,18 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit\ValueCalculation;
 
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PromotionIdentifierCalculator;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Promotion\PromotionEntity;
 
+/**
+ * @internal
+ */
 class PromotionIdentifierCalculatorTest extends TestCase
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\PromotionIdentifierCalculator
+     * @var PromotionIdentifierCalculator
      */
     private $sut;
 

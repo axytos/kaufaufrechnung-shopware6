@@ -8,19 +8,21 @@ use Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface;
 use Axytos\ECommerce\Clients\Checkout\CreditCheckAgreementLoadFailedException;
 use Axytos\KaufAufRechnung\Shopware\Core\AxytosInvoicePaymentHandler;
 use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodCollectionFilter;
+use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates;
 use Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage\CheckoutConfirmPageExtension;
 use Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage\CheckoutConfirmPageLoadedEventHandler;
-use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates;
-use Exception;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Payment\PaymentMethodCollection;
 use Shopware\Core\Checkout\Payment\PaymentMethodEntity;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Page\Checkout\Confirm\CheckoutConfirmPage;
 use Shopware\Storefront\Page\Checkout\Confirm\CheckoutConfirmPageLoadedEvent;
 
+/**
+ * @internal
+ */
 class CheckoutConfirmPageLoadedEventHandlerTest extends TestCase
 {
     private const EXTENSION_NAME = 'axytos_kauf_auf_rechnung_checkout_confirm_page';
@@ -36,10 +38,9 @@ class CheckoutConfirmPageLoadedEventHandlerTest extends TestCase
     private $paymentMethodPredicates;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage\CheckoutConfirmPageLoadedEventHandler
+     * @var CheckoutConfirmPageLoadedEventHandler
      */
     private $sut;
-
 
     /** @var CheckoutConfirmPage&MockObject */
     private $page;
@@ -96,7 +97,8 @@ class CheckoutConfirmPageLoadedEventHandlerTest extends TestCase
         $this->paymentMethodCollectionFilter
             ->method('filterPaymentMethodsNotUsingHandler')
             ->with($this->paymentMethods, AxytosInvoicePaymentHandler::class)
-            ->willReturn($this->fallbackPaymentMethods);
+            ->willReturn($this->fallbackPaymentMethods)
+        ;
     }
 
     private function setUpCheckout(
@@ -106,25 +108,28 @@ class CheckoutConfirmPageLoadedEventHandlerTest extends TestCase
         $this->paymentMethodPredicates
             ->method('usesHandler')
             ->with($this->paymentMethod, AxytosInvoicePaymentHandler::class)
-            ->willReturn($mustShowCreditCheckAgreement);
+            ->willReturn($mustShowCreditCheckAgreement)
+        ;
 
         $this->checkoutClient
             ->method('getCreditCheckAgreementInfo')
-            ->willReturn($getCreditCheckAgreementInfo);
+            ->willReturn($getCreditCheckAgreementInfo)
+        ;
     }
 
     private function setUpCheckoutFailed(): void
     {
         $this->checkoutClient
             ->method('getCreditCheckAgreementInfo')
-            ->willThrowException(new CreditCheckAgreementLoadFailedException(new Exception()));
+            ->willThrowException(new CreditCheckAgreementLoadFailedException(new \Exception()))
+        ;
     }
 
     /**
      * @group legacy
      */
     #[Group('legacy')]
-    public function test_handle_adds_CheckoutConfirmPageExtension(): void
+    public function test_handle_adds_checkout_confirm_page_extension(): void
     {
         $matchExtension = $this->callback(function ($extension) {
             return $extension instanceof CheckoutConfirmPageExtension;
@@ -133,7 +138,8 @@ class CheckoutConfirmPageLoadedEventHandlerTest extends TestCase
         $this->page
             ->expects($this->once())
             ->method('addExtension')
-            ->with(self::EXTENSION_NAME, $matchExtension);
+            ->with(self::EXTENSION_NAME, $matchExtension)
+        ;
 
         $this->sut->handle($this->event);
     }
@@ -142,18 +148,19 @@ class CheckoutConfirmPageLoadedEventHandlerTest extends TestCase
      * @group legacy
      */
     #[Group('legacy')]
-    public function test_handle_sets_ShowCreditCheckAgreement(): void
+    public function test_handle_sets_show_credit_check_agreement(): void
     {
         $this->setUpCheckout(true, 'CreditCheckAgreementInfo');
 
         $matchExtension = $this->callback(function (CheckoutConfirmPageExtension $extension) {
-            return $extension->showCreditCheckAgreement === true;
+            return true === $extension->showCreditCheckAgreement;
         });
 
         $this->page
             ->expects($this->once())
             ->method('addExtension')
-            ->with(self::EXTENSION_NAME, $matchExtension);
+            ->with(self::EXTENSION_NAME, $matchExtension)
+        ;
 
         $this->sut->handle($this->event);
     }
@@ -162,18 +169,19 @@ class CheckoutConfirmPageLoadedEventHandlerTest extends TestCase
      * @group legacy
      */
     #[Group('legacy')]
-    public function test_handle_sets_CreditCheckAgreementInfo(): void
+    public function test_handle_sets_credit_check_agreement_info(): void
     {
         $this->setUpCheckout(true, 'CreditCheckAgreementInfo');
 
         $matchExtension = $this->callback(function (CheckoutConfirmPageExtension $extension) {
-            return $extension->creditCheckAgreementInfo === 'CreditCheckAgreementInfo';
+            return 'CreditCheckAgreementInfo' === $extension->creditCheckAgreementInfo;
         });
 
         $this->page
             ->expects($this->once())
             ->method('addExtension')
-            ->with(self::EXTENSION_NAME, $matchExtension);
+            ->with(self::EXTENSION_NAME, $matchExtension)
+        ;
 
         $this->sut->handle($this->event);
     }
@@ -182,19 +190,20 @@ class CheckoutConfirmPageLoadedEventHandlerTest extends TestCase
      * @group legacy
      */
     #[Group('legacy')]
-    public function test_handle_does_not_show_CreditCheckAgreement_if_CreditCheckAgreement_cannot_be_loaded(): void
+    public function test_handle_does_not_show_credit_check_agreement_if_credit_check_agreement_cannot_be_loaded(): void
     {
         $this->setUpCheckoutFailed();
 
         $matchExtension = $this->callback(function (CheckoutConfirmPageExtension $extension) {
-            return $extension->showCreditCheckAgreement === false
-                && $extension->creditCheckAgreementInfo === '';
+            return false === $extension->showCreditCheckAgreement
+                && '' === $extension->creditCheckAgreementInfo;
         });
 
         $this->page
             ->expects($this->once())
             ->method('addExtension')
-            ->with(self::EXTENSION_NAME, $matchExtension);
+            ->with(self::EXTENSION_NAME, $matchExtension)
+        ;
 
         $this->sut->handle($this->event);
     }
@@ -203,14 +212,15 @@ class CheckoutConfirmPageLoadedEventHandlerTest extends TestCase
      * @group legacy
      */
     #[Group('legacy')]
-    public function test_handle_only_shows_fallback_payment_methods_if_CreditCheckAgreement_cannot_be_loaded(): void
+    public function test_handle_only_shows_fallback_payment_methods_if_credit_check_agreement_cannot_be_loaded(): void
     {
         $this->setUpCheckoutFailed();
 
         $this->page
             ->expects($this->once())
             ->method('setPaymentMethods')
-            ->with($this->fallbackPaymentMethods);
+            ->with($this->fallbackPaymentMethods)
+        ;
 
         $this->sut->handle($this->event);
     }

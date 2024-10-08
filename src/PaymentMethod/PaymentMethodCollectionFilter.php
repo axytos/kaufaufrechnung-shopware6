@@ -10,7 +10,7 @@ use Shopware\Core\Checkout\Payment\PaymentMethodEntity;
 class PaymentMethodCollectionFilter
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates
+     * @var PaymentMethodPredicates
      */
     private $paymentMethodPredicates;
 

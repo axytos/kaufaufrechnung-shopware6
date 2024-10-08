@@ -10,9 +10,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 /**
- * reference: https://developer.shopware.com/docs/guides/plugins/plugins/framework/data-handling/add-complex-data-to-existing-entities.html#creating-the-extension
- *
- * @package Axytos\KaufAufRechnung\Shopware\Data
+ * reference: https://developer.shopware.com/docs/guides/plugins/plugins/framework/data-handling/add-complex-data-to-existing-entities.html#creating-the-extension.
  */
 class AxytosOrderAttributesEntityExtension extends EntityExtension
 {

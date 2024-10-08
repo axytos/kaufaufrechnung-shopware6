@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\ValueCalculation;
 
-use InvalidArgumentException;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 
 class PositionProductNameCalculator
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\PromotionIdentifierCalculator
+     * @var PromotionIdentifierCalculator
      */
     private $promotionIdentifierCalculator;
 
@@ -38,7 +37,7 @@ class PositionProductNameCalculator
                 return $orderLineItemEntity->getLabel();
             default:
                 $type = var_export($type, true);
-                throw new InvalidArgumentException("Order Line item with type '$type' is not supported!");
+                throw new \InvalidArgumentException("Order Line item with type '{$type}' is not supported!");
         }
     }
 

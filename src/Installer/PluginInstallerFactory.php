@@ -15,6 +15,7 @@ class PluginInstallerFactory
     {
         $paymentMethodRepository = self::createPaymentMethodRepository($container);
         $pluginIdProvider = self::createPluginIdProvider($pluginClassName, $container);
+
         return new PluginInstaller($paymentMethodRepository, $pluginIdProvider);
     }
 
@@ -22,6 +23,7 @@ class PluginInstallerFactory
     {
         /** @var EntityRepository<PaymentMethodCollection> */
         $paymentMethodEntityRepository = $container->get('payment_method.repository');
+
         return new PaymentMethodEntityRepository($paymentMethodEntityRepository);
     }
 

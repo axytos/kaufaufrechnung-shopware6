@@ -10,13 +10,16 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 
+/**
+ * @internal
+ */
 class ReturnPositionModelDtoFactoryTest extends TestCase
 {
     /** @var PositionProductIdCalculator&MockObject */
     private $positionProductIdCalculator;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoFactory
+     * @var ReturnPositionModelDtoFactory
      */
     private $sut;
 
@@ -49,7 +52,8 @@ class ReturnPositionModelDtoFactoryTest extends TestCase
         $this->positionProductIdCalculator
             ->method('calculate')
             ->with($orderLineItem)
-            ->willReturn($productId);
+            ->willReturn($productId)
+        ;
 
         $actual = $this->sut->create($orderLineItem);
 

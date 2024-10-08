@@ -8,8 +8,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Invoice\TaxGroup
 class TaxGroup implements TaxGroupInterface
 {
     /**
-     *
-     * @var \Axytos\ECommerce\DataTransferObjects\CreateInvoiceTaxGroupDto
+     * @var CreateInvoiceTaxGroupDto
      */
     private $dto;
 

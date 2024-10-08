@@ -2,18 +2,16 @@
 
 namespace Axytos\KaufAufRechnung\Shopware\Adapter\Information;
 
-use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\PaymentInformationInterface;
+use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
 
 /**
- * payment callbacks are currently not a supported feature for magento
- *
- * @package Axytos\KaufAufRechnung\Shopware\Adapter\Information
+ * payment callbacks are currently not a supported feature for magento.
  */
 class PaymentInformation implements PaymentInformationInterface
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext
+     * @var InvoiceOrderContext
      */
     private $invoiceOrderContext;
 

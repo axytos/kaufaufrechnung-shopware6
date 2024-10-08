@@ -8,8 +8,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Shipping\BasketP
 class BasketPosition implements BasketPositionInterface
 {
     /**
-     *
-     * @var \Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDto
+     * @var ShippingBasketPositionDto
      */
     private $dto;
 
@@ -27,10 +26,10 @@ class BasketPosition implements BasketPositionInterface
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getQuantity()
     {
-        return intval($this->dto->quantity);
+        return floatval($this->dto->quantity);
     }
 }

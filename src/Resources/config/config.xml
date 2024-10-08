@@ -6,10 +6,22 @@
         <title>API settings</title>
         <title lang="de-DE">API Einstellungen</title>
 
-        <input-field>
+        <input-field type="single-select">
             <name>apiHost</name>
             <label>API Host</label>
-            <defaultValue>https://api-sandbox.axytos.com/</defaultValue>
+            <defaultValue>APIHOST_SANDBOX</defaultValue>
+            <options>
+                <option>
+                    <id>APIHOST_LIVE</id>
+                    <name lang="de-DE">Live</name>
+                    <name>Live</name>
+                </option>
+                <option>
+                    <id>APIHOST_SANDBOX</id>
+                    <name lang="de-DE">Sandbox</name>
+                    <name>Sandbox</name>
+                </option>
+            </options>
         </input-field>
 
         <input-field type="password">

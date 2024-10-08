@@ -18,7 +18,7 @@ class DeliveryAddressDtoFactory
         if (!is_null($deliveries)) {
             $deliveryElements = $deliveries->getElements();
 
-            if ($deliveryElements !== []) {
+            if ([] !== $deliveryElements) {
                 reset($deliveryElements);
                 $deliveryElement = $deliveryElements[key($deliveryElements)];
 

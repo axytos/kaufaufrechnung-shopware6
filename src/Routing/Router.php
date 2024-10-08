@@ -13,7 +13,7 @@ class Router
     public const EDIT_ORDER_PAGE = 'frontend.account.edit-order.page';
 
     /**
-     * @var \Symfony\Component\Routing\RouterInterface
+     * @var RouterInterface
      */
     private $router;
 
@@ -25,6 +25,7 @@ class Router
     public function redirectToCheckoutFailedPage(): RedirectResponse
     {
         $url = $this->router->generate(self::CHECKOUT_FAILED_PAGE);
+
         return new RedirectResponse($url);
     }
 
@@ -33,6 +34,7 @@ class Router
         $url = $this->router->generate(self::EDIT_ORDER_PAGE, [
             'orderId' => $orderId,
         ]);
+
         return new RedirectResponse($url);
     }
 
@@ -40,8 +42,9 @@ class Router
     {
         $url = $this->router->generate(self::EDIT_ORDER_PAGE, [
             'orderId' => $orderId,
-            'error-code' => 'AXYTOS-TECHNICAL-ERROR'
+            'error-code' => 'AXYTOS-TECHNICAL-ERROR',
         ]);
+
         return new RedirectResponse($url);
     }
 }

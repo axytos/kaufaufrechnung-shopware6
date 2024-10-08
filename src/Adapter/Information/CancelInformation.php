@@ -2,13 +2,13 @@
 
 namespace Axytos\KaufAufRechnung\Shopware\Adapter\Information;
 
-use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\CancelInformationInterface;
+use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
 
 class CancelInformation implements CancelInformationInterface
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext
+     * @var InvoiceOrderContext
      */
     private $invoiceOrderContext;
 

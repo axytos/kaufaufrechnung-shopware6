@@ -2,14 +2,14 @@
 
 namespace Axytos\KaufAufRechnung\Shopware\Adapter\Information;
 
-use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\TrackingInformationInterface;
 use Axytos\KaufAufRechnung\Shopware\Adapter\Information\Tracking\DeliveryAddress;
+use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext;
 
 class TrackingInformation implements TrackingInformationInterface
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext
+     * @var InvoiceOrderContext
      */
     private $invoiceOrderContext;
 
@@ -36,6 +36,7 @@ class TrackingInformation implements TrackingInformationInterface
     public function getDeliveryAddress()
     {
         $dto = $this->invoiceOrderContext->getDeliveryAddress();
+
         return new DeliveryAddress($dto);
     }
 

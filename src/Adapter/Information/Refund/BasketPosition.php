@@ -8,8 +8,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Refund\BasketPos
 class BasketPosition implements BasketPositionInterface
 {
     /**
-     *
-     * @var \Axytos\ECommerce\DataTransferObjects\RefundBasketPositionDto
+     * @var RefundBasketPositionDto
      */
     private $dto;
 

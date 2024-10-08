@@ -2,12 +2,11 @@
 
 namespace Axytos\KaufAufRechnung\Shopware\Administration\Controller\Api;
 
+use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface;
-use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
-use Psr\Container\ContainerInterface;
 
 /**
  * @RouteScope(scopes={"administration"})
@@ -16,11 +15,11 @@ use Psr\Container\ContainerInterface;
 class CredentialValidationController
 {
     /**
-     * @var \Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface
+     * @var CredentialValidationClientInterface
      */
     private $CredentialValidationClient;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler
+     * @var ErrorHandler
      */
     private $errorHandler;
 

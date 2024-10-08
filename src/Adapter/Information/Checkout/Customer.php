@@ -8,7 +8,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Checkout\Custome
 class Customer implements CustomerInterface
 {
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\CustomerDataDto
+     * @var CustomerDataDto
      */
     private $dto;
 
@@ -36,6 +36,7 @@ class Customer implements CustomerInterface
     {
         $company = $this->dto->company;
         $name = !is_null($company) ? $company->name : null;
+
         return strval($name);
     }
 }

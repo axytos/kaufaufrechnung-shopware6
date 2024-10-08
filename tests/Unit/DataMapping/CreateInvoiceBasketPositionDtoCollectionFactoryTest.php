@@ -8,8 +8,8 @@ use Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketPositionDto;
 use Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketPositionDtoCollection;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketPositionDtoCollectionFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketPositionDtoFactory;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Shopware\Core\Checkout\Cart\Tax\Struct\CalculatedTax;
 use Shopware\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
@@ -17,13 +17,16 @@ use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 
+/**
+ * @internal
+ */
 class CreateInvoiceBasketPositionDtoCollectionFactoryTest extends TestCase
 {
     /** @var CreateInvoiceBasketPositionDtoFactory&MockObject */
     private $createInvoiceBasketPositionDtoFactory;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketPositionDtoCollectionFactory
+     * @var CreateInvoiceBasketPositionDtoCollectionFactory
      */
     private $sut;
 
@@ -75,7 +78,7 @@ class CreateInvoiceBasketPositionDtoCollectionFactoryTest extends TestCase
         $shippingPositionDto = $this->createCreateInvoiceBasketPositionDto();
 
         $mapping = [];
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             array_push($mapping, [$orderLineItems->getAt($i), $basketPositionDtos[$i]]);
         }
 
@@ -86,14 +89,16 @@ class CreateInvoiceBasketPositionDtoCollectionFactoryTest extends TestCase
 
         $this->createInvoiceBasketPositionDtoFactory
             ->method('create')
-            ->willReturnMap($mapping);
+            ->willReturnMap($mapping)
+        ;
 
         $this->createInvoiceBasketPositionDtoFactory
             ->method('createShippingPosition')
             ->with($orderEntity)
-            ->willReturn($shippingPositionDto);
+            ->willReturn($shippingPositionDto)
+        ;
 
-        $actual  = $this->sut->create($orderEntity);
+        $actual = $this->sut->create($orderEntity);
 
         $this->assertCount(4, $actual);
         $this->assertContains($shippingPositionDto, $actual);
@@ -121,7 +126,8 @@ class CreateInvoiceBasketPositionDtoCollectionFactoryTest extends TestCase
     {
         /** @var OrderLineItemEntity[] */
         $elements = array_fill(0, $count, null);
-        $elements = array_map([$this,'createOrderLineItem'], $elements);
+        $elements = array_map([$this, 'createOrderLineItem'], $elements);
+
         return new OrderLineItemCollection($elements);
     }
 
@@ -143,10 +149,10 @@ class CreateInvoiceBasketPositionDtoCollectionFactoryTest extends TestCase
         /** @var CalculatedTax&MockObject */
         $calculatedTax = $this->createMock(CalculatedTax::class);
 
-        $shippingCosts->method("getQuantity")->willReturn(1);
-        $shippingCosts->method("getTotalPrice")->willReturn(100.0);
-        $shippingCosts->method("getCalculatedTaxes")->willReturn(new CalculatedTaxCollection([$calculatedTax]));
-        $calculatedTax->method("getTaxRate")->willReturn(19.0);
+        $shippingCosts->method('getQuantity')->willReturn(1);
+        $shippingCosts->method('getTotalPrice')->willReturn(100.0);
+        $shippingCosts->method('getCalculatedTaxes')->willReturn(new CalculatedTaxCollection([$calculatedTax]));
+        $calculatedTax->method('getTaxRate')->willReturn(19.0);
 
         return $shippingCosts;
     }

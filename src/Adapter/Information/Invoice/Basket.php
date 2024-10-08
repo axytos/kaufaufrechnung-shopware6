@@ -8,8 +8,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Invoice\BasketIn
 class Basket implements BasketInterface
 {
     /**
-     *
-     * @var \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto
+     * @var CreateInvoiceBasketDto
      */
     private $dto;
 
@@ -34,7 +33,6 @@ class Basket implements BasketInterface
         return floatval($this->dto->grossTotal);
     }
 
-
     /**
      * @return \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Invoice\BasketPositionInterface[]
      */
@@ -44,7 +42,6 @@ class Basket implements BasketInterface
             return new BasketPosition($position);
         }, $this->dto->positions->getElements());
     }
-
 
     /**
      * @return \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Invoice\TaxGroupInterface[]

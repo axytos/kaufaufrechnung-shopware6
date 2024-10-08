@@ -23,8 +23,6 @@ use Shopware\Core\Framework\Migration\MigrationStep;
  * see references:
  * - https://developer.shopware.com/docs/guides/plugins/plugins/plugin-fundamentals/database-migrations.html#create-migration
  * - https://developer.shopware.com/docs/guides/plugins/plugins/plugin-fundamentals/database-migrations.html#sql-schema
- *
- * @package Axytos\KaufAufRechnung\Shopware\Migration
  */
 class Migration1718718356Initial extends MigrationStep
 {
@@ -35,7 +33,7 @@ class Migration1718718356Initial extends MigrationStep
 
     public function update(Connection $connection): void
     {
-        $sql = <<<SQL
+        $sql = <<<'SQL'
 
 CREATE TABLE IF NOT EXISTS `axytos_kaufaufrechnung_order_attributes` (
     `id` BINARY(16) NOT NULL,

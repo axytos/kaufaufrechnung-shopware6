@@ -10,23 +10,20 @@ use Shopware\Core\System\SystemConfig\Event\SystemConfigChangedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * reference: https://stackoverflow.com/a/75177047
- *
- * @package Axytos\KaufAufRechnung\Shopware\CronJob
+ * reference: https://stackoverflow.com/a/75177047.
  */
 class OrderSyncCronJobConfigSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface
+     * @var LoggerAdapterInterface
      */
     private $logger;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\CronJob\OrderSyncCronJobScheduler
+     * @var OrderSyncCronJobScheduler
      */
     private $orderSyncCronJobScheduler;
 
     /**
-     * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface $logger
      * @return void
      */
     public function __construct(
@@ -40,14 +37,14 @@ class OrderSyncCronJobConfigSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            SystemConfigChangedEvent::class => 'onSystemConfigChanged'
+            SystemConfigChangedEvent::class => 'onSystemConfigChanged',
         ];
     }
 
     public function onSystemConfigChanged(SystemConfigChangedEvent $event): void
     {
         try {
-            if ($event->getKey() !== PluginConfigurationValueNames::ORDER_SYNC_CRONJOB_INTERVAL) {
+            if (PluginConfigurationValueNames::ORDER_SYNC_CRONJOB_INTERVAL !== $event->getKey()) {
                 return;
             }
             $this->orderSyncCronJobScheduler->scheduleOrderSyncTask();

@@ -23,7 +23,6 @@ interface AxytosOrderAttributesInterface
     public function getId();
 
     /**
-     * @param string $id
      * @return void
      */
     public function setId(string $id);
@@ -34,7 +33,8 @@ interface AxytosOrderAttributesInterface
     public function getShopwareOrderEntityId();
 
     /**
-     * @param string|null  $shopwareOrderEntityId
+     * @param string|null $shopwareOrderEntityId
+     *
      * @return void
      */
     public function setShopwareOrderEntityId($shopwareOrderEntityId);
@@ -46,6 +46,7 @@ interface AxytosOrderAttributesInterface
 
     /**
      * @param string|null $magentoOrderIncrementId
+     *
      * @return void
      */
     public function setShopwareOrderNumber($magentoOrderIncrementId);
@@ -57,6 +58,7 @@ interface AxytosOrderAttributesInterface
 
     /**
      * @param array<mixed> $orderPreCheckResult
+     *
      * @return void
      */
     public function setOrderPreCheckResult($orderPreCheckResult);
@@ -68,6 +70,7 @@ interface AxytosOrderAttributesInterface
 
     /**
      * @param bool $shippingReported
+     *
      * @return void
      */
     public function setShippingReported($shippingReported);
@@ -79,6 +82,7 @@ interface AxytosOrderAttributesInterface
 
     /**
      * @param string|null $reportedTrackingCode
+     *
      * @return void
      */
     public function setReportedTrackingCode($reportedTrackingCode);
@@ -90,6 +94,7 @@ interface AxytosOrderAttributesInterface
 
     /**
      * @param string $orderBasketHash
+     *
      * @return void
      */
     public function setOrderBasketHash($orderBasketHash);
@@ -101,6 +106,7 @@ interface AxytosOrderAttributesInterface
 
     /**
      * @param string $orderState
+     *
      * @return void
      */
     public function setOrderState($orderState);
@@ -112,6 +118,7 @@ interface AxytosOrderAttributesInterface
 
     /**
      * @param string $orderStateData
+     *
      * @return void
      */
     public function setOrderStateData($orderStateData);

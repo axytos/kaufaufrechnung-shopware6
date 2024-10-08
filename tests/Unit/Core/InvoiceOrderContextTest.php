@@ -23,14 +23,15 @@ use Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\LogisticianCalculator;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\TrackingIdCalculator;
-use DateTime;
-use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
 
+/**
+ * @internal
+ */
 class InvoiceOrderContextTest extends TestCase
 {
     const ORDER_ID = 'orderId';
@@ -56,7 +57,7 @@ class InvoiceOrderContextTest extends TestCase
     private $returnPositionModelDtoCollectionFactory;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContext
+     * @var InvoiceOrderContext
      */
     private $sut;
 
@@ -95,10 +96,11 @@ class InvoiceOrderContextTest extends TestCase
         $this->orderEntityRepository
             ->method('findOrder')
             ->with(self::ORDER_ID, $this->context)
-            ->willReturn($orderEntity);
+            ->willReturn($orderEntity)
+        ;
     }
 
-    public function test_getOrderNumber_returns_order_number(): void
+    public function test_get_order_number_returns_order_number(): void
     {
         /** @var OrderEntity&MockObject */
         $orderEntity = $this->createMock(OrderEntity::class);
@@ -111,7 +113,7 @@ class InvoiceOrderContextTest extends TestCase
         $this->assertSame($orderEntity->getOrderNumber(), $actual);
     }
 
-    public function test_getOrderNumber_throws_Exception_when_order_number_is_null(): void
+    public function test_get_order_number_throws_exception_when_order_number_is_null(): void
     {
         /** @var OrderEntity&MockObject */
         $orderEntity = $this->createMock(OrderEntity::class);
@@ -119,15 +121,15 @@ class InvoiceOrderContextTest extends TestCase
 
         $this->setUpOrderEntityRepository($orderEntity);
 
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         $this->sut->getOrderNumber();
     }
 
-    public function test_getOrderDateTime_returns_order_date_time(): void
+    public function test_get_order_date_time_returns_order_date_time(): void
     {
         /** @var OrderEntity&MockObject */
         $orderEntity = $this->createMock(OrderEntity::class);
-        $orderEntity->method('getOrderDateTime')->willReturn(new DateTime());
+        $orderEntity->method('getOrderDateTime')->willReturn(new \DateTime());
 
         $this->setUpOrderEntityRepository($orderEntity);
 
@@ -136,7 +138,7 @@ class InvoiceOrderContextTest extends TestCase
         $this->assertSame($orderEntity->getOrderDateTime(), $actual);
     }
 
-    public function test_getPersonalData_creates_CustomerDataDto(): void
+    public function test_get_personal_data_creates_customer_data_dto(): void
     {
         $orderEntity = $this->createMock(OrderEntity::class);
         $customerDataDto = $this->createMock(CustomerDataDto::class);
@@ -146,14 +148,15 @@ class InvoiceOrderContextTest extends TestCase
         $this->customerDataDtoFactory
             ->method('create')
             ->with($orderEntity)
-            ->willReturn($customerDataDto);
+            ->willReturn($customerDataDto)
+        ;
 
         $actual = $this->sut->getPersonalData();
 
         $this->assertSame($customerDataDto, $actual);
     }
 
-    public function test_getInvoiceAddress_creates_InvoiceAddressDto(): void
+    public function test_get_invoice_address_creates_invoice_address_dto(): void
     {
         $orderEntity = $this->createMock(OrderEntity::class);
         $invoiceAddressDto = $this->createMock(InvoiceAddressDto::class);
@@ -163,14 +166,15 @@ class InvoiceOrderContextTest extends TestCase
         $this->invoiceAddressDtoFactory
             ->method('create')
             ->with($orderEntity)
-            ->willReturn($invoiceAddressDto);
+            ->willReturn($invoiceAddressDto)
+        ;
 
         $actual = $this->sut->getInvoiceAddress();
 
         $this->assertSame($invoiceAddressDto, $actual);
     }
 
-    public function test_getDeliveryAddress_creates_DeliveryAddressDto(): void
+    public function test_get_delivery_address_creates_delivery_address_dto(): void
     {
         $orderEntity = $this->createMock(OrderEntity::class);
         $deliveryAddressDto = $this->createMock(DeliveryAddressDto::class);
@@ -180,14 +184,15 @@ class InvoiceOrderContextTest extends TestCase
         $this->deliveryAddressDtoFactory
             ->method('create')
             ->with($orderEntity)
-            ->willReturn($deliveryAddressDto);
+            ->willReturn($deliveryAddressDto)
+        ;
 
         $actual = $this->sut->getDeliveryAddress();
 
         $this->assertSame($deliveryAddressDto, $actual);
     }
 
-    public function test_getBasket_creates_BasketDto(): void
+    public function test_get_basket_creates_basket_dto(): void
     {
         $orderEntity = $this->createMock(OrderEntity::class);
         $basketDto = $this->createMock(BasketDto::class);
@@ -197,60 +202,67 @@ class InvoiceOrderContextTest extends TestCase
         $this->basketDtoFactory
             ->method('create')
             ->with($orderEntity)
-            ->willReturn($basketDto);
+            ->willReturn($basketDto)
+        ;
 
         $actual = $this->sut->getBasket();
 
         $this->assertSame($basketDto, $actual);
     }
 
-    public function test_getPreCheckResponseData_returns_precheck_response_data(): void
+    public function test_get_pre_check_response_data_returns_precheck_response_data(): void
     {
         $preCheckResponseData = ['key' => 42];
         $attributes = $this->createMock(AxytosOrderAttributesEntity::class);
 
         $attributes
             ->method('getOrderPreCheckResult')
-            ->willReturn($preCheckResponseData);
+            ->willReturn($preCheckResponseData)
+        ;
 
         $this->orderEntityRepository
             ->method('getAxytosOrderAttributes')
             ->with(self::ORDER_ID, $this->context)
-            ->willReturn($attributes);
+            ->willReturn($attributes)
+        ;
 
         $actual = $this->sut->getPreCheckResponseData();
 
         $this->assertSame($preCheckResponseData, $actual);
     }
 
-    public function test_setPreCheckResponseData_saves_precheck_response_data_in_custom_extension_for_order(): void
+    public function test_set_pre_check_response_data_saves_precheck_response_data_in_custom_extension_for_order(): void
     {
         $preCheckResponseData = ['key' => 42];
         $attributes = $this->createMock(AxytosOrderAttributesEntity::class);
 
         $attributes
             ->method('getOrderPreCheckResult')
-            ->willReturn($preCheckResponseData);
+            ->willReturn($preCheckResponseData)
+        ;
 
         $this->orderEntityRepository
             ->method('getAxytosOrderAttributes')
             ->with(self::ORDER_ID, $this->context)
-            ->willReturn($attributes);
+            ->willReturn($attributes)
+        ;
 
         $attributes
             ->expects($this->once())
             ->method('setOrderPreCheckResult')
-            ->with($preCheckResponseData);
+            ->with($preCheckResponseData)
+        ;
 
         $this->orderEntityRepository
             ->expects($this->once())
             ->method('updateAxytosOrderAttributes')
-            ->with(self::ORDER_ID, $attributes, $this->context);
+            ->with(self::ORDER_ID, $attributes, $this->context)
+        ;
 
         $this->sut->setPreCheckResponseData($preCheckResponseData);
     }
 
-    public function test_getBasket_creates_RefundBasketDto(): void
+    public function test_get_basket_creates_refund_basket_dto(): void
     {
         $orderEntity = $this->createMock(OrderEntity::class);
         $refundBasketDto = $this->createMock(RefundBasketDto::class);
@@ -260,14 +272,15 @@ class InvoiceOrderContextTest extends TestCase
         $this->refundBasketDtoFactory
             ->method('create')
             ->with($orderEntity)
-            ->willReturn($refundBasketDto);
+            ->willReturn($refundBasketDto)
+        ;
 
         $actual = $this->sut->getRefundBasket();
 
         $this->assertSame($refundBasketDto, $actual);
     }
 
-    public function test_getReturnPositions_creates_ReturnPositionModelDtoCollection(): void
+    public function test_get_return_positions_creates_return_position_model_dto_collection(): void
     {
         /** @var OrderEntity&MockObject */
         $orderEntity = $this->createMock(OrderEntity::class);
@@ -281,7 +294,8 @@ class InvoiceOrderContextTest extends TestCase
         $this->returnPositionModelDtoCollectionFactory
             ->method('create')
             ->with($orderLineItems)
-            ->willReturn($returnPositions);
+            ->willReturn($returnPositions)
+        ;
 
         $actual = $this->sut->getReturnPositions();
 

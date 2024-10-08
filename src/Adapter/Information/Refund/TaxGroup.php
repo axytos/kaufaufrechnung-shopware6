@@ -8,8 +8,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Refund\TaxGroupI
 class TaxGroup implements TaxGroupInterface
 {
     /**
-     *
-     * @var \Axytos\ECommerce\DataTransferObjects\RefundBasketTaxGroupDto
+     * @var RefundBasketTaxGroupDto
      */
     private $dto;
 

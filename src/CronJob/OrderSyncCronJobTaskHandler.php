@@ -17,42 +17,37 @@ use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 /**
- * reference: https://developer.shopware.com/docs/guides/plugins/plugins/plugin-fundamentals/add-scheduled-task.html#scheduledtask-and-its-handler
- *
- * @package Axytos\KaufAufRechnung\Shopware\CronJob
+ * reference: https://developer.shopware.com/docs/guides/plugins/plugins/plugin-fundamentals/add-scheduled-task.html#scheduledtask-and-its-handler.
  */
 #[AsMessageHandler(handles: OrderSyncCronJobTask::class)]
 class OrderSyncCronJobTaskHandler extends ScheduledTaskHandler
 {
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator
+     * @var PluginConfigurationValidator
      */
     private $pluginConfigurationValidator;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler
+     * @var ErrorHandler
      */
     private $errorHandler;
     /**
-     * @var \Axytos\KaufAufRechnung\Core\OrderSyncWorker
+     * @var OrderSyncWorker
      */
     private $orderSyncWorker;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\CronJob\OrderSyncCronJobScheduler
+     * @var OrderSyncCronJobScheduler
      */
     private $orderSyncCronJobScheduler;
 
     /**
-     * NOTE: OrderSyncCronJobTaskHandler is EXPLICITLY wired in services.xml
+     * NOTE: OrderSyncCronJobTaskHandler is EXPLICITLY wired in services.xml.
      *
      * @param \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository<ScheduledTaskCollection> $scheduledTaskRepository
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator $pluginConfigurationValidator
-     * @param \Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler $errorHandler
-     * @param \Axytos\KaufAufRechnung\Core\OrderSyncWorker $orderSyncWorker
+     *
      * @return void
      */
     public function __construct(
@@ -71,9 +66,6 @@ class OrderSyncCronJobTaskHandler extends ScheduledTaskHandler
         $this->orderSyncCronJobScheduler = $orderSyncCronJobScheduler;
     }
 
-    /**
-     * @return void
-     */
     public function run(): void
     {
         try {
@@ -81,6 +73,7 @@ class OrderSyncCronJobTaskHandler extends ScheduledTaskHandler
 
             if ($this->pluginConfigurationValidator->isInvalid()) {
                 $this->logger->info('CronJob Order Sync aborted: invalid config');
+
                 return;
             }
 
@@ -95,10 +88,6 @@ class OrderSyncCronJobTaskHandler extends ScheduledTaskHandler
         }
     }
 
-    /**
-     * @param \Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask $task
-     * @param \Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskEntity $taskEntity
-     */
     protected function rescheduleTask(ScheduledTask $task, ScheduledTaskEntity $taskEntity): void
     {
         // check cron job scheduling configuration and prevent the task from being rescheduled
@@ -106,6 +95,7 @@ class OrderSyncCronJobTaskHandler extends ScheduledTaskHandler
         if ($this->orderSyncCronJobScheduler->isConfiguredToRunNever()) {
             $this->logger->info('CronJob Order Sync Rescheduling aborted: configured interval is never');
             $this->orderSyncCronJobScheduler->scheduleToRunNever($taskEntity, Context::createDefaultContext());
+
             return;
         }
 

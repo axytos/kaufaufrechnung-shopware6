@@ -6,22 +6,18 @@ namespace Axytos\KaufAufRechnung\Shopware\CronJob;
 
 use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface;
 use Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration;
-use DateTimeImmutable;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskEntity;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskDefinition;
+use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskEntity;
 
-/**
- * @package Axytos\KaufAufRechnung\Shopware\CronJob
- */
 class OrderSyncCronJobScheduler
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration
+     * @var PluginConfiguration
      */
     private $pluginConfiguration;
 
@@ -31,14 +27,13 @@ class OrderSyncCronJobScheduler
     private $scheduledTaskRepository;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface
+     * @var LoggerAdapterInterface
      */
     private $logger;
 
     /**
-     * @param \Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration $pluginConfiguration
      * @param \Shopware\Core\Framework\DataAbstractionLayer\EntityRepository<ScheduledTaskCollection> $scheduledTaskRepository
-     * @param \Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Logging\LoggerAdapterInterface $logger
+     *
      * @return void
      */
     public function __construct(
@@ -61,7 +56,7 @@ class OrderSyncCronJobScheduler
         return $this->getConfiguredOrderSyncCronJobInterval()->isNever();
     }
 
-    public function scheduleOrderSyncTask(OrderSyncCronJobIntervalInterface $interval = null, ScheduledTaskEntity $task = null, Context $context = null): void
+    public function scheduleOrderSyncTask(?OrderSyncCronJobIntervalInterface $interval = null, ?ScheduledTaskEntity $task = null, ?Context $context = null): void
     {
         if (is_null($interval)) {
             $interval = $this->getConfiguredOrderSyncCronJobInterval();
@@ -76,6 +71,7 @@ class OrderSyncCronJobScheduler
             if (is_null($task)) {
                 // can happen during plugin uninstallation
                 $this->logger->warning('Task ' . OrderSyncCronJobTask::getTaskName() . ' not found.');
+
                 return;
             }
         }
@@ -84,20 +80,20 @@ class OrderSyncCronJobScheduler
             $this->scheduleToRunNever($task, $context);
         } else {
             $runInterval = $interval->getRunIntervalSeconds();
-            $nextExecutionTime =  $interval->getNextExecutionTime();
+            $nextExecutionTime = $interval->getNextExecutionTime();
             $this->scheduledTaskRepository->update([
                 [
                     'id' => $task->getId(),
                     'status' => ScheduledTaskDefinition::STATUS_SCHEDULED,
                     'runInterval' => $runInterval,
                     'nextExecutionTime' => $nextExecutionTime,
-                ]
+                ],
             ], $context);
-            $this->logger->info("OrderSyncCronJobTask scheduled to run once every $runInterval seconds. Next at " . $nextExecutionTime->format(DateTimeImmutable::ATOM));
+            $this->logger->info("OrderSyncCronJobTask scheduled to run once every {$runInterval} seconds. Next at " . $nextExecutionTime->format(\DateTimeImmutable::ATOM));
         }
     }
 
-    public function scheduleToRunNever(ScheduledTaskEntity $task = null, Context $context = null): void
+    public function scheduleToRunNever(?ScheduledTaskEntity $task = null, ?Context $context = null): void
     {
         if (is_null($context)) {
             $context = Context::createDefaultContext();
@@ -108,6 +104,7 @@ class OrderSyncCronJobScheduler
             if (is_null($task)) {
                 // can happen during plugin uninstallation
                 $this->logger->warning('Task ' . OrderSyncCronJobTask::getTaskName() . ' not found.');
+
                 return;
             }
         }
@@ -116,15 +113,15 @@ class OrderSyncCronJobScheduler
 
         // check if the task has never run at all, e.g. after first installation
         if (is_null($lastExecutionTime)) {
-            $lastExecutionTime = new DateTimeImmutable('now');
+            $lastExecutionTime = new \DateTimeImmutable('now');
         }
 
         $this->scheduledTaskRepository->update([
             [
                 'id' => $task->getId(),
                 'status' => ScheduledTaskDefinition::STATUS_INACTIVE,
-                'nextExecutionTime' => $lastExecutionTime
-            ]
+                'nextExecutionTime' => $lastExecutionTime,
+            ],
         ], $context);
         $this->logger->info('OrderSyncCronJobTask disabled.');
     }
@@ -132,7 +129,7 @@ class OrderSyncCronJobScheduler
     /**
      * @return ScheduledTaskEntity|null
      */
-    private function findScheduledTaskEntity(Context $context = null)
+    private function findScheduledTaskEntity(?Context $context = null)
     {
         if (is_null($context)) {
             $context = Context::createDefaultContext();

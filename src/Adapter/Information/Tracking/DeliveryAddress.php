@@ -8,7 +8,7 @@ use Axytos\KaufAufRechnung\Core\Plugin\Abstractions\Information\Tracking\Deliver
 class DeliveryAddress implements DeliveryAddressInterface
 {
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto
+     * @var DeliveryAddressDto
      */
     private $dto;
 
