@@ -16,7 +16,7 @@ class LogisticianCalculator
         if (!is_null($deliveries)) {
             $deliveryElements = $deliveries->getElements();
 
-            if ($deliveryElements !== []) {
+            if ([] !== $deliveryElements) {
                 reset($deliveryElements);
                 /** @var OrderDeliveryEntity */
                 $deliveryElement = $deliveryElements[key($deliveryElements)];
@@ -32,6 +32,6 @@ class LogisticianCalculator
             }
         }
 
-        return "";
+        return '';
     }
 }

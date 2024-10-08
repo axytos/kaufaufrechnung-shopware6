@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\DataMapping;
 
 use Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto;
-use Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceTaxGroupDtoCollectionFactory;
 use Shopware\Core\Checkout\Order\OrderEntity;
 
 class CreateInvoiceBasketDtoFactory
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketPositionDtoCollectionFactory
+     * @var CreateInvoiceBasketPositionDtoCollectionFactory
      */
     private $createInvoiceBasketPositionDtoCollectionFactory;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceTaxGroupDtoCollectionFactory
+     * @var CreateInvoiceTaxGroupDtoCollectionFactory
      */
     private $createInvoiceTaxGroupDtoCollectionFactory;
 

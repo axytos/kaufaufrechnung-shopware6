@@ -6,16 +6,19 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit\ValueCalculation;
 
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionTaxPercentCalculator;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Shopware\Core\Checkout\Cart\Tax\Struct\CalculatedTax;
 use Shopware\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 
+/**
+ * @internal
+ */
 class PositionTaxPercentCalculatorTest extends TestCase
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionTaxPercentCalculator
+     * @var PositionTaxPercentCalculator
      */
     private $sut;
 
@@ -31,6 +34,7 @@ class PositionTaxPercentCalculatorTest extends TestCase
 
     /**
      * @dataProvider dataProvider_test_calculate_returns_sum_of_caclulated_taxes
+     *
      * @param array<float> $taxRates
      */
     #[DataProvider('dataProvider_test_calculate_returns_sum_of_caclulated_taxes')]
@@ -55,8 +59,8 @@ class PositionTaxPercentCalculatorTest extends TestCase
         return [
             [[], 0],
             [[1], 1],
-            [[1,2], 3],
-            [[1,2,0.5], 3.5],
+            [[1, 2], 3],
+            [[1, 2, 0.5], 3.5],
         ];
     }
 
@@ -66,12 +70,12 @@ class PositionTaxPercentCalculatorTest extends TestCase
     private function createCalculatedTaxes(array $taxRates): CalculatedTaxCollection
     {
         $elements = array_map([$this, 'createCalculatedTax'], $taxRates);
+
         return new CalculatedTaxCollection($elements);
     }
 
     private function createCalculatedTax(float $taxRate): CalculatedTax
     {
-        $calculatedTax = new CalculatedTax(0, $taxRate, 0);
-        return $calculatedTax;
+        return new CalculatedTax(0, $taxRate, 0);
     }
 }

@@ -11,11 +11,14 @@ use Axytos\KaufAufRechnung\Shopware\Installer\PluginInstaller;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Plugin\Context\InstallContext;
-use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\DeactivateContext;
+use Shopware\Core\Framework\Plugin\Context\InstallContext;
+use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 
+/**
+ * @internal
+ */
 class PluginInstallerTest extends TestCase
 {
     const PLUGIN_ID = 'PLUGIN_ID';
@@ -27,7 +30,7 @@ class PluginInstallerTest extends TestCase
     private $pluginIdProvider;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Installer\PluginInstaller
+     * @var PluginInstaller
      */
     private $sut;
 
@@ -68,7 +71,8 @@ class PluginInstallerTest extends TestCase
         $this->pluginIdProvider
             ->method('getPluginId')
             ->with($this->context)
-            ->willReturn(self::PLUGIN_ID);
+            ->willReturn(self::PLUGIN_ID)
+        ;
     }
 
     private function setUpContexts(): void
@@ -84,7 +88,8 @@ class PluginInstallerTest extends TestCase
         $this->paymentMethodRepository
             ->method('containsByHandlerIdentifier')
             ->with(AxytosInvoicePaymentHandler::class, $this->context)
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
     }
 
     private function setUpPluginNotInstalled(): void
@@ -92,7 +97,8 @@ class PluginInstallerTest extends TestCase
         $this->paymentMethodRepository
             ->method('containsByHandlerIdentifier')
             ->with(AxytosInvoicePaymentHandler::class, $this->context)
-            ->willReturn(false);
+            ->willReturn(false)
+        ;
     }
 
     public function test_install_plugin_already_installed_does_not_create_new_payment_method(): void
@@ -102,7 +108,8 @@ class PluginInstallerTest extends TestCase
         $this->paymentMethodRepository
             ->expects($this->never())
             ->method('create')
-            ->with(AxytosInvoicePaymentHandler::class, AxytosInvoicePaymentHandler::NAME, AxytosInvoicePaymentHandler::DESCRIPTION, self::PLUGIN_ID, $this->context);
+            ->with(AxytosInvoicePaymentHandler::class, AxytosInvoicePaymentHandler::NAME, AxytosInvoicePaymentHandler::DESCRIPTION, self::PLUGIN_ID, $this->context)
+        ;
 
         $this->sut->install($this->installContext);
     }
@@ -111,13 +118,15 @@ class PluginInstallerTest extends TestCase
     {
         $paymentName = 'Kauf auf Rechnung';
         $paymentDescription = 'Sie zahlen bequem die Rechnung, sobald Sie die Ware erhalten haben, innerhalb der Zahlfrist';
+        $technicalName = 'payment_axytos_kaufaufrechnung';
 
         $this->setUpPluginNotInstalled();
 
         $this->paymentMethodRepository
             ->expects($this->once())
             ->method('create')
-            ->with(AxytosInvoicePaymentHandler::class, $paymentName, $paymentDescription, self::PLUGIN_ID, $this->context);
+            ->with(AxytosInvoicePaymentHandler::class, $paymentName, $paymentDescription, $technicalName, self::PLUGIN_ID, $this->context)
+        ;
 
         $this->sut->install($this->installContext);
     }
@@ -127,7 +136,8 @@ class PluginInstallerTest extends TestCase
         $this->paymentMethodRepository
             ->expects($this->once())
             ->method('updateAllActiveStatesByHandlerIdentifer')
-            ->with(AxytosInvoicePaymentHandler::class, false, $this->context);
+            ->with(AxytosInvoicePaymentHandler::class, false, $this->context)
+        ;
 
         $this->sut->uninstall($this->unintallContext);
     }
@@ -137,7 +147,8 @@ class PluginInstallerTest extends TestCase
         $this->paymentMethodRepository
             ->expects($this->once())
             ->method('updateAllActiveStatesByHandlerIdentifer')
-            ->with(AxytosInvoicePaymentHandler::class, true, $this->context);
+            ->with(AxytosInvoicePaymentHandler::class, true, $this->context)
+        ;
 
         $this->sut->activate($this->activateContext);
     }
@@ -147,7 +158,8 @@ class PluginInstallerTest extends TestCase
         $this->paymentMethodRepository
             ->expects($this->once())
             ->method('updateAllActiveStatesByHandlerIdentifer')
-            ->with(AxytosInvoicePaymentHandler::class, false, $this->context);
+            ->with(AxytosInvoicePaymentHandler::class, false, $this->context)
+        ;
 
         $this->sut->deactivate($this->deactivateContext);
     }

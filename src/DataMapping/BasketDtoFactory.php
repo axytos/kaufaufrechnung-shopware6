@@ -11,7 +11,7 @@ use Shopware\Core\System\Currency\CurrencyEntity;
 class BasketDtoFactory
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\BasketPositionDtoCollectionFactory
+     * @var BasketPositionDtoCollectionFactory
      */
     private $basketPositionCollectionFactory;
 

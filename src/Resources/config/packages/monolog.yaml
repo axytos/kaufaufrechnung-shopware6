@@ -4,6 +4,6 @@ monolog:
   handlers:
     myPluginLogHandler:
         type: rotating_file
-        path: "%kernel.logs_dir%/my_plugin_%kernel.environment%.log"
-        level: error
+        path: "%kernel.logs_dir%/axytos_kauf_auf_rechnung_%kernel.environment%.log"
+        level: info
         channels: [ "axytos.kauf_auf_rechnung.plugin.channel"]

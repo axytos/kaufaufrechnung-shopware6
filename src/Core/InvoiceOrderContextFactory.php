@@ -6,11 +6,11 @@ namespace Axytos\KaufAufRechnung\Shopware\Core;
 
 use Axytos\ECommerce\DataMapping\DtoToDtoMapper;
 use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\BasketDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\CustomerDataDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\DeliveryAddressDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\InvoiceAddressDtoFactory;
-use Axytos\KaufAufRechnung\Shopware\DataMapping\BasketDtoFactory;
-use Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\LogisticianCalculator;
@@ -20,47 +20,47 @@ use Shopware\Core\Framework\Context;
 class InvoiceOrderContextFactory
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository
+     * @var OrderEntityRepository
      */
     private $orderEntityRepository;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\CustomerDataDtoFactory
+     * @var CustomerDataDtoFactory
      */
     private $customerDataDtoFactory;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\DeliveryAddressDtoFactory
+     * @var DeliveryAddressDtoFactory
      */
     private $deliveryAddressDtoFactory;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\InvoiceAddressDtoFactory
+     * @var InvoiceAddressDtoFactory
      */
     private $invoiceAddressDtoFactory;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\BasketDtoFactory
+     * @var BasketDtoFactory
      */
     private $basketDtoFactory;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketDtoFactory
+     * @var CreateInvoiceBasketDtoFactory
      */
     private $createInvoiceBasketDtoFactory;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketDtoFactory
+     * @var RefundBasketDtoFactory
      */
     private $refundBasketDtoFactory;
     /**
-     * @var \Axytos\ECommerce\DataMapping\DtoToDtoMapper
+     * @var DtoToDtoMapper
      */
     private $dtoToDtoMapper;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory
+     * @var ReturnPositionModelDtoCollectionFactory
      */
     private $returnPositionModelDtoCollectionFactory;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\TrackingIdCalculator
+     * @var TrackingIdCalculator
      */
     private $trackingIdCalculator;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\LogisticianCalculator
+     * @var LogisticianCalculator
      */
     private $logisticianCalculator;
 

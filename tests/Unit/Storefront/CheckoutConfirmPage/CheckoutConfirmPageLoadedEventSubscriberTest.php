@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit;
 
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
+use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage\CheckoutConfirmPageLoadedEventHandler;
 use Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage\CheckoutConfirmPageLoadedEventSubscriber;
-use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
-use Exception;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Shopware\Storefront\Page\Checkout\Confirm\CheckoutConfirmPageLoadedEvent;
 
+/**
+ * @internal
+ */
 class CheckoutConfirmPageLoadedEventSubscriberTest extends TestCase
 {
     /** @var PluginConfigurationValidator&MockObject */
@@ -25,7 +27,7 @@ class CheckoutConfirmPageLoadedEventSubscriberTest extends TestCase
     private $errorHandler;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Storefront\CheckoutConfirmPage\CheckoutConfirmPageLoadedEventSubscriber
+     * @var CheckoutConfirmPageLoadedEventSubscriber
      */
     private $sut;
 
@@ -42,7 +44,7 @@ class CheckoutConfirmPageLoadedEventSubscriberTest extends TestCase
         );
     }
 
-    public function test_onCheckoutConfirmPageLoaded_is_subscribed_to_CheckoutConfirmPageLoadedEvent(): void
+    public function test_on_checkout_confirm_page_loaded_is_subscribed_to_checkout_confirm_page_loaded_event(): void
     {
         $subscribedEvents = CheckoutConfirmPageLoadedEventSubscriber::getSubscribedEvents();
 
@@ -52,7 +54,7 @@ class CheckoutConfirmPageLoadedEventSubscriberTest extends TestCase
         );
     }
 
-    public function test_onCheckoutConfirmPageLoaded_plugin_configuraton_is_valid_executes_handler(): void
+    public function test_on_checkout_confirm_page_loaded_plugin_configuraton_is_valid_executes_handler(): void
     {
         $event = $this->createMock(CheckoutConfirmPageLoadedEvent::class);
 
@@ -61,12 +63,13 @@ class CheckoutConfirmPageLoadedEventSubscriberTest extends TestCase
         $this->checkoutConfirmPageLoadedEventHandler
             ->expects($this->once())
             ->method('handle')
-            ->with($event);
+            ->with($event)
+        ;
 
         $this->sut->onCheckoutConfirmPageLoaded($event);
     }
 
-    public function test_onCheckoutConfirmPageLoaded_plugin_configuraton_is_invalid_does_not_execute_handler(): void
+    public function test_on_checkout_confirm_page_loaded_plugin_configuraton_is_invalid_does_not_execute_handler(): void
     {
         $event = $this->createMock(CheckoutConfirmPageLoadedEvent::class);
 
@@ -75,26 +78,29 @@ class CheckoutConfirmPageLoadedEventSubscriberTest extends TestCase
         $this->checkoutConfirmPageLoadedEventHandler
             ->expects($this->never())
             ->method('handle')
-            ->with($event);
+            ->with($event)
+        ;
 
         $this->sut->onCheckoutConfirmPageLoaded($event);
     }
 
-    public function test_onCheckoutConfirmPageLoaded_reprots_errors(): void
+    public function test_on_checkout_confirm_page_loaded_reprots_errors(): void
     {
         $event = $this->createMock(CheckoutConfirmPageLoadedEvent::class);
-        $exception = new Exception();
+        $exception = new \Exception();
 
         $this->pluginConfigurationValidator->method('isInvalid')->willReturn(false);
 
         $this->checkoutConfirmPageLoadedEventHandler
             ->method('handle')
-            ->willThrowException($exception);
+            ->willThrowException($exception)
+        ;
 
         $this->errorHandler
             ->expects($this->once())
             ->method('handle')
-            ->with($exception);
+            ->with($exception)
+        ;
 
         $this->sut->onCheckoutConfirmPageLoaded($event);
     }

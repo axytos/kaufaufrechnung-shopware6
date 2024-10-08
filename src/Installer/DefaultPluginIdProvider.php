@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class DefaultPluginIdProvider implements PluginIdProviderInterface
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var ContainerInterface
      */
     private $container;
     /**
@@ -31,6 +31,7 @@ class DefaultPluginIdProvider implements PluginIdProviderInterface
     {
         /** @var ShopwarePluginIdProvider */
         $pluginIdProvider = $this->container->get(ShopwarePluginIdProvider::class);
+
         return $pluginIdProvider->getPluginIdByBaseClass($this->pluginClassName, $context);
     }
 }

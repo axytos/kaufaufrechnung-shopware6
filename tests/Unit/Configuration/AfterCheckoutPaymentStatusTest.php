@@ -9,13 +9,16 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\System\StateMachine\Aggregation\StateMachineTransition\StateMachineTransitionActions;
 
+/**
+ * @internal
+ */
 class AfterCheckoutPaymentStatusTest extends TestCase
 {
     /**
      * @dataProvider getStateMachineTransactionActionCases
      */
     #[DataProvider('getStateMachineTransactionActionCases')]
-    public function test_getStateMachineTransactionActionCases_returns_correct_value(string $value, string $expectedStatusCode): void
+    public function test_get_state_machine_transaction_action_cases_returns_correct_value(string $value, string $expectedStatusCode): void
     {
         $afterCheckoutOrderStatus = new AfterCheckoutPaymentStatus($value);
 
@@ -37,7 +40,7 @@ class AfterCheckoutPaymentStatusTest extends TestCase
         ];
     }
 
-    public function test_getStateMachineTransactionAction_returns_ACTION_REOPEN_as_default(): void
+    public function test_get_state_machine_transaction_action_returns_actio_n_reope_n_as_default(): void
     {
         $afterCheckoutOrderStatus = new AfterCheckoutPaymentStatus('');
 

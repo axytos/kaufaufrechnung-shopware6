@@ -12,15 +12,15 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class AccountEditOrderPageLoadedEventSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator
+     * @var PluginConfigurationValidator
      */
     private $pluginConfigurationValidator;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Storefront\AccountEditOrderPage\AccountEditOrderPageLoadedEventHandler
+     * @var AccountEditOrderPageLoadedEventHandler
      */
     private $accountEditOrderPageLoadedEventHandler;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler
+     * @var ErrorHandler
      */
     private $errorHandler;
 
@@ -37,7 +37,7 @@ class AccountEditOrderPageLoadedEventSubscriber implements EventSubscriberInterf
     public static function getSubscribedEvents(): array
     {
         return [
-            AccountEditOrderPageLoadedEvent::class => 'onAccountEditOrderPageLoaded'
+            AccountEditOrderPageLoadedEvent::class => 'onAccountEditOrderPageLoaded',
         ];
     }
 

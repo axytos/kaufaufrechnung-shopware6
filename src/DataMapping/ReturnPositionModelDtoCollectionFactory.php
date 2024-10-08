@@ -11,7 +11,7 @@ use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 class ReturnPositionModelDtoCollectionFactory
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoFactory
+     * @var ReturnPositionModelDtoFactory
      */
     private $returnPositionModelDtoFactory;
 

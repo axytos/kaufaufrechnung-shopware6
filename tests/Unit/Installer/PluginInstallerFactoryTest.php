@@ -13,9 +13,12 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\Plugin\Util\PluginIdProvider;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * @internal
+ */
 class PluginInstallerFactoryTest extends TestCase
 {
-    public function test_createInstaller_returns_instance_of_Plugininstaller(): void
+    public function test_create_installer_returns_instance_of_plugininstaller(): void
     {
         /** @var ContainerInterface&MockObject */
         $container = $this->createMock(ContainerInterface::class);

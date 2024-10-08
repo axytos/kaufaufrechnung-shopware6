@@ -20,7 +20,10 @@
     },
     "require": {
         "php": ">=7.2.0",
-        "axytos/ecommerce-sdk": "1.6.19"
+        "axytos/ecommerce-sdk": "1.7.0-rc",
+        "axytos/kaufaufrechnung-core": "1.7.0-rc",
+        "axytos/kaufaufrechnung-core-abstractions": "1.7.0-rc",
+        "axytos/kaufaufrechnung-core-plugin-abstractions": "1.7.0-rc"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5 || ^10.5 || ^11.1",
@@ -51,11 +54,6 @@
         "test-integration": [
             "@phpunit --testsuite Integration"
         ],
-        "clean": [
-            "rm -rf ./packages/core/ecommerce-sdk/vendor",
-            "rm -rf ./packages/api/financial-services-api-sdk/vendor",
-            "rm -rf ./vendor"
-        ],
         "phpunit": "./vendor/bin/phpunit --colors=always",
         "coverage": "./vendor/bin/phpunit --colors=always --coverage-html coverage ",
         "phpstan": "./vendor/bin/phpstan analyse --memory-limit=1G",
@@ -67,13 +65,27 @@
             "../../../bin/build-administration.sh"
         ],
         "shopware-build-storefront": "../../../bin/build-storefront.sh",
-        "shopware-refresh": "../../../bin/console plugin:refresh",
-        "shopware-install": "../../../bin/console plugin:install --activate AxytosKaufAufRechnung",
-        "shopware-uninstall": "../../../bin/console plugin:uninstall AxytosKaufAufRechnung",
+        "shopware-refresh": "../../../bin/console -v plugin:refresh",
+        "shopware-install": "../../../bin/console -v plugin:install --activate AxytosKaufAufRechnung",
+        "shopware-uninstall": "../../../bin/console -v plugin:uninstall AxytosKaufAufRechnung",
         "shopware-cache-clear": "../../../bin/console cache:clear",
+        "shopware-debug-router": [
+            "../../../bin/console debug:router -v axytos.kaufaufrechnung.action.execute",
+            "../../../bin/console debug:router -v axytos.kaufaufrechnung.payment",
+            "../../../bin/console debug:router -v axytos.kaufaufrechnung.credentials.validate"
+        ],
+        "shopware-create-migration": "../../../bin/console database:create-migration -p AxytosKaufAufRechnung --name ",
+        "shopware-create-schema": "../../../bin/console dal:create:schema",
+        "shopware-execute-migration": "../../../bin/console database:migrate --all",
+        "shopware-list-cronjobs": "../../../bin/console -v scheduled-task:list",
+        "shopware-run-order-sync-cronjob": "../../../bin/console -v scheduled-task:run-single asytos.kaufaufrechnung.order_sync_cronjob",
+        "shopware-start-cronjobs": [
+            "../../../bin/console -v scheduled-task:run"
+        ],
         "format": "@php ./scripts/format_composer_json.php",
         "remove-shopware-core": "@php ./scripts/remove_shopware_core.php",
         "require-shopware-core": "@php ./scripts/require_shopware_core.php",
         "set-version": "@php ./scripts/set_version.php"
-    }
+    },
+    "minimum-stability": "RC"
 }

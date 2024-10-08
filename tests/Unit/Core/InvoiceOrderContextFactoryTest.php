@@ -20,10 +20,13 @@ use Axytos\KaufAufRechnung\Shopware\ValueCalculation\TrackingIdCalculator;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Framework\Context;
 
+/**
+ * @internal
+ */
 class InvoiceOrderContextFactoryTest extends TestCase
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory
+     * @var InvoiceOrderContextFactory
      */
     private $sut;
 
@@ -44,7 +47,7 @@ class InvoiceOrderContextFactoryTest extends TestCase
         );
     }
 
-    public function test_getInvoiceOrderContext(): void
+    public function test_get_invoice_order_context(): void
     {
         $orderId = 'orderId';
         $context = $this->createMock(Context::class);

@@ -6,16 +6,16 @@ namespace Axytos\KaufAufRechnung\Shopware\Order;
 
 use Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration;
 use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository;
-use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\Framework\Context;
 
 class OrderStateMachine
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository
+     * @var OrderEntityRepository
      */
     private $orderEntityRepository;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration
+     * @var PluginConfiguration
      */
     private $pluginConfiguration;
 
@@ -25,37 +25,37 @@ class OrderStateMachine
         $this->pluginConfiguration = $pluginConfiguration;
     }
 
-    public function cancelOrder(string $orderId, SalesChannelContext $salesChannelContext): void
+    public function cancelOrder(string $orderId, Context $context): void
     {
-        $this->orderEntityRepository->cancelOrder($orderId, $salesChannelContext->getContext());
+        $this->orderEntityRepository->cancelOrder($orderId, $context);
     }
 
-    public function failPayment(string $orderId, SalesChannelContext $salesChannelContext): void
+    public function failPayment(string $orderId, Context $context): void
     {
-        $this->orderEntityRepository->failPayment($orderId, $salesChannelContext->getContext());
+        $this->orderEntityRepository->failPayment($orderId, $context);
     }
 
-    public function payOrder(string $orderId, SalesChannelContext $salesChannelContext): void
+    public function payOrder(string $orderId, Context $context): void
     {
-        $this->orderEntityRepository->payOrder($orderId, $salesChannelContext->getContext());
+        $this->orderEntityRepository->payOrder($orderId, $context);
     }
 
-    public function payOrderPartially(string $orderId, SalesChannelContext $salesChannelContext): void
+    public function payOrderPartially(string $orderId, Context $context): void
     {
-        $this->orderEntityRepository->payOrderPartially($orderId, $salesChannelContext->getContext());
+        $this->orderEntityRepository->payOrderPartially($orderId, $context);
     }
 
-    public function setConfiguredAfterCheckoutOrderStatus(string $orderId, SalesChannelContext $salesChannelContext): void
+    public function setConfiguredAfterCheckoutOrderStatus(string $orderId, Context $context): void
     {
         $afterCheckoutOrderStatus = $this->pluginConfiguration->getAfterCheckoutOrderStatus();
 
-        $this->orderEntityRepository->saveAfterCheckoutOrderStatus($orderId, $salesChannelContext->getContext(), $afterCheckoutOrderStatus);
+        $this->orderEntityRepository->saveAfterCheckoutOrderStatus($orderId, $context, $afterCheckoutOrderStatus);
     }
 
-    public function setConfiguredAfterCheckoutPaymentStatus(string $orderId, SalesChannelContext $salesChannelContext): void
+    public function setConfiguredAfterCheckoutPaymentStatus(string $orderId, Context $context): void
     {
         $afterCheckoutPaymentStatus = $this->pluginConfiguration->getAfterCheckoutPaymentStatus();
 
-        $this->orderEntityRepository->saveAfterCheckoutPaymentStatus($orderId, $salesChannelContext->getContext(), $afterCheckoutPaymentStatus);
+        $this->orderEntityRepository->saveAfterCheckoutPaymentStatus($orderId, $context, $afterCheckoutPaymentStatus);
     }
 }

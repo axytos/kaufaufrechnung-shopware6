@@ -17,27 +17,27 @@ use Shopware\Core\Checkout\Order\OrderEntity;
 class BasketPositionDtoFactory
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionNetPriceCalculator
+     * @var PositionNetPriceCalculator
      */
     private $positionNetPriceCalculator;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionTaxPercentCalculator
+     * @var PositionTaxPercentCalculator
      */
     private $positionTaxPercentCalculator;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionNetPricePerUnitCalculator
+     * @var PositionNetPricePerUnitCalculator
      */
     private $positionNetPricePerUnitCalculator;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionGrossPricePerUnitCalculator
+     * @var PositionGrossPricePerUnitCalculator
      */
     private $positionGrossPricePerUnitCalculator;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionProductIdCalculator
+     * @var PositionProductIdCalculator
      */
     private $positionProductIdCalculator;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionProductNameCalculator
+     * @var PositionProductNameCalculator
      */
     private $positionProductNameCalculator;
 

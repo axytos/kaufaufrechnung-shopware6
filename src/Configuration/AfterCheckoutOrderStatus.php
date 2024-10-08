@@ -23,7 +23,7 @@ class AfterCheckoutOrderStatus
     private static $orderStatusMapping = [
         self::ORDER_STATE_OPEN => StateMachineTransitionActions::ACTION_REOPEN,
         self::ORDER_STATE_CANCELLED => StateMachineTransitionActions::ACTION_CANCEL,
-        self::ORDER_STATE_IN_PROGRESS => StateMachineTransitionActions::ACTION_PROCESS
+        self::ORDER_STATE_IN_PROGRESS => StateMachineTransitionActions::ACTION_PROCESS,
     ];
 
     /**

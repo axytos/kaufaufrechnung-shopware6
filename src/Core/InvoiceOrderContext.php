@@ -6,27 +6,18 @@ namespace Axytos\KaufAufRechnung\Shopware\Core;
 
 use Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface;
 use Axytos\ECommerce\DataMapping\DtoToDtoMapper;
-use Axytos\ECommerce\DataTransferObjects\BasketDto;
-use Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto;
-use Axytos\ECommerce\DataTransferObjects\CustomerDataDto;
-use Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto;
-use Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto;
-use Axytos\ECommerce\DataTransferObjects\RefundBasketDto;
-use Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection;
 use Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDtoCollection;
 use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\BasketDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\CustomerDataDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\DeliveryAddressDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\InvoiceAddressDtoFactory;
-use Axytos\KaufAufRechnung\Shopware\DataMapping\BasketDtoFactory;
-use Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\LogisticianCalculator;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\TrackingIdCalculator;
-use DateTimeInterface;
-use Exception;
-use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryEntity;
+use Shopware\Core\Checkout\Document\DocumentEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
 
@@ -37,58 +28,53 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
      */
     private $orderId;
     /**
-     * @var \Shopware\Core\Framework\Context
+     * @var Context
      */
     private $context;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository
+     * @var OrderEntityRepository
      */
     private $orderEntityRepository;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\CustomerDataDtoFactory
+     * @var CustomerDataDtoFactory
      */
     private $customerDataDtoFactory;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\DeliveryAddressDtoFactory
+     * @var DeliveryAddressDtoFactory
      */
     private $deliveryAddressDtoFactory;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\InvoiceAddressDtoFactory
+     * @var InvoiceAddressDtoFactory
      */
     private $invoiceAddressDtoFactory;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\BasketDtoFactory
+     * @var BasketDtoFactory
      */
     private $basketDtoFactory;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketDtoFactory
+     * @var CreateInvoiceBasketDtoFactory
      */
     private $createInvoiceBasketDtoFactory;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketDtoFactory
+     * @var RefundBasketDtoFactory
      */
     private $refundBasketDtoFactory;
     /**
-     * @var \Axytos\ECommerce\DataMapping\DtoToDtoMapper
+     * @var DtoToDtoMapper
      */
     private $dtoToDtoMapper;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory
+     * @var ReturnPositionModelDtoCollectionFactory
      */
     private $returnPositionModelDtoCollectionFactory;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\TrackingIdCalculator
+     * @var TrackingIdCalculator
      */
     private $trackingIdCalculator;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\LogisticianCalculator
+     * @var LogisticianCalculator
      */
     private $logisticianCalculator;
-
-    /**
-     * @var string
-     */
-    private $invoiceNumber;
 
     public function __construct(
         string $orderId,
@@ -120,6 +106,22 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
         $this->logisticianCalculator = $logisticianCalculator;
     }
 
+    /**
+     * @return string
+     */
+    public function getOrderId()
+    {
+        return $this->orderId;
+    }
+
+    /**
+     * @return Context
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
+
     private function getOrder(): OrderEntity
     {
         return $this->orderEntityRepository->findOrder($this->orderId, $this->context);
@@ -134,7 +136,7 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
         $orderNumber = $orderEntity->getOrderNumber();
 
         if (is_null($orderNumber)) {
-            throw new Exception("OrderNumber not defined for order with id '{$orderEntity->getId()}'.");
+            throw new \Exception("OrderNumber not defined for order with id '{$orderEntity->getId()}'.");
         }
 
         return $orderNumber;
@@ -145,16 +147,19 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
      */
     public function getOrderInvoiceNumber()
     {
-        return $this->invoiceNumber;
-    }
+        $orderEntity = $this->getOrder();
+        $documents = $orderEntity->getDocuments();
+        if (!is_null($documents)) {
+            /** @var DocumentEntity $document */
+            foreach ($documents as $document) {
+                $documentType = $document->getDocumentType();
+                if (!is_null($documentType) && 'invoice' === $documentType->getTechnicalName()) {
+                    return strval($document->getDocumentNumber());
+                }
+            }
+        }
 
-    /**
-     * @param string $invoiceNumber
-     * @return void
-     */
-    public function setOrderInvoiceNumber($invoiceNumber)
-    {
-        $this->invoiceNumber = $invoiceNumber;
+        return '';
     }
 
     /**
@@ -163,6 +168,7 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
     public function getOrderDateTime()
     {
         $orderEntity = $this->getOrder();
+
         return $orderEntity->getOrderDateTime();
     }
 
@@ -172,6 +178,7 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
     public function getPersonalData()
     {
         $orderEntity = $this->getOrder();
+
         return $this->customerDataDtoFactory->create($orderEntity);
     }
 
@@ -181,6 +188,7 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
     public function getInvoiceAddress()
     {
         $orderEntity = $this->getOrder();
+
         return $this->invoiceAddressDtoFactory->create($orderEntity);
     }
 
@@ -190,6 +198,7 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
     public function getDeliveryAddress()
     {
         $orderEntity = $this->getOrder();
+
         return $this->deliveryAddressDtoFactory->create($orderEntity);
     }
 
@@ -199,6 +208,7 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
     public function getBasket()
     {
         $orderEntity = $this->getOrder();
+
         return $this->basketDtoFactory->create($orderEntity);
     }
 
@@ -208,15 +218,17 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
     public function getCreateInvoiceBasket()
     {
         $orderEntity = $this->getOrder();
+
         return $this->createInvoiceBasketDtoFactory->create($orderEntity);
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDtoCollection
+     * @return ShippingBasketPositionDtoCollection
      */
     public function getShippingBasketPositions()
     {
         $basketPositions = $this->getBasket()->positions;
+
         return $this->dtoToDtoMapper->mapDtoCollection($basketPositions, ShippingBasketPositionDtoCollection::class);
     }
 
@@ -225,23 +237,21 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
      */
     public function getPreCheckResponseData()
     {
-        $customFields = $this->orderEntityRepository->getCustomFields($this->orderId, $this->context);
+        $attributes = $this->orderEntityRepository->getAxytosOrderAttributes($this->orderId, $this->context);
 
-        if (!array_key_exists('axytos_invoice_order_check_response', $customFields)) {
-            return [];
-        }
-
-        return $customFields['axytos_invoice_order_check_response'];
+        return $attributes->getOrderPreCheckResult();
     }
 
     /**
      * @param array<mixed> $data
+     *
      * @return void
      */
     public function setPreCheckResponseData($data)
     {
-        $customFields = ['axytos_invoice_order_check_response' => $data];
-        $this->orderEntityRepository->updateCustomFields($this->orderId, $customFields, $this->context);
+        $attributes = $this->orderEntityRepository->getAxytosOrderAttributes($this->orderId, $this->context);
+        $attributes->setOrderPreCheckResult($data);
+        $this->orderEntityRepository->updateAxytosOrderAttributes($this->orderId, $attributes, $this->context);
     }
 
     /**
@@ -250,6 +260,7 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
     public function getRefundBasket()
     {
         $orderEntity = $this->getOrder();
+
         return $this->refundBasketDtoFactory->create($orderEntity);
     }
 
@@ -259,6 +270,7 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
     public function getReturnPositions()
     {
         $orderEntity = $this->getOrder();
+
         return $this->returnPositionModelDtoCollectionFactory->create($orderEntity->getLineItems());
     }
 
@@ -273,12 +285,14 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
         // we decided to return 0 as constant delivery weight
         return 0;
     }
+
     /**
      * @return string[]
      */
     public function getTrackingIds()
     {
         $orderEntity = $this->getOrder();
+
         return $this->trackingIdCalculator->calculate($orderEntity);
     }
 
@@ -288,6 +302,7 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
     public function getLogistician()
     {
         $orderEntity = $this->getOrder();
+
         return $this->logisticianCalculator->calculate($orderEntity);
     }
 }

@@ -11,6 +11,9 @@ use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Plugin\Util\PluginIdProvider;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * @internal
+ */
 class DefaultPluginIdProviderTest extends TestCase
 {
     const PLUGIN_CLASS_NAME = 'PLUGIN_CLASS_NAME';
@@ -20,7 +23,7 @@ class DefaultPluginIdProviderTest extends TestCase
     private $container;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Installer\DefaultPluginIdProvider
+     * @var DefaultPluginIdProvider
      */
     private $sut;
 
@@ -47,7 +50,8 @@ class DefaultPluginIdProviderTest extends TestCase
         $this->container
             ->method('get')
             ->with(PluginIdProvider::class)
-            ->willReturn($this->pluginIdProvider);
+            ->willReturn($this->pluginIdProvider)
+        ;
     }
 
     private function setUpShopwarePluginIdProvider(): void
@@ -55,10 +59,11 @@ class DefaultPluginIdProviderTest extends TestCase
         $this->pluginIdProvider
             ->method('getPluginIdByBaseClass')
             ->with(self::PLUGIN_CLASS_NAME, $this->context)
-            ->willReturn(self::PLUGIN_ID);
+            ->willReturn(self::PLUGIN_ID)
+        ;
     }
 
-    public function test_getPluginId(): void
+    public function test_get_plugin_id(): void
     {
         $this->setUpShopwarePluginIdProvider();
 

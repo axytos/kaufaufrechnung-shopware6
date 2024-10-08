@@ -7,15 +7,18 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit\Client;
 use Axytos\ECommerce\Abstractions\ApiKeyProviderInterface;
 use Axytos\KaufAufRechnung\Shopware\Client\ApiKeyProvider;
 use Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ApiKeyProviderTest extends TestCase
 {
-    /** @var PluginConfiguration&MockObject $pluginConfiguration */
+    /** @var PluginConfiguration&MockObject */
     private $pluginConfiguration;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Client\ApiKeyProvider
+     * @var ApiKeyProvider
      */
     private $sut;
 
@@ -28,17 +31,18 @@ class ApiKeyProviderTest extends TestCase
         );
     }
 
-    public function test_implements_ApiKeyProviderInterface(): void
+    public function test_implements_api_key_provider_interface(): void
     {
         $this->assertInstanceOf(ApiKeyProviderInterface::class, $this->sut);
     }
 
-    public function test_getApiKey_returns_api_key_from_configuration(): void
+    public function test_get_api_key_returns_api_key_from_configuration(): void
     {
         $expected = 'apikey';
         $this->pluginConfiguration
             ->method('getApiKey')
-            ->willReturn($expected);
+            ->willReturn($expected)
+        ;
 
         $actual = $this->sut->getApiKey();
 

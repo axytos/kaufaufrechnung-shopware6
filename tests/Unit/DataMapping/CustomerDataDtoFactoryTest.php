@@ -5,16 +5,19 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit\DataMapping;
 
 use Axytos\KaufAufRechnung\Shopware\DataMapping\CustomerDataDtoFactory;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Checkout\Order\Aggregate\OrderCustomer\OrderCustomerEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 
+/**
+ * @internal
+ */
 class CustomerDataDtoFactoryTest extends TestCase
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\CustomerDataDtoFactory
+     * @var CustomerDataDtoFactory
      */
     private $sut;
 
@@ -23,7 +26,7 @@ class CustomerDataDtoFactoryTest extends TestCase
         $this->sut = new CustomerDataDtoFactory();
     }
 
-    public function test_create_maps_personalData_correctly_without_existing_customer(): void
+    public function test_create_maps_personal_data_correctly_without_existing_customer(): void
     {
         /** @var OrderEntity&MockObject $order */
         $order = $this->createMock(OrderEntity::class);
@@ -36,23 +39,28 @@ class CustomerDataDtoFactoryTest extends TestCase
 
         $order
             ->method('getOrderCustomer')
-            ->willReturn($orderCustomer);
+            ->willReturn($orderCustomer)
+        ;
 
         $orderCustomer
             ->method('getEmail')
-            ->willReturn($email);
+            ->willReturn($email)
+        ;
 
         $orderCustomer
             ->method('getCustomerId')
-            ->willReturn($customerId);
+            ->willReturn($customerId)
+        ;
 
         $orderCustomer
             ->method('getCustomerNumber')
-            ->willReturn($customerNumber);
+            ->willReturn($customerNumber)
+        ;
 
         $orderCustomer
             ->method('getCustomer')
-            ->willReturn(null);
+            ->willReturn(null)
+        ;
 
         $actual = $this->sut->create($order);
 
@@ -61,7 +69,7 @@ class CustomerDataDtoFactoryTest extends TestCase
         $this->assertSame(null, $actual->dateOfBirth);
     }
 
-    public function test_create_maps_personalData_correctly_for_existing_customer_without_birthdate(): void
+    public function test_create_maps_personal_data_correctly_for_existing_customer_without_birthdate(): void
     {
         /** @var OrderEntity&MockObject $order */
         $order = $this->createMock(OrderEntity::class);
@@ -76,27 +84,33 @@ class CustomerDataDtoFactoryTest extends TestCase
 
         $order
             ->method('getOrderCustomer')
-            ->willReturn($orderCustomer);
+            ->willReturn($orderCustomer)
+        ;
 
         $orderCustomer
             ->method('getEmail')
-            ->willReturn($email);
+            ->willReturn($email)
+        ;
 
         $orderCustomer
             ->method('getCustomerId')
-            ->willReturn($customerId);
+            ->willReturn($customerId)
+        ;
 
         $orderCustomer
             ->method('getCustomerNumber')
-            ->willReturn($customerNumber);
+            ->willReturn($customerNumber)
+        ;
 
         $orderCustomer
             ->method('getCustomer')
-            ->willReturn($customer);
+            ->willReturn($customer)
+        ;
 
         $customer
             ->method('getBirthDay')
-            ->willReturn(null);
+            ->willReturn(null)
+        ;
 
         $actual = $this->sut->create($order);
 
@@ -105,7 +119,7 @@ class CustomerDataDtoFactoryTest extends TestCase
         $this->assertSame(null, $actual->dateOfBirth);
     }
 
-    public function test_create_maps_personalData_correctly_for_existing_customer_with_birthdate_date_time_type(): void
+    public function test_create_maps_personal_data_correctly_for_existing_customer_with_birthdate_date_time_type(): void
     {
         /** @var OrderEntity&MockObject $order */
         $order = $this->createMock(OrderEntity::class);
@@ -122,27 +136,33 @@ class CustomerDataDtoFactoryTest extends TestCase
 
         $order
             ->method('getOrderCustomer')
-            ->willReturn($orderCustomer);
+            ->willReturn($orderCustomer)
+        ;
 
         $orderCustomer
             ->method('getEmail')
-            ->willReturn($email);
+            ->willReturn($email)
+        ;
 
         $orderCustomer
             ->method('getCustomerId')
-            ->willReturn($customerId);
+            ->willReturn($customerId)
+        ;
 
         $orderCustomer
             ->method('getCustomerNumber')
-            ->willReturn($customerNumber);
+            ->willReturn($customerNumber)
+        ;
 
         $orderCustomer
             ->method('getCustomer')
-            ->willReturn($customer);
+            ->willReturn($customer)
+        ;
 
         $customer
             ->method('getBirthDay')
-            ->willReturn($dateTime);
+            ->willReturn($dateTime)
+        ;
 
         $actual = $this->sut->create($order);
 
@@ -152,7 +172,7 @@ class CustomerDataDtoFactoryTest extends TestCase
         $this->assertSame($dateTime->getTimestamp(), $actual->dateOfBirth->getTimestamp());
     }
 
-    public function test_create_maps_personalData_correctly_for_existing_customer_with_birthdate_date_time_immutable_type(): void
+    public function test_create_maps_personal_data_correctly_for_existing_customer_with_birthdate_date_time_immutable_type(): void
     {
         /** @var OrderEntity&MockObject $order */
         $order = $this->createMock(OrderEntity::class);
@@ -170,31 +190,38 @@ class CustomerDataDtoFactoryTest extends TestCase
 
         $order
             ->method('getOrderCustomer')
-            ->willReturn($orderCustomer);
+            ->willReturn($orderCustomer)
+        ;
 
         $orderCustomer
             ->method('getEmail')
-            ->willReturn($email);
+            ->willReturn($email)
+        ;
 
         $orderCustomer
             ->method('getCompany')
-            ->willReturn($company);
+            ->willReturn($company)
+        ;
 
         $orderCustomer
             ->method('getCustomerId')
-            ->willReturn($customerId);
+            ->willReturn($customerId)
+        ;
 
         $orderCustomer
             ->method('getCustomerNumber')
-            ->willReturn($customerNumber);
+            ->willReturn($customerNumber)
+        ;
 
         $orderCustomer
             ->method('getCustomer')
-            ->willReturn($customer);
+            ->willReturn($customer)
+        ;
 
         $customer
             ->method('getBirthDay')
-            ->willReturn($dateTimeImmutable);
+            ->willReturn($dateTimeImmutable)
+        ;
 
         $actual = $this->sut->create($order);
 

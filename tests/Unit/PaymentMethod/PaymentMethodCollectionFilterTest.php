@@ -11,13 +11,16 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Payment\PaymentMethodCollection;
 use Shopware\Core\Checkout\Payment\PaymentMethodEntity;
 
+/**
+ * @internal
+ */
 class PaymentMethodCollectionFilterTest extends TestCase
 {
     /** @var PaymentMethodPredicates&MockObject */
     private $paymentMethodPredicates;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodCollectionFilter
+     * @var PaymentMethodCollectionFilter
      */
     private $sut;
 
@@ -30,7 +33,7 @@ class PaymentMethodCollectionFilterTest extends TestCase
         );
     }
 
-    public function test_filterAllowedFallbackPaymentMethods_filters_allowed_payment_methods(): void
+    public function test_filter_allowed_fallback_payment_methods_filters_allowed_payment_methods(): void
     {
         $paymentMethodCollection = $this->createPaymentMethodCollection(4);
 
@@ -43,7 +46,8 @@ class PaymentMethodCollectionFilterTest extends TestCase
 
         $this->paymentMethodPredicates
             ->method('isAllowedFallback')
-            ->willReturnMap($config);
+            ->willReturnMap($config)
+        ;
 
         $actual = $this->sut->filterAllowedFallbackPaymentMethods($paymentMethodCollection);
 
@@ -54,7 +58,7 @@ class PaymentMethodCollectionFilterTest extends TestCase
         $this->assertContains($paymentMethodCollection->getAt(3), $actual);
     }
 
-    public function test_filterNotUnsafePaymentMethods_filters_not_unsafe_payment_methods(): void
+    public function test_filter_not_unsafe_payment_methods_filters_not_unsafe_payment_methods(): void
     {
         $paymentMethodCollection = $this->createPaymentMethodCollection(4);
 
@@ -67,7 +71,8 @@ class PaymentMethodCollectionFilterTest extends TestCase
 
         $this->paymentMethodPredicates
             ->method('isNotUnsafe')
-            ->willReturnMap($config);
+            ->willReturnMap($config)
+        ;
 
         $actual = $this->sut->filterNotUnsafePaymentMethods($paymentMethodCollection);
 
@@ -78,9 +83,9 @@ class PaymentMethodCollectionFilterTest extends TestCase
         $this->assertContains($paymentMethodCollection->getAt(3), $actual);
     }
 
-    public function test_filterPaymentMethodsNotUsingHandler(): void
+    public function test_filter_payment_methods_not_using_handler(): void
     {
-        $handlerClass = "handlerClass";
+        $handlerClass = 'handlerClass';
         $paymentMethodCollection = $this->createPaymentMethodCollection(4);
 
         $config = [
@@ -92,7 +97,8 @@ class PaymentMethodCollectionFilterTest extends TestCase
 
         $this->paymentMethodPredicates
             ->method('usesHandler')
-            ->willReturnMap($config);
+            ->willReturnMap($config)
+        ;
 
         $actual = $this->sut->filterPaymentMethodsNotUsingHandler($paymentMethodCollection, $handlerClass);
 
@@ -107,10 +113,10 @@ class PaymentMethodCollectionFilterTest extends TestCase
     {
         $paymentMethods = [];
 
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $paymentMethods[$i] = new PaymentMethodEntity();
-            $paymentMethods[$i]->setId("paymentMethod$i");
-            $paymentMethods[$i]->setUniqueIdentifier("paymentMethod$i");
+            $paymentMethods[$i]->setId("paymentMethod{$i}");
+            $paymentMethods[$i]->setUniqueIdentifier("paymentMethod{$i}");
         }
 
         return new PaymentMethodCollection($paymentMethods);

@@ -14,6 +14,7 @@ class RefundBasketPositionDtoFactory
         $refundBasketPosition->productId = $productId;
         $refundBasketPosition->grossRefundTotal = $grossRefundTotal;
         $refundBasketPosition->netRefundTotal = $netRefundTotal;
+
         return $refundBasketPosition;
     }
 }

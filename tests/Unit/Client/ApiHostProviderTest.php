@@ -10,13 +10,16 @@ use Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ApiHostProviderTest extends TestCase
 {
     /** @var PluginConfiguration&MockObject */
     private $pluginConfiguration;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Client\ApiHostProvider
+     * @var ApiHostProvider
      */
     private $sut;
 
@@ -29,20 +32,44 @@ class ApiHostProviderTest extends TestCase
         );
     }
 
-    public function test_implements_ApiHostProviderInterface(): void
+    public function test_implements_api_host_provider_interface(): void
     {
         $this->assertInstanceOf(ApiHostProviderInterface::class, $this->sut);
     }
 
-    public function test_getApiHost_returns_api_key_from_configuration(): void
+    public function test_get_api_host_returns_sandbox_by_default(): void
     {
-        $expected = 'apihost';
         $this->pluginConfiguration
             ->method('getApiHost')
-            ->willReturn($expected);
+            ->willReturn('something else')
+        ;
 
         $actual = $this->sut->getApiHost();
 
-        $this->assertSame($expected, $actual);
+        $this->assertSame(ApiHostProviderInterface::SANDBOX, $actual);
+    }
+
+    public function test_get_api_host_returns_sandbox_for_sandbox_option_from_configuration(): void
+    {
+        $this->pluginConfiguration
+            ->method('getApiHost')
+            ->willReturn('APIHOST_SANDBOX')
+        ;
+
+        $actual = $this->sut->getApiHost();
+
+        $this->assertSame(ApiHostProviderInterface::SANDBOX, $actual);
+    }
+
+    public function test_get_api_host_returns_live_for_live_option_from_configuration(): void
+    {
+        $this->pluginConfiguration
+            ->method('getApiHost')
+            ->willReturn('APIHOST_LIVE')
+        ;
+
+        $actual = $this->sut->getApiHost();
+
+        $this->assertSame(ApiHostProviderInterface::LIVE, $actual);
     }
 }

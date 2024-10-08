@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Storefront\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Shopware\Storefront\Controller\StorefrontController;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Invoice\PaymentStatus;
-use Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
+use Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration;
 use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine;
+use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @RouteScope(scopes={"storefront"})
@@ -24,23 +24,23 @@ use Symfony\Component\HttpFoundation\Request;
 class PaymentController extends StorefrontController
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler
+     * @var ErrorHandler
      */
     private $errorHandler;
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface
+     * @var InvoiceClientInterface
      */
     private $invoiceClient;
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator
+     * @var PluginConfigurationValidator
      */
     private $pluginConfigurationValidator;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration
+     * @var PluginConfiguration
      */
     private $pluginConfiguration;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine
+     * @var OrderStateMachine
      */
     private $orderStateMachine;
 
@@ -78,6 +78,7 @@ class PaymentController extends StorefrontController
             return new Response();
         } catch (\Throwable $th) {
             $this->errorHandler->handle($th);
+
             return new Response('', 500);
         }
     }
@@ -88,12 +89,12 @@ class PaymentController extends StorefrontController
         $orderId = $invoiceOrderPaymentUpdate->orderId;
         $paymentStatus = $invoiceOrderPaymentUpdate->paymentStatus;
 
-        if ($paymentStatus === PaymentStatus::PAID || $paymentStatus === PaymentStatus::OVERPAID) {
-            $this->orderStateMachine->payOrder($orderId, $context);
+        if (PaymentStatus::PAID === $paymentStatus || PaymentStatus::OVERPAID === $paymentStatus) {
+            $this->orderStateMachine->payOrder($orderId, $context->getContext());
         }
 
-        if ($paymentStatus === PaymentStatus::PARTIALLY_PAID) {
-            $this->orderStateMachine->payOrderPartially($orderId, $context);
+        if (PaymentStatus::PARTIALLY_PAID === $paymentStatus) {
+            $this->orderStateMachine->payOrderPartially($orderId, $context->getContext());
         }
     }
 
@@ -101,7 +102,7 @@ class PaymentController extends StorefrontController
     {
         $configClientSecret = $this->pluginConfiguration->getClientSecret();
 
-        $headerClientSecret = $request->headers->get("X-secret");
+        $headerClientSecret = $request->headers->get('X-secret');
 
         return is_null($configClientSecret) || $configClientSecret !== $headerClientSecret;
     }

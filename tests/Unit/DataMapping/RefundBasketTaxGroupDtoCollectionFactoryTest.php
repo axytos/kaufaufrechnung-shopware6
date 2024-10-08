@@ -13,10 +13,13 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Cart\Tax\Struct\CalculatedTax;
 use Shopware\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 
+/**
+ * @internal
+ */
 class RefundBasketTaxGroupDtoCollectionFactoryTest extends TestCase
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketTaxGroupDtoCollectionFactory
+     * @var RefundBasketTaxGroupDtoCollectionFactory
      */
     private $sut;
 
@@ -29,7 +32,7 @@ class RefundBasketTaxGroupDtoCollectionFactoryTest extends TestCase
         $this->sut = new RefundBasketTaxGroupDtoCollectionFactory($this->refundBasketTaxGroupDtoFactory);
     }
 
-    public function test_with_null_orderLineItems(): void
+    public function test_with_null_order_line_items(): void
     {
         $expected = new RefundBasketTaxGroupDtoCollection();
         $orderLineItems = null;
@@ -39,11 +42,11 @@ class RefundBasketTaxGroupDtoCollectionFactoryTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function test_with_orderLineItems(): void
+    public function test_with_order_line_items(): void
     {
         $expected = new RefundBasketTaxGroupDtoCollection(new RefundBasketTaxGroupDto(), new RefundBasketTaxGroupDto());
         $calculatedTaxCollection = new CalculatedTaxCollection();
-        for ($i = 0; $i < $expected->count(); $i++) {
+        for ($i = 0; $i < $expected->count(); ++$i) {
             $caluatedTax = new CalculatedTax($i, $i, $i);
             $calculatedTaxCollection->add($caluatedTax);
         }
@@ -58,8 +61,10 @@ class RefundBasketTaxGroupDtoCollectionFactoryTest extends TestCase
                 if ($caluatedTax === $calculatedTaxCollection->get(1)) {
                     return $expected[1];
                 }
+
                 return null;
-            });
+            })
+        ;
 
         $actual = $this->sut->create($calculatedTaxCollection);
 

@@ -47,6 +47,7 @@ class AfterCheckoutPaymentStatus
         if (!isset(self::$paymentStatusMapping[$this->value])) {
             return self::$default;
         }
+
         return self::$paymentStatusMapping[$this->value];
     }
 }

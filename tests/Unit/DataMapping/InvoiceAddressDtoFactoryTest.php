@@ -5,18 +5,21 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit\DataMapping;
 
 use Axytos\KaufAufRechnung\Shopware\DataMapping\InvoiceAddressDtoFactory;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Order\Aggregate\OrderAddress\OrderAddressEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\System\Country\Aggregate\CountryState\CountryStateEntity;
 use Shopware\Core\System\Country\CountryEntity;
 use Shopware\Core\System\Salutation\SalutationEntity;
 
+/**
+ * @internal
+ */
 class InvoiceAddressDtoFactoryTest extends TestCase
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\InvoiceAddressDtoFactory
+     * @var InvoiceAddressDtoFactory
      */
     private $sut;
 
@@ -51,59 +54,73 @@ class InvoiceAddressDtoFactoryTest extends TestCase
 
         $order
             ->method('getBillingAddress')
-            ->willReturn($billingAddress);
+            ->willReturn($billingAddress)
+        ;
 
         $billingAddress
             ->method('getStreet')
-            ->willReturn($street);
+            ->willReturn($street)
+        ;
 
         $billingAddress
             ->method('getCity')
-            ->willReturn($city);
+            ->willReturn($city)
+        ;
 
         $billingAddress
             ->method('getCompany')
-            ->willReturn($company);
+            ->willReturn($company)
+        ;
 
         $billingAddress
             ->method('getFirstName')
-            ->willReturn($firstname);
+            ->willReturn($firstname)
+        ;
 
         $billingAddress
             ->method('getLastName')
-            ->willReturn($lastname);
+            ->willReturn($lastname)
+        ;
 
         $billingAddress
             ->method('getZipcode')
-            ->willReturn($zipCode);
+            ->willReturn($zipCode)
+        ;
 
         $billingAddress
             ->method('getVatId')
-            ->willReturn($vatId);
+            ->willReturn($vatId)
+        ;
 
         $billingAddress
             ->method('getCountry')
-            ->willReturn($country);
+            ->willReturn($country)
+        ;
 
         $country
             ->method('getIso')
-            ->willReturn($countryIso);
+            ->willReturn($countryIso)
+        ;
 
         $billingAddress
             ->method('getCountryState')
-            ->willReturn($countryState);
+            ->willReturn($countryState)
+        ;
 
         $countryState
             ->method('getName')
-            ->willReturn($stateName);
+            ->willReturn($stateName)
+        ;
 
         $billingAddress
             ->method('getSalutation')
-            ->willReturn($salutation);
+            ->willReturn($salutation)
+        ;
 
         $salutation
             ->method('getDisplayName')
-            ->willReturn($salutationDisplayName);
+            ->willReturn($salutationDisplayName)
+        ;
 
         $actual = $this->sut->create($order);
 

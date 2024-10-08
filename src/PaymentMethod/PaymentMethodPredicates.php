@@ -12,11 +12,11 @@ use Shopware\Core\Checkout\Payment\PaymentMethodEntity;
 class PaymentMethodPredicates
 {
     /**
-     * @var \Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface
+     * @var PaymentMethodConfigurationInterface
      */
     private $paymentMethodConfiguration;
     /**
-     * @var \Axytos\ECommerce\Abstractions\FallbackModeConfigurationInterface
+     * @var FallbackModeConfigurationInterface
      */
     private $fallbackModeConfiguration;
 
@@ -24,7 +24,6 @@ class PaymentMethodPredicates
         PaymentMethodConfigurationInterface $paymentMethodConfiguration,
         FallbackModeConfigurationInterface $fallbackModeConfiguration
     ) {
-
         $this->paymentMethodConfiguration = $paymentMethodConfiguration;
         $this->fallbackModeConfiguration = $fallbackModeConfiguration;
     }
@@ -48,12 +47,14 @@ class PaymentMethodPredicates
     public function isNotUnsafe(PaymentMethodEntity $paymentMethodEntity): bool
     {
         $paymentMethodId = $paymentMethodEntity->getId();
+
         return !$this->paymentMethodConfiguration->isUnsafe($paymentMethodId);
     }
 
     public function isIgnoredOrNotConfigured(PaymentMethodEntity $paymentMethodEntity): bool
     {
         $paymentMethodId = $paymentMethodEntity->getId();
+
         return $this->paymentMethodConfiguration->isIgnored($paymentMethodId)
             || $this->paymentMethodConfiguration->isNotConfigured($paymentMethodId);
     }
@@ -61,6 +62,7 @@ class PaymentMethodPredicates
     public function usesHandler(PaymentMethodEntity $paymentMethodEntity, string $handlerClass): bool
     {
         $handlerIdentifier = $paymentMethodEntity->getHandlerIdentifier();
+
         return $handlerIdentifier === $handlerClass;
     }
 }

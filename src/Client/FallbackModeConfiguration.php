@@ -11,7 +11,7 @@ use Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration;
 class FallbackModeConfiguration implements FallbackModeConfigurationInterface
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration
+     * @var PluginConfiguration
      */
     public $pluginConfig;
 

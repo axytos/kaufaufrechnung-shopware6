@@ -11,34 +11,33 @@ use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionNetPricePerUnitCalc
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionProductIdCalculator;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionProductNameCalculator;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionTaxPercentCalculator;
-use LogicException;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 
 class CreateInvoiceBasketPositionDtoFactory
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionNetPriceCalculator
+     * @var PositionNetPriceCalculator
      */
     private $positionNetPriceCalculator;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionTaxPercentCalculator
+     * @var PositionTaxPercentCalculator
      */
     private $positionTaxPercentCalculator;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionNetPricePerUnitCalculator
+     * @var PositionNetPricePerUnitCalculator
      */
     private $positionNetPricePerUnitCalculator;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionGrossPricePerUnitCalculator
+     * @var PositionGrossPricePerUnitCalculator
      */
     private $positionGrossPricePerUnitCalculator;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionProductIdCalculator
+     * @var PositionProductIdCalculator
      */
     private $positionProductIdCalculator;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionProductNameCalculator
+     * @var PositionProductNameCalculator
      */
     private $positionProductNameCalculator;
 
@@ -60,7 +59,6 @@ class CreateInvoiceBasketPositionDtoFactory
 
     public function create(OrderLineItemEntity $orderLineItemEntity): CreateInvoiceBasketPositionDto
     {
-
         $createInvoiceBasketPosition = new CreateInvoiceBasketPositionDto();
         $createInvoiceBasketPosition->grossPositionTotal = $orderLineItemEntity->getTotalPrice();
         $createInvoiceBasketPosition->quantity = $orderLineItemEntity->getQuantity();

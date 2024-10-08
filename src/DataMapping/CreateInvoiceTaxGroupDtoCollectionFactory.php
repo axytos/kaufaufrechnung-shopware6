@@ -11,7 +11,7 @@ use Shopware\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 class CreateInvoiceTaxGroupDtoCollectionFactory
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceTaxGroupDtoFactory
+     * @var CreateInvoiceTaxGroupDtoFactory
      */
     private $createInvoiceTaxGroupDtoFactory;
 
@@ -31,8 +31,6 @@ class CreateInvoiceTaxGroupDtoCollectionFactory
             return $this->createInvoiceTaxGroupDtoFactory->create($calculatedTax);
         }));
 
-        $result = new CreateInvoiceTaxGroupDtoCollection(...$positions);
-
-        return $result;
+        return new CreateInvoiceTaxGroupDtoCollection(...$positions);
     }
 }

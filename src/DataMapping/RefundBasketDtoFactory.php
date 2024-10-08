@@ -10,11 +10,11 @@ use Shopware\Core\Checkout\Order\OrderEntity;
 class RefundBasketDtoFactory
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketPositionDtoCollectionFactory
+     * @var RefundBasketPositionDtoCollectionFactory
      */
     private $refundBasketPositionDtoCollectionFactory;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketTaxGroupDtoCollectionFactory
+     * @var RefundBasketTaxGroupDtoCollectionFactory
      */
     private $refundBasketTaxGroupDtoCollectionFactory;
 
@@ -31,6 +31,7 @@ class RefundBasketDtoFactory
         $refundBasket->netTotal = $orderEntity->getAmountNet();
         $refundBasket->positions = $this->refundBasketPositionDtoCollectionFactory->create($orderEntity->getLineItems());
         $refundBasket->taxGroups = $this->refundBasketTaxGroupDtoCollectionFactory->create($orderEntity->getPrice()->getCalculatedTaxes());
+
         return $refundBasket;
     }
 }
