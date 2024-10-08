@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Storefront\AccountEditOrderPage;
 
-use Axytos\KaufAufRechnung\Shopware\Core\AxytosInvoicePaymentHandler;
-use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodCollectionFilter;
-use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
 use Axytos\ECommerce\Order\OrderCheckProcessStates;
+use Axytos\KaufAufRechnung\Shopware\Core\AxytosInvoicePaymentHandler;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
+use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodCollectionFilter;
 use Shopware\Storefront\Page\Account\Order\AccountEditOrderPageLoadedEvent;
 
 class AccountEditOrderPageLoadedEventHandler
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine
+     * @var OrderCheckProcessStateMachine
      */
     private $orderCheckProcessStateMachine;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodCollectionFilter
+     * @var PaymentMethodCollectionFilter
      */
     private $paymentMethodCollectionFilter;
 
@@ -39,13 +39,13 @@ class AccountEditOrderPageLoadedEventHandler
 
         $paymentControlOrderState = $this->orderCheckProcessStateMachine->getState($orderId, $context);
 
-        if ($paymentControlOrderState === OrderCheckProcessStates::FAILED) {
+        if (OrderCheckProcessStates::FAILED === $paymentControlOrderState) {
             $paymentMethods = $page->getPaymentMethods();
             $paymentMethods = $this->paymentMethodCollectionFilter->filterAllowedFallbackPaymentMethods($paymentMethods);
             $page->setPaymentMethods($paymentMethods);
         }
 
-        if ($paymentControlOrderState === OrderCheckProcessStates::CHECKED) {
+        if (OrderCheckProcessStates::CHECKED === $paymentControlOrderState) {
             $paymentMethods = $page->getPaymentMethods();
             $paymentMethods = $this->paymentMethodCollectionFilter->filterPaymentMethodsNotUsingHandler($paymentMethods, AxytosInvoicePaymentHandler::class);
             $paymentMethods = $this->paymentMethodCollectionFilter->filterNotUnsafePaymentMethods($paymentMethods);

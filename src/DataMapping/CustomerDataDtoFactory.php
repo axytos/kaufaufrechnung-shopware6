@@ -6,7 +6,6 @@ namespace Axytos\KaufAufRechnung\Shopware\DataMapping;
 
 use Axytos\ECommerce\DataTransferObjects\CompanyDto;
 use Axytos\ECommerce\DataTransferObjects\CustomerDataDto;
-use DateTimeImmutable;
 use Shopware\Core\Checkout\Order\OrderEntity;
 
 class CustomerDataDtoFactory
@@ -23,7 +22,6 @@ class CustomerDataDtoFactory
                 $personalData->externalCustomerId = $orderCustomer->getCustomerNumber() . '-' . $orderCustomer->getCustomerId();
             }
 
-
             if (!is_null($orderCustomer->getCompany())) {
                 $personalData->company = new CompanyDto();
 
@@ -35,7 +33,7 @@ class CustomerDataDtoFactory
             if (!is_null($customer)) {
                 $birthDay = $customer->getBirthday();
                 if (!is_null($birthDay)) {
-                    $personalData->dateOfBirth = new DateTimeImmutable('@' . $birthDay->getTimestamp(), $birthDay->getTimezone());
+                    $personalData->dateOfBirth = new \DateTimeImmutable('@' . $birthDay->getTimestamp(), $birthDay->getTimezone());
                 }
             }
         }

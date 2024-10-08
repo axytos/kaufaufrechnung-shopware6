@@ -58,7 +58,7 @@ In order to be able to use the plugin, you need valid connection data for [https
 
 2. Execute configuration in the three-point menu of Axytos Purchase on account.
 
-3. Enter API host. Either [https://api.axytos.com/](https://api.axytos.com/) or [https://api-sandbox.axytos.com/](https://api-sandbox.axytos.com/), the correct values ​​will be communicated to you by axytos during onboarding (see requirements)
+3. Choose API Host, either 'Live' or 'Sandbox'.
 
 4. Enter API key. You will be informed of the correct value during the onboarding of axytos (see requirements).
 

@@ -10,7 +10,7 @@ use Axytos\ECommerce\PackageInfo\ComposerPackageInfoProvider;
 class UserAgentInfoProvider implements UserAgentInfoProviderInterface
 {
     /**
-     * @var \Axytos\ECommerce\PackageInfo\ComposerPackageInfoProvider
+     * @var ComposerPackageInfoProvider
      */
     private $composerPackageInfoProvider;
 
@@ -21,29 +21,31 @@ class UserAgentInfoProvider implements UserAgentInfoProviderInterface
 
     public function getPluginName(): string
     {
-        return "KaufAufRechnung";
+        return 'KaufAufRechnung';
     }
 
     public function getPluginVersion(): string
     {
         /**
-         * cannot be null, because this is the package name of THIS plugin
+         * cannot be null, because this is the package name of THIS plugin.
+         *
          * @phpstan-ignore-next-line
          */
-        return $this->composerPackageInfoProvider->getVersion("axytos/kaufaufrechnung-shopware6");
+        return $this->composerPackageInfoProvider->getVersion('axytos/kaufaufrechnung-shopware6');
     }
 
     public function getShopSystemName(): string
     {
-        return "Shopware";
+        return 'Shopware';
     }
 
     public function getShopSystemVersion(): string
     {
         /**
-         * cannot be null, because this is a shopware plugin
+         * cannot be null, because this is a shopware plugin.
+         *
          * @phpstan-ignore-next-line
          */
-        return $this->composerPackageInfoProvider->getVersion("shopware/core");
+        return $this->composerPackageInfoProvider->getVersion('shopware/core');
     }
 }

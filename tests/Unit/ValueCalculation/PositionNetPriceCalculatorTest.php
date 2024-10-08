@@ -6,15 +6,18 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit\ValueCalculation;
 
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionNetPriceCalculator;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Shopware\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 
+/**
+ * @internal
+ */
 class PositionNetPriceCalculatorTest extends TestCase
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionNetPriceCalculator
+     * @var PositionNetPriceCalculator
      */
     private $sut;
 

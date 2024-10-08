@@ -17,15 +17,15 @@ class CheckoutConfirmPageLoadedEventHandler
     private const EXTENSION_NAME = 'axytos_kauf_auf_rechnung_checkout_confirm_page';
 
     /**
-     * @var \Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface
+     * @var CheckoutClientInterface
      */
     private $checkoutClient;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodCollectionFilter
+     * @var PaymentMethodCollectionFilter
      */
     private $paymentMethodCollectionFilter;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates
+     * @var PaymentMethodPredicates
      */
     private $paymentMethodPredicates;
 

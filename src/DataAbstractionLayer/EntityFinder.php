@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer;
 
-use LogicException;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
@@ -39,7 +38,7 @@ class EntityFinder
         $entitySearchResult = $this->entityRepository->search($criteria, $context);
 
         if ($entitySearchResult->count() < 1) {
-            throw new LogicException('Given criteria did not find any entities!');
+            throw new \LogicException('Given criteria did not find any entities!');
         }
 
         /** @var TEntity */

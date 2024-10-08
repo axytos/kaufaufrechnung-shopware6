@@ -7,10 +7,13 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit;
 use Axytos\KaufAufRechnung\Shopware\AxytosKaufAufRechnung;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class AxytosKaufAufRechnungTest extends TestCase
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\AxytosKaufAufRechnung
+     * @var AxytosKaufAufRechnung
      */
     private $sut;
 
@@ -19,7 +22,7 @@ class AxytosKaufAufRechnungTest extends TestCase
         $this->sut = new AxytosKaufAufRechnung(true, 'basePath');
     }
 
-    public function test_AxytosKaufAufRechnung_can_be_constructed(): void
+    public function test_axytos_kauf_auf_rechnung_can_be_constructed(): void
     {
         $plugin = $this->sut;
 

@@ -4,26 +4,28 @@ declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit\Order;
 
+use Axytos\ECommerce\Order\OrderCheckProcessStates;
 use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository;
 use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
-use Axytos\ECommerce\Order\OrderCheckProcessStates;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 
+/**
+ * @internal
+ */
 class OrderCheckProcessStateMachineTest extends TestCase
 {
     private const ORDER_ID = 'orderId';
     private const CUSTOM_FIELD_NAME = 'axytos_order_check_process_state';
 
-
     /** @var OrderEntityRepository&MockObject */
     private $orderEntityRepository;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine
+     * @var OrderCheckProcessStateMachine
      */
     private $sut;
 
@@ -49,7 +51,8 @@ class OrderCheckProcessStateMachineTest extends TestCase
     {
         $this->salesChannelContext
             ->method('getContext')
-            ->willReturn($this->context);
+            ->willReturn($this->context)
+        ;
     }
 
     /**
@@ -60,7 +63,8 @@ class OrderCheckProcessStateMachineTest extends TestCase
         $this->orderEntityRepository
             ->method('getCustomFields')
             ->with(self::ORDER_ID, $this->context)
-            ->willReturn($customFields);
+            ->willReturn($customFields)
+        ;
     }
 
     /**
@@ -71,10 +75,11 @@ class OrderCheckProcessStateMachineTest extends TestCase
         $this->orderEntityRepository
             ->expects($this->once())
             ->method('updateCustomFields')
-            ->with(self::ORDER_ID, $expectedCustomFields, $this->context);
+            ->with(self::ORDER_ID, $expectedCustomFields, $this->context)
+        ;
     }
 
-    public function test_getState_returns_UNCHECKED_as_default(): void
+    public function test_get_state_returns_unchecke_d_as_default(): void
     {
         $this->setUpCustomFields([]);
 
@@ -87,10 +92,10 @@ class OrderCheckProcessStateMachineTest extends TestCase
      * @dataProvider dataProvider_test_getState
      */
     #[DataProvider('dataProvider_test_getState')]
-    public function test_getState(string $state): void
+    public function test_get_state(string $state): void
     {
         $this->setUpCustomFields([
-            self::CUSTOM_FIELD_NAME => $state
+            self::CUSTOM_FIELD_NAME => $state,
         ]);
 
         $actual = $this->sut->getState(self::ORDER_ID, $this->context);
@@ -111,37 +116,37 @@ class OrderCheckProcessStateMachineTest extends TestCase
         ];
     }
 
-    public function test_setUnchecked(): void
+    public function test_set_unchecked(): void
     {
         $this->expectCustomFieldsUpdate([
-            self::CUSTOM_FIELD_NAME => OrderCheckProcessStates::UNCHECKED
+            self::CUSTOM_FIELD_NAME => OrderCheckProcessStates::UNCHECKED,
         ]);
 
         $this->sut->setUnchecked(self::ORDER_ID, $this->salesChannelContext);
     }
 
-    public function test_setChecked(): void
+    public function test_set_checked(): void
     {
         $this->expectCustomFieldsUpdate([
-            self::CUSTOM_FIELD_NAME => OrderCheckProcessStates::CHECKED
+            self::CUSTOM_FIELD_NAME => OrderCheckProcessStates::CHECKED,
         ]);
 
         $this->sut->setChecked(self::ORDER_ID, $this->salesChannelContext);
     }
 
-    public function test_setConfirmed(): void
+    public function test_set_confirmed(): void
     {
         $this->expectCustomFieldsUpdate([
-            self::CUSTOM_FIELD_NAME => OrderCheckProcessStates::CONFIRMED
+            self::CUSTOM_FIELD_NAME => OrderCheckProcessStates::CONFIRMED,
         ]);
 
         $this->sut->setConfirmed(self::ORDER_ID, $this->salesChannelContext);
     }
 
-    public function test_setFailed(): void
+    public function test_set_failed(): void
     {
         $this->expectCustomFieldsUpdate([
-            self::CUSTOM_FIELD_NAME => OrderCheckProcessStates::FAILED
+            self::CUSTOM_FIELD_NAME => OrderCheckProcessStates::FAILED,
         ]);
 
         $this->sut->setFailed(self::ORDER_ID, $this->salesChannelContext);

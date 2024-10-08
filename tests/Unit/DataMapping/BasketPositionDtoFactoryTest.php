@@ -11,13 +11,15 @@ use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionNetPricePerUnitCalc
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionProductIdCalculator;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionProductNameCalculator;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PositionTaxPercentCalculator;
-use Axytos\KaufAufRechnung\Shopware\ValueCalculation\PromotionIdentifierCalculator;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 
+/**
+ * @internal
+ */
 class BasketPositionDtoFactoryTest extends TestCase
 {
     /** @var PositionNetPriceCalculator&MockObject */
@@ -34,7 +36,7 @@ class BasketPositionDtoFactoryTest extends TestCase
     private $positionProductNameCalculator;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\BasketPositionDtoFactory
+     * @var BasketPositionDtoFactory
      */
     private $sut;
 
@@ -70,11 +72,12 @@ class BasketPositionDtoFactoryTest extends TestCase
     {
         $orderLineItem = $this->createOrderLineItemEntity();
 
-        $productId = "ProductId";
+        $productId = 'ProductId';
         $this->positionProductIdCalculator
             ->method('calculate')
             ->with($orderLineItem)
-            ->willReturn($productId);
+            ->willReturn($productId)
+        ;
 
         $actual = $this->sut->create($orderLineItem);
 
@@ -85,11 +88,12 @@ class BasketPositionDtoFactoryTest extends TestCase
     {
         $orderLineItem = $this->createOrderLineItemEntity();
 
-        $productName = "ProductName";
+        $productName = 'ProductName';
         $this->positionProductNameCalculator
             ->method('calculate')
             ->with($orderLineItem)
-            ->willReturn($productName);
+            ->willReturn($productName)
+        ;
 
         $actual = $this->sut->create($orderLineItem);
 
@@ -113,7 +117,8 @@ class BasketPositionDtoFactoryTest extends TestCase
         $this->positionNetPriceCalculator
             ->method('calculate')
             ->with($orderLineItem->getPrice())
-            ->willReturn($netPositionTotal);
+            ->willReturn($netPositionTotal)
+        ;
 
         $actual = $this->sut->create($orderLineItem);
 
@@ -128,7 +133,8 @@ class BasketPositionDtoFactoryTest extends TestCase
         $this->positionTaxPercentCalculator
             ->method('calculate')
             ->with($orderLineItem->getPrice())
-            ->willReturn($taxPercent);
+            ->willReturn($taxPercent)
+        ;
 
         $actual = $this->sut->create($orderLineItem);
 
@@ -143,7 +149,8 @@ class BasketPositionDtoFactoryTest extends TestCase
         $this->positionNetPricePerUnitCalculator
             ->method('calculate')
             ->with($orderLineItem->getPrice())
-            ->willReturn($netPricePerUnit);
+            ->willReturn($netPricePerUnit)
+        ;
 
         $actual = $this->sut->create($orderLineItem);
 
@@ -158,16 +165,17 @@ class BasketPositionDtoFactoryTest extends TestCase
         $this->positionGrossPricePerUnitCalculator
             ->method('calculate')
             ->with($orderLineItem->getPrice())
-            ->willReturn($grossPricePerUnit);
+            ->willReturn($grossPricePerUnit)
+        ;
 
         $actual = $this->sut->create($orderLineItem);
 
         $this->assertEquals($grossPricePerUnit, $actual->grossPricePerUnit);
     }
 
-    //============================================================================================================
+    // ============================================================================================================
 
-    public function test_createShippingPosition_sets_productId_to_zero(): void
+    public function test_create_shipping_position_sets_product_id_to_zero(): void
     {
         $orderEntity = $this->createOrderEntity();
 
@@ -176,7 +184,7 @@ class BasketPositionDtoFactoryTest extends TestCase
         $this->assertEquals('0', $actual->productId);
     }
 
-    public function test_createShippingPosition_sets_productName_to_Shipping(): void
+    public function test_create_shipping_position_sets_product_name_to_shipping(): void
     {
         $orderEntity = $this->createOrderEntity();
 
@@ -185,7 +193,7 @@ class BasketPositionDtoFactoryTest extends TestCase
         $this->assertEquals('Shipping', $actual->productName);
     }
 
-    public function test_createShippingPosition_sets_quantity_to_one(): void
+    public function test_create_shipping_position_sets_quantity_to_one(): void
     {
         $orderEntity = $this->createOrderEntity();
 
@@ -194,7 +202,7 @@ class BasketPositionDtoFactoryTest extends TestCase
         $this->assertEquals(1, $actual->quantity);
     }
 
-    public function test_createShippingPosition_maps_order_shipping_total_as_gross_position_total(): void
+    public function test_create_shipping_position_maps_order_shipping_total_as_gross_position_total(): void
     {
         $orderEntity = $this->createOrderEntity();
 
@@ -203,7 +211,7 @@ class BasketPositionDtoFactoryTest extends TestCase
         $this->assertEquals($orderEntity->getShippingTotal(), $actual->grossPositionTotal);
     }
 
-    public function test_createShippingPosition_calculates_net_position_total(): void
+    public function test_create_shipping_position_calculates_net_position_total(): void
     {
         $orderEntity = $this->createOrderEntity();
 
@@ -211,14 +219,15 @@ class BasketPositionDtoFactoryTest extends TestCase
         $this->positionNetPriceCalculator
             ->method('calculate')
             ->with($orderEntity->getShippingCosts())
-            ->willReturn($netPrice);
+            ->willReturn($netPrice)
+        ;
 
         $actual = $this->sut->createShippingPosition($orderEntity);
 
         $this->assertEquals($netPrice, $actual->netPositionTotal);
     }
 
-    public function test_createShippingPosition_calculates_tax_percent(): void
+    public function test_create_shipping_position_calculates_tax_percent(): void
     {
         $orderEntity = $this->createOrderEntity();
 
@@ -226,14 +235,15 @@ class BasketPositionDtoFactoryTest extends TestCase
         $this->positionTaxPercentCalculator
             ->method('calculate')
             ->with($orderEntity->getShippingCosts())
-            ->willReturn($taxPercent);
+            ->willReturn($taxPercent)
+        ;
 
         $actual = $this->sut->createShippingPosition($orderEntity);
 
         $this->assertEquals($taxPercent, $actual->taxPercent);
     }
 
-    public function test_createShippingPosition_calculates_net_price_per_unit(): void
+    public function test_create_shipping_position_calculates_net_price_per_unit(): void
     {
         $orderEntity = $this->createOrderEntity();
 
@@ -241,14 +251,15 @@ class BasketPositionDtoFactoryTest extends TestCase
         $this->positionNetPricePerUnitCalculator
             ->method('calculate')
             ->with($orderEntity->getShippingCosts())
-            ->willReturn($netPricePerUnit);
+            ->willReturn($netPricePerUnit)
+        ;
 
         $actual = $this->sut->createShippingPosition($orderEntity);
 
         $this->assertEquals($netPricePerUnit, $actual->netPricePerUnit);
     }
 
-    public function test_createShippingPosition_calculates_gross_price_per_unit(): void
+    public function test_create_shipping_position_calculates_gross_price_per_unit(): void
     {
         $orderEntity = $this->createOrderEntity();
 
@@ -256,14 +267,15 @@ class BasketPositionDtoFactoryTest extends TestCase
         $this->positionGrossPricePerUnitCalculator
             ->method('calculate')
             ->with($orderEntity->getShippingCosts())
-            ->willReturn($grossPricePerUnit);
+            ->willReturn($grossPricePerUnit)
+        ;
 
         $actual = $this->sut->createShippingPosition($orderEntity);
 
         $this->assertEquals($grossPricePerUnit, $actual->grossPricePerUnit);
     }
 
-    //============================================================================================================
+    // ============================================================================================================
 
     public function createOrderEntity(): OrderEntity
     {
@@ -281,6 +293,7 @@ class BasketPositionDtoFactoryTest extends TestCase
         $orderLineItem = $this->createMock(OrderLineItemEntity::class);
         $orderLineItem->method('getTotalPrice')->willReturn(12.34);
         $orderLineItem->method('getQuantity')->willReturn(5);
+
         return $orderLineItem;
     }
 }

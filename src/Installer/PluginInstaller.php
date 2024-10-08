@@ -7,20 +7,19 @@ namespace Axytos\KaufAufRechnung\Shopware\Installer;
 use Axytos\KaufAufRechnung\Shopware\Core\AxytosInvoicePaymentHandler;
 use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\PaymentMethodEntityRepository;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Plugin\Context\InstallContext;
-use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\DeactivateContext;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Shopware\Core\Framework\Plugin\Context\InstallContext;
+use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 
 class PluginInstaller
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\PaymentMethodEntityRepository
+     * @var PaymentMethodEntityRepository
      */
     private $paymentMethodRepository;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Installer\PluginIdProviderInterface
+     * @var PluginIdProviderInterface
      */
     private $pluginIdProvider;
 
@@ -50,7 +49,6 @@ class PluginInstaller
     public function deactivate(DeactivateContext $deactivateContext): void
     {
         $this->deactivatePaymentMethod($deactivateContext->getContext());
-        ;
     }
 
     public function addPaymentMethod(Context $context): void
@@ -65,6 +63,7 @@ class PluginInstaller
             AxytosInvoicePaymentHandler::class,
             AxytosInvoicePaymentHandler::NAME,
             AxytosInvoicePaymentHandler::DESCRIPTION,
+            AxytosInvoicePaymentHandler::TECHNICAL_NAME,
             $pluginId,
             $context
         );
@@ -77,7 +76,6 @@ class PluginInstaller
 
     public function deactivatePaymentMethod(Context $context): void
     {
-
         $this->paymentMethodRepository->updateAllActiveStatesByHandlerIdentifer(AxytosInvoicePaymentHandler::class, false, $context);
     }
 }

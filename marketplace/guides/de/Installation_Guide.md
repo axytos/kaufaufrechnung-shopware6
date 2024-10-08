@@ -59,7 +59,7 @@ Um das Plugin nutzen zu können, benötigen Sie valide Verbindungsdaten zu [http
 
 2. Konfiguration im Dreipunktmenu von __axytos Kauf auf Rechnung__ ausführen.
 
-3. __API Host__ eintragen. Entweder [https://api.axytos.com/](https://api.axytos.com/) oder [https://api-sandbox.axytos.com/](https://api-sandbox.axytos.com/), die korrekten Werte werden Ihnen von axytos während des Onboarding mitgeteilt (siehe Voraussetzungen)
+3. __API Host__ auswählen, entweder 'Live' oder 'Sandbox'.
 
 4. __API Key__ eintragen. Der korrekte Wert wird Ihnen während des Onboarding von axytos mitgeteilt (siehe Voraussetzungen).
 

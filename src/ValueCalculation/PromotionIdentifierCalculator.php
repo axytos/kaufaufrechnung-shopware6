@@ -13,7 +13,7 @@ class PromotionIdentifierCalculator
         $promotionName = $this->getPromotionName($orderLineItemEntity);
         $promotionCode = $this->getPromotionCode($orderLineItemEntity);
 
-        return "$promotionName $promotionCode";
+        return "{$promotionName} {$promotionCode}";
     }
 
     private function getPromotionName(OrderLineItemEntity $orderLineItemEntity): ?string

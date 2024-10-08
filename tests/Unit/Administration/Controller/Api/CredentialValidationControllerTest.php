@@ -10,6 +10,9 @@ use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class CredentialValidationControllerTest extends TestCase
 {
     /** @var CredentialValidationClientInterface&MockObject */
@@ -19,7 +22,7 @@ class CredentialValidationControllerTest extends TestCase
     private $errorHandler;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Administration\Controller\Api\CredentialValidationController
+     * @var CredentialValidationController
      */
     private $sut;
 
@@ -34,11 +37,12 @@ class CredentialValidationControllerTest extends TestCase
         );
     }
 
-    public function test_validateCredentials_returns_true_if_api_key_is_valid(): void
+    public function test_validate_credentials_returns_true_if_api_key_is_valid(): void
     {
         $this->credentialValidationClient
-          ->method('validateApiKey')
-          ->willReturn(true);
+            ->method('validateApiKey')
+            ->willReturn(true)
+        ;
 
         $response = $this->sut->validateCredentials();
 
@@ -47,14 +51,15 @@ class CredentialValidationControllerTest extends TestCase
         /** @var mixed[] */
         $content = json_decode($json, true);
 
-        $this->assertTrue($content["success"]);
+        $this->assertTrue($content['success']);
     }
 
-    public function test_validateCredentials_returns_false_if_api_key_is_valid(): void
+    public function test_validate_credentials_returns_false_if_api_key_is_valid(): void
     {
         $this->credentialValidationClient
-          ->method('validateApiKey')
-          ->willReturn(false);
+            ->method('validateApiKey')
+            ->willReturn(false)
+        ;
 
         $response = $this->sut->validateCredentials();
 
@@ -63,14 +68,15 @@ class CredentialValidationControllerTest extends TestCase
         /** @var mixed[] */
         $content = json_decode($json, true);
 
-        $this->assertFalse($content["success"]);
+        $this->assertFalse($content['success']);
     }
 
-    public function test_validateCredentials_returns_false_if_api_key_validation_fails(): void
+    public function test_validate_credentials_returns_false_if_api_key_validation_fails(): void
     {
         $this->credentialValidationClient
-          ->method('validateApiKey')
-          ->willThrowException(new \Exception());
+            ->method('validateApiKey')
+            ->willThrowException(new \Exception())
+        ;
 
         $response = $this->sut->validateCredentials();
 
@@ -79,21 +85,23 @@ class CredentialValidationControllerTest extends TestCase
         /** @var mixed[] */
         $content = json_decode($json, true);
 
-        $this->assertFalse($content["success"]);
+        $this->assertFalse($content['success']);
     }
 
-    public function test_validateCredentials_reports_error_if_api_key_validation_fails(): void
+    public function test_validate_credentials_reports_error_if_api_key_validation_fails(): void
     {
         $exception = new \Exception();
 
         $this->credentialValidationClient
-          ->method('validateApiKey')
-          ->willThrowException($exception);
+            ->method('validateApiKey')
+            ->willThrowException($exception)
+        ;
 
         $this->errorHandler
             ->expects($this->once())
             ->method('handle')
-            ->with($exception);
+            ->with($exception)
+        ;
 
         $this->sut->validateCredentials();
     }

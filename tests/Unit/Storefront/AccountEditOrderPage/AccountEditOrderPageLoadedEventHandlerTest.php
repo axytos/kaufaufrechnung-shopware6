@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit;
 
-use Axytos\KaufAufRechnung\Shopware\Core\AxytosInvoicePaymentHandler;
-use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodCollectionFilter;
-use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
 use Axytos\ECommerce\Order\OrderCheckProcessStates;
+use Axytos\KaufAufRechnung\Shopware\Core\AxytosInvoicePaymentHandler;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderCheckProcessStateMachine;
+use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodCollectionFilter;
 use Axytos\KaufAufRechnung\Shopware\Storefront\AccountEditOrderPage\AccountEditOrderPageLoadedEventHandler;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -18,50 +18,53 @@ use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Page\Account\Order\AccountEditOrderPage;
 use Shopware\Storefront\Page\Account\Order\AccountEditOrderPageLoadedEvent;
 
+/**
+ * @internal
+ */
 class AccountEditOrderPageLoadedEventHandlerTest extends TestCase
 {
-    /** @var OrderCheckProcessStateMachine&MockObject $orderCheckProcessStateMachine */
+    /** @var OrderCheckProcessStateMachine&MockObject */
     private $orderCheckProcessStateMachine;
 
-    /** @var PaymentMethodCollectionFilter&MockObject $paymentMethodCollectionFilter */
+    /** @var PaymentMethodCollectionFilter&MockObject */
     private $paymentMethodCollectionFilter;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Storefront\AccountEditOrderPage\AccountEditOrderPageLoadedEventHandler
+     * @var AccountEditOrderPageLoadedEventHandler
      */
     private $sut;
 
     private const ORDER_ID = 'orderId';
 
-    /** @var OrderEntity&MockObject $order */
+    /** @var OrderEntity&MockObject */
     private $order;
 
-    /** @var SalesChannelContext&MockObject $salesChannelContext */
+    /** @var SalesChannelContext&MockObject */
     private $salesChannelContext;
 
-    /** @var Context&MockObject $context */
+    /** @var Context&MockObject */
     private $context;
 
-    /** @var AccountEditOrderPage&MockObject $page */
+    /** @var AccountEditOrderPage&MockObject */
     private $page;
 
-    /** @var AccountEditOrderPageLoadedEvent&MockObject $event */
+    /** @var AccountEditOrderPageLoadedEvent&MockObject */
     private $event;
 
     /**
-     * @var \Shopware\Core\Checkout\Payment\PaymentMethodCollection
+     * @var PaymentMethodCollection
      */
     private $paymentMethods;
     /**
-     * @var \Shopware\Core\Checkout\Payment\PaymentMethodCollection
+     * @var PaymentMethodCollection
      */
     private $allowedFallbackPaymentMethods;
     /**
-     * @var \Shopware\Core\Checkout\Payment\PaymentMethodCollection
+     * @var PaymentMethodCollection
      */
     private $notUnsafePaymentMethods;
     /**
-     * @var \Shopware\Core\Checkout\Payment\PaymentMethodCollection
+     * @var PaymentMethodCollection
      */
     private $noAxytosInvoicePaymentMethods;
 
@@ -106,17 +109,20 @@ class AccountEditOrderPageLoadedEventHandlerTest extends TestCase
         $this->paymentMethodCollectionFilter
             ->method('filterAllowedFallbackPaymentMethods')
             ->with($this->paymentMethods)
-            ->willReturn($this->allowedFallbackPaymentMethods);
+            ->willReturn($this->allowedFallbackPaymentMethods)
+        ;
 
         $this->paymentMethodCollectionFilter
             ->method('filterPaymentMethodsNotUsingHandler')
             ->with($this->paymentMethods, AxytosInvoicePaymentHandler::class)
-            ->willReturn($this->noAxytosInvoicePaymentMethods);
+            ->willReturn($this->noAxytosInvoicePaymentMethods)
+        ;
 
         $this->paymentMethodCollectionFilter
             ->method('filterNotUnsafePaymentMethods')
             ->with($this->noAxytosInvoicePaymentMethods)
-            ->willReturn($this->notUnsafePaymentMethods);
+            ->willReturn($this->notUnsafePaymentMethods)
+        ;
     }
 
     private function setUpPaymentControlOrderState(string $paymentControlOrderState): void
@@ -124,37 +130,41 @@ class AccountEditOrderPageLoadedEventHandlerTest extends TestCase
         $this->orderCheckProcessStateMachine
             ->method('getState')
             ->with(self::ORDER_ID, $this->context)
-            ->willReturn($paymentControlOrderState);
+            ->willReturn($paymentControlOrderState)
+        ;
     }
 
-    public function test_handle_CHECKED_order_does_not_alter_payment_methods(): void
+    public function test_handle_checke_d_order_does_not_alter_payment_methods(): void
     {
         $this->setUpPaymentControlOrderState(OrderCheckProcessStates::CHECKED);
 
         $this->page->expects($this->once())
             ->method('setPaymentMethods')
-            ->with($this->notUnsafePaymentMethods);
+            ->with($this->notUnsafePaymentMethods)
+        ;
 
         $this->sut->handle($this->event);
     }
 
-    public function test_handle_CONFIRMED_order_does_not_alter_payment_methods(): void
+    public function test_handle_confirme_d_order_does_not_alter_payment_methods(): void
     {
         $this->setUpPaymentControlOrderState(OrderCheckProcessStates::CONFIRMED);
 
         $this->page->expects($this->never())
-            ->method('setPaymentMethods');
+            ->method('setPaymentMethods')
+        ;
 
         $this->sut->handle($this->event);
     }
 
-    public function test_handle_FAILED_order_sets_allowed_fallback_payment_methods(): void
+    public function test_handle_faile_d_order_sets_allowed_fallback_payment_methods(): void
     {
         $this->setUpPaymentControlOrderState(OrderCheckProcessStates::FAILED);
 
         $this->page->expects($this->once())
             ->method('setPaymentMethods')
-            ->with($this->allowedFallbackPaymentMethods);
+            ->with($this->allowedFallbackPaymentMethods)
+        ;
 
         $this->sut->handle($this->event);
     }

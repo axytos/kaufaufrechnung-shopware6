@@ -30,6 +30,7 @@ class PaymentMethodEntityRepository
         string $handlerIdentifier,
         string $name,
         string $description,
+        string $technicalName,
         string $pluginId,
         Context $context
     ): void {
@@ -37,6 +38,7 @@ class PaymentMethodEntityRepository
             'handlerIdentifier' => $handlerIdentifier,
             'name' => $name,
             'description' => $description,
+            'technicalName' => $technicalName,
             'pluginId' => $pluginId,
         ];
 

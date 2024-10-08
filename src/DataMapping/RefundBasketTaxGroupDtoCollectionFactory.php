@@ -11,7 +11,7 @@ use Shopware\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 class RefundBasketTaxGroupDtoCollectionFactory
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketTaxGroupDtoFactory
+     * @var RefundBasketTaxGroupDtoFactory
      */
     private $refundBasketTaxGroupDtoFactory;
 
@@ -31,8 +31,6 @@ class RefundBasketTaxGroupDtoCollectionFactory
             return $this->refundBasketTaxGroupDtoFactory->create($calculatedTax);
         }));
 
-        $result = new RefundBasketTaxGroupDtoCollection(...$positions);
-
-        return $result;
+        return new RefundBasketTaxGroupDtoCollection(...$positions);
     }
 }

@@ -9,10 +9,13 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Cart\Tax\Struct\CalculatedTax;
 
+/**
+ * @internal
+ */
 class RefundBasketTaxGroupDtoFactoryTest extends TestCase
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketTaxGroupDtoFactory
+     * @var RefundBasketTaxGroupDtoFactory
      */
     private $sut;
 
@@ -21,7 +24,7 @@ class RefundBasketTaxGroupDtoFactoryTest extends TestCase
         $this->sut = new RefundBasketTaxGroupDtoFactory();
     }
 
-    public function test_maps_taxPercent(): void
+    public function test_maps_tax_percent(): void
     {
         $taxPercent = 10.1;
 
@@ -30,14 +33,15 @@ class RefundBasketTaxGroupDtoFactoryTest extends TestCase
         $calculatedTaxes
             ->expects($this->once())
             ->method('getTaxRate')
-            ->willReturn($taxPercent);
+            ->willReturn($taxPercent)
+        ;
 
         $actual = $this->sut->create($calculatedTaxes)->taxPercent;
 
         $this->assertSame($taxPercent, $actual);
     }
 
-    public function test_maps_valueToTax(): void
+    public function test_maps_value_to_tax(): void
     {
         $valueToTax = 11.1;
 
@@ -46,7 +50,8 @@ class RefundBasketTaxGroupDtoFactoryTest extends TestCase
         $calculatedTaxes
             ->expects($this->once())
             ->method('getPrice')
-            ->willReturn($valueToTax);
+            ->willReturn($valueToTax)
+        ;
 
         $actual = $this->sut->create($calculatedTaxes)->valueToTax;
 
@@ -62,7 +67,8 @@ class RefundBasketTaxGroupDtoFactoryTest extends TestCase
         $calculatedTaxes
             ->expects($this->once())
             ->method('getTax')
-            ->willReturn($total);
+            ->willReturn($total)
+        ;
 
         $actual = $this->sut->create($calculatedTaxes)->total;
 

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\Storefront\Controller;
 
 use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
-use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
+use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Controller\ErrorController;
 use Shopware\Storefront\Controller\StorefrontController;
 use Shopware\Storefront\Page\GenericPageLoader;
@@ -23,19 +23,19 @@ class CheckoutFailedController extends StorefrontController
     const CHECKOUT_FAILED_VIEW = '@AxytosKaufAufRechnung/storefront/page/checkout/failed/index.html.twig';
 
     /**
-     * @var \Shopware\Storefront\Page\GenericPageLoader
+     * @var GenericPageLoader
      */
     private $genericPageLoader;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Storefront\Controller\StorefrontViewRenderer
+     * @var StorefrontViewRenderer
      */
     private $storefrontViewRenderer;
     /**
-     * @var \Shopware\Storefront\Controller\ErrorController
+     * @var ErrorController
      */
     private $errorController;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler
+     * @var ErrorHandler
      */
     private $errorHandler;
 
@@ -63,11 +63,12 @@ class CheckoutFailedController extends StorefrontController
             return $this->storefrontViewRenderer->renderStorefrontView(
                 self::CHECKOUT_FAILED_VIEW,
                 [
-                    'page' => $page
+                    'page' => $page,
                 ]
             );
         } catch (\Throwable $th) {
             $this->errorHandler->handle($th);
+
             return $this->errorController->error($th, $request, $context);
         }
     }

@@ -7,24 +7,26 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit;
 use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Invoice\InvoiceOrderPaymentUpdate;
 use Axytos\ECommerce\Clients\Invoice\PaymentStatus;
-use Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
-use Axytos\KaufAufRechnung\Shopware\Storefront\Controller\PaymentController;
-use Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine;
+use Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration;
 use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
-use Error;
-use GuzzleHttp\Psr7\Response;
+use Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine;
+use Axytos\KaufAufRechnung\Shopware\Storefront\Controller\PaymentController;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Shopware\Core\Framework\Context;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @internal
+ */
 class PaymentControllerTest extends TestCase
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Storefront\Controller\PaymentController
+     * @var PaymentController
      */
     private $paymentController;
 
@@ -69,13 +71,15 @@ class PaymentControllerTest extends TestCase
         $paymentStatus = 'paymentStatus';
         $paymentId = 'paymentId';
         $request = $this->createRequest($xSecretHeader);
-        $context = $this->createMock(SalesChannelContext::class);
+        $salesChannelContext = $this->createMock(SalesChannelContext::class);
+        $context = $this->createMock(Context::class);
+        $salesChannelContext->method('getContext')->willReturn($context);
 
         $this->setUpPluginConfigurationValidator($configInvalid);
         $this->setUpInvoiceOrderPaymentUpdate($paymentId, $orderId, $paymentStatus);
         $this->setUpClientSecret($clientSecret);
 
-        $response = $this->paymentController->payment($paymentId, $request, $context);
+        $response = $this->paymentController->payment($paymentId, $request, $salesChannelContext);
 
         $this->assertEmpty($response->getContent());
         $this->assertEquals($expectedStatusCode, $response->getStatusCode());
@@ -109,7 +113,9 @@ class PaymentControllerTest extends TestCase
         $orderId = 'orderId';
         $paymentId = 'paymentId';
         $request = $this->createRequest($xSecretHeader);
-        $context = $this->createMock(SalesChannelContext::class);
+        $salesChannelContext = $this->createMock(SalesChannelContext::class);
+        $context = $this->createMock(Context::class);
+        $salesChannelContext->method('getContext')->willReturn($context);
 
         $this->setUpPluginConfigurationValidator($configInvalid);
         $this->setUpInvoiceOrderPaymentUpdate($paymentId, $orderId, $paymentStatus);
@@ -118,14 +124,16 @@ class PaymentControllerTest extends TestCase
         $this->orderStateMachine
             ->expects($this->exactly($expectedPayOrderCount))
             ->method('payOrder')
-            ->with($orderId, $context);
+            ->with($orderId, $context)
+        ;
 
         $this->orderStateMachine
             ->expects($this->exactly($expectedPayOrderPartiallyCount))
             ->method('payOrderPartially')
-            ->with($orderId, $context);
+            ->with($orderId, $context)
+        ;
 
-        $this->paymentController->payment($paymentId, $request, $context);
+        $this->paymentController->payment($paymentId, $request, $salesChannelContext);
     }
 
     /**
@@ -155,7 +163,8 @@ class PaymentControllerTest extends TestCase
     {
         $this->pluginConfigurationValidator
             ->method('isInvalid')
-            ->willReturn($isInvalid);
+            ->willReturn($isInvalid)
+        ;
     }
 
     private function setUpInvoiceOrderPaymentUpdate(string $paymentId, string $orderId, string $paymentStatus): void
@@ -166,14 +175,16 @@ class PaymentControllerTest extends TestCase
 
         $this->invoiceClient->method('getInvoiceOrderPaymentUpdate')
             ->with($paymentId)
-            ->willReturn($invoiceOrderPaymentUpdate);
+            ->willReturn($invoiceOrderPaymentUpdate)
+        ;
     }
 
     private function setUpClientSecret(string $clientSecret): void
     {
         $this->pluginConfiguration
             ->method('getClientSecret')
-            ->willReturn($clientSecret);
+            ->willReturn($clientSecret)
+        ;
     }
 
     private function createRequest(string $xSecretHeader): Request
@@ -186,7 +197,8 @@ class PaymentControllerTest extends TestCase
         $headers
             ->method('get')
             ->with('X-secret')
-            ->willReturn($xSecretHeader);
+            ->willReturn($xSecretHeader)
+        ;
 
         $request->headers = $headers;
 

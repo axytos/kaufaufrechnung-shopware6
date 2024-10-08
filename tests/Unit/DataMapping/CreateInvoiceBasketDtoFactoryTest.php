@@ -9,13 +9,16 @@ use Axytos\ECommerce\DataTransferObjects\CreateInvoiceTaxGroupDtoCollection;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketPositionDtoCollectionFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceTaxGroupDtoCollectionFactory;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Shopware\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
 use Shopware\Core\Checkout\Order\OrderEntity;
 
+/**
+ * @internal
+ */
 class CreateInvoiceBasketDtoFactoryTest extends TestCase
 {
     /** @var CreateInvoiceBasketPositionDtoCollectionFactory&MockObject */
@@ -25,7 +28,7 @@ class CreateInvoiceBasketDtoFactoryTest extends TestCase
     private $createInvoiceTaxGroupDtoCollectionFactory;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceBasketDtoFactory
+     * @var CreateInvoiceBasketDtoFactory
      */
     private $sut;
 
@@ -68,14 +71,15 @@ class CreateInvoiceBasketDtoFactoryTest extends TestCase
         $this->createInvoiceBasketPositionDtoCollectionFactory
             ->method('create')
             ->with($orderEntity)
-            ->willReturn($basketPositions);
+            ->willReturn($basketPositions)
+        ;
 
         $actual = $this->sut->create($orderEntity);
 
         $this->assertSame($basketPositions, $actual->positions);
     }
 
-    public function test_maps_taxGroups(): void
+    public function test_maps_tax_groups(): void
     {
         $taxGroups = new CreateInvoiceTaxGroupDtoCollection();
         $calculatedTaxtes = new CalculatedTaxCollection();
@@ -85,20 +89,23 @@ class CreateInvoiceBasketDtoFactoryTest extends TestCase
         $cartPrice
             ->expects($this->once())
             ->method('getCalculatedTaxes')
-            ->willReturn($calculatedTaxtes);
+            ->willReturn($calculatedTaxtes)
+        ;
 
         /** @var OrderEntity&MockObject */
         $orderEntity = $this->createMock(OrderEntity::class);
         $orderEntity
             ->expects($this->once())
             ->method('getPrice')
-            ->willReturn($cartPrice);
+            ->willReturn($cartPrice)
+        ;
 
         $this->createInvoiceTaxGroupDtoCollectionFactory
             ->expects($this->once())
             ->method('create')
             ->with($calculatedTaxtes)
-            ->willReturn($taxGroups);
+            ->willReturn($taxGroups)
+        ;
 
         $actual = $this->sut->create($orderEntity)->taxGroups;
 

@@ -7,19 +7,22 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit\DataMapping;
 use Axytos\ECommerce\DataTransferObjects\BasketPositionDtoCollection;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\BasketDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\BasketPositionDtoCollectionFactory;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\System\Currency\CurrencyEntity;
 
+/**
+ * @internal
+ */
 class BasketDtoFactoryTest extends TestCase
 {
     /** @var BasketPositionDtoCollectionFactory&MockObject */
     private $basketPositionDtoCollectionFactory;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\BasketDtoFactory
+     * @var BasketDtoFactory
      */
     private $sut;
 
@@ -82,7 +85,8 @@ class BasketDtoFactoryTest extends TestCase
         $this->basketPositionDtoCollectionFactory
             ->method('create')
             ->with($orderEntity)
-            ->willReturn($basketPositions);
+            ->willReturn($basketPositions)
+        ;
 
         $acutal = $this->sut->create($orderEntity);
 

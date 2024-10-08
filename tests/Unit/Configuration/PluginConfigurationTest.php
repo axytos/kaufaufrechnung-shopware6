@@ -6,16 +6,19 @@ namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit;
 
 use Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration;
 use Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfigurationValueNames;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 
+/**
+ * @internal
+ */
 class PluginConfigurationTest extends TestCase
 {
-    /** @var SystemConfigService&MockObject $systemConfigService */
+    /** @var SystemConfigService&MockObject */
     private $systemConfigService;
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration
+     * @var PluginConfiguration
      */
     private $sut;
 
@@ -26,42 +29,45 @@ class PluginConfigurationTest extends TestCase
         $this->sut = new PluginConfiguration($this->systemConfigService);
     }
 
-    public function test_getApiHost_returns_api_host_from_configuration(): void
+    public function test_get_api_host_returns_api_host_from_configuration(): void
     {
         $expected = 'apiHost';
 
         $this->systemConfigService
             ->method('getString')
             ->with(PluginConfigurationValueNames::API_HOST)
-            ->willReturn($expected);
+            ->willReturn($expected)
+        ;
 
         $actual = $this->sut->getApiHost();
 
         $this->assertEquals($expected, $actual);
     }
 
-    public function test_getApiKey_returns_api_key_from_configuration(): void
+    public function test_get_api_key_returns_api_key_from_configuration(): void
     {
         $expected = 'apiKey';
 
         $this->systemConfigService
             ->method('getString')
             ->with(PluginConfigurationValueNames::API_KEY)
-            ->willReturn($expected);
+            ->willReturn($expected)
+        ;
 
         $actual = $this->sut->getApiKey();
 
         $this->assertEquals($expected, $actual);
     }
 
-    public function test_getClientSecret_returns_client_secret_from_configuration(): void
+    public function test_get_client_secret_returns_client_secret_from_configuration(): void
     {
         $expected = 'client_secret';
 
         $this->systemConfigService
             ->method('getString')
             ->with(PluginConfigurationValueNames::CLIENT_SECRET)
-            ->willReturn($expected);
+            ->willReturn($expected)
+        ;
 
         $actual = $this->sut->getClientSecret();
 

@@ -10,7 +10,7 @@ use Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration;
 class PaymentMethodConfiguration implements PaymentMethodConfigurationInterface
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration
+     * @var PluginConfiguration
      */
     public $pluginConfig;
 
@@ -21,6 +21,7 @@ class PaymentMethodConfiguration implements PaymentMethodConfigurationInterface
 
     /**
      * @param string $paymentMethodId
+     *
      * @return bool
      */
     public function isIgnored($paymentMethodId)
@@ -30,6 +31,7 @@ class PaymentMethodConfiguration implements PaymentMethodConfigurationInterface
 
     /**
      * @param string $paymentMethodId
+     *
      * @return bool
      */
     public function isSafe($paymentMethodId)
@@ -39,6 +41,7 @@ class PaymentMethodConfiguration implements PaymentMethodConfigurationInterface
 
     /**
      * @param string $paymentMethodId
+     *
      * @return bool
      */
     public function isUnsafe($paymentMethodId)
@@ -48,6 +51,7 @@ class PaymentMethodConfiguration implements PaymentMethodConfigurationInterface
 
     /**
      * @param string $paymentMethodId
+     *
      * @return bool
      */
     public function isNotConfigured($paymentMethodId)

@@ -14,13 +14,16 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 
+/**
+ * @internal
+ */
 class ReturnPositionModelDtoCollectionFactoryTest extends TestCase
 {
     /** @var ReturnPositionModelDtoFactory&MockObject */
     private $returnPositionModelDtoFactory;
 
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory
+     * @var ReturnPositionModelDtoCollectionFactory
      */
     private $sut;
 
@@ -43,7 +46,8 @@ class ReturnPositionModelDtoCollectionFactoryTest extends TestCase
 
         $this->returnPositionModelDtoFactory
             ->method('create')
-            ->willReturnMap($mappings);
+            ->willReturnMap($mappings)
+        ;
 
         $actual = $this->sut->create($orderLineItemCollection);
 
@@ -82,7 +86,8 @@ class ReturnPositionModelDtoCollectionFactoryTest extends TestCase
     {
         /** @var OrderLineItemEntity[] */
         $elements = array_fill(0, $count, null);
-        $elements = array_map([self::class,'createOrderLineItem'], $elements);
+        $elements = array_map([self::class, 'createOrderLineItem'], $elements);
+
         return new OrderLineItemCollection($elements);
     }
 

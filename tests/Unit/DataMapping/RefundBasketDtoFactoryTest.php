@@ -16,10 +16,13 @@ use Shopware\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
 use Shopware\Core\Checkout\Order\OrderEntity;
 
+/**
+ * @internal
+ */
 class RefundBasketDtoFactoryTest extends TestCase
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketDtoFactory
+     * @var RefundBasketDtoFactory
      */
     private $sut;
 
@@ -36,7 +39,7 @@ class RefundBasketDtoFactoryTest extends TestCase
         $this->sut = new RefundBasketDtoFactory($this->refundBasketPositionDtoCollectionFactory, $this->refundBasketTaxGroupDtoCollectionFactory);
     }
 
-    public function test_maps_netTotal(): void
+    public function test_maps_net_total(): void
     {
         $amountNet = 10.1;
 
@@ -45,14 +48,15 @@ class RefundBasketDtoFactoryTest extends TestCase
         $orderEntity
             ->expects($this->once())
             ->method('getAmountNet')
-            ->willReturn($amountNet);
+            ->willReturn($amountNet)
+        ;
 
         $actual = $this->sut->create($orderEntity)->netTotal;
 
         $this->assertSame($amountNet, $actual);
     }
 
-    public function test_maps_grossTotal(): void
+    public function test_maps_gross_total(): void
     {
         $grossTotal = 11.1;
 
@@ -61,7 +65,8 @@ class RefundBasketDtoFactoryTest extends TestCase
         $orderEntity
             ->expects($this->once())
             ->method('getAmountTotal')
-            ->willReturn($grossTotal);
+            ->willReturn($grossTotal)
+        ;
 
         $actual = $this->sut->create($orderEntity)->grossTotal;
 
@@ -78,20 +83,22 @@ class RefundBasketDtoFactoryTest extends TestCase
         $orderEntity
             ->expects($this->once())
             ->method('getLineItems')
-            ->willReturn($lineItems);
+            ->willReturn($lineItems)
+        ;
 
         $this->refundBasketPositionDtoCollectionFactory
             ->expects($this->once())
             ->method('create')
             ->with($lineItems)
-            ->willReturn($positions);
+            ->willReturn($positions)
+        ;
 
         $actual = $this->sut->create($orderEntity)->positions;
 
         $this->assertSame($positions, $actual);
     }
 
-    public function test_maps_taxGroups(): void
+    public function test_maps_tax_groups(): void
     {
         $taxGroups = new RefundBasketTaxGroupDtoCollection();
         $calculatedTaxtes = new CalculatedTaxCollection();
@@ -101,20 +108,23 @@ class RefundBasketDtoFactoryTest extends TestCase
         $cartPrice
             ->expects($this->once())
             ->method('getCalculatedTaxes')
-            ->willReturn($calculatedTaxtes);
+            ->willReturn($calculatedTaxtes)
+        ;
 
         /** @var OrderEntity&MockObject */
         $orderEntity = $this->createMock(OrderEntity::class);
         $orderEntity
             ->expects($this->once())
             ->method('getPrice')
-            ->willReturn($cartPrice);
+            ->willReturn($cartPrice)
+        ;
 
         $this->refundBasketTaxGroupDtoCollectionFactory
             ->expects($this->once())
             ->method('create')
             ->with($calculatedTaxtes)
-            ->willReturn($taxGroups);
+            ->willReturn($taxGroups)
+        ;
 
         $actual = $this->sut->create($orderEntity)->taxGroups;
 

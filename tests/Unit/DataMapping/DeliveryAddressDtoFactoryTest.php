@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Axytos\KaufAufRechnung\Shopware\Tests\Unit\DataMapping;
 
 use Axytos\KaufAufRechnung\Shopware\DataMapping\DeliveryAddressDtoFactory;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Order\Aggregate\OrderAddress\OrderAddressEntity;
 use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryCollection;
 use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryEntity;
@@ -15,10 +15,13 @@ use Shopware\Core\System\Country\Aggregate\CountryState\CountryStateEntity;
 use Shopware\Core\System\Country\CountryEntity;
 use Shopware\Core\System\Salutation\SalutationEntity;
 
+/**
+ * @internal
+ */
 class DeliveryAddressDtoFactoryTest extends TestCase
 {
     /**
-     * @var \Axytos\KaufAufRechnung\Shopware\DataMapping\DeliveryAddressDtoFactory
+     * @var DeliveryAddressDtoFactory
      */
     private $sut;
 
@@ -27,7 +30,7 @@ class DeliveryAddressDtoFactoryTest extends TestCase
         $this->sut = new DeliveryAddressDtoFactory();
     }
 
-    public function test_create_maps_deliveryAddress_correctly(): void
+    public function test_create_maps_delivery_address_correctly(): void
     {
         /** @var OrderEntity&MockObject $order */
         $order = $this->createMock(OrderEntity::class);
@@ -58,67 +61,83 @@ class DeliveryAddressDtoFactoryTest extends TestCase
 
         $order
             ->method('getDeliveries')
-            ->willReturn($deliveries);
+            ->willReturn($deliveries)
+        ;
 
         $deliveries
             ->method('getElements')
-            ->willReturn($deliveryElements);
+            ->willReturn($deliveryElements)
+        ;
 
         $deliveryElement
             ->method('getShippingOrderAddress')
-            ->willReturn($shippingOrderAddress);
+            ->willReturn($shippingOrderAddress)
+        ;
 
         $shippingOrderAddress
             ->method('getStreet')
-            ->willReturn($street);
+            ->willReturn($street)
+        ;
 
         $shippingOrderAddress
             ->method('getCity')
-            ->willReturn($city);
+            ->willReturn($city)
+        ;
 
         $shippingOrderAddress
             ->method('getCompany')
-            ->willReturn($company);
+            ->willReturn($company)
+        ;
 
         $shippingOrderAddress
             ->method('getFirstName')
-            ->willReturn($firstname);
+            ->willReturn($firstname)
+        ;
 
         $shippingOrderAddress
             ->method('getLastName')
-            ->willReturn($lastname);
+            ->willReturn($lastname)
+        ;
 
         $shippingOrderAddress
             ->method('getZipcode')
-            ->willReturn($zipCode);
+            ->willReturn($zipCode)
+        ;
 
         $shippingOrderAddress
             ->method('getVatId')
-            ->willReturn($vatId);
+            ->willReturn($vatId)
+        ;
 
         $shippingOrderAddress
             ->method('getCountry')
-            ->willReturn($country);
+            ->willReturn($country)
+        ;
 
         $country
             ->method('getIso')
-            ->willReturn($countryIso);
+            ->willReturn($countryIso)
+        ;
 
         $shippingOrderAddress
             ->method('getCountryState')
-            ->willReturn($countryState);
+            ->willReturn($countryState)
+        ;
 
         $countryState
             ->method('getName')
-            ->willReturn($stateName);
+            ->willReturn($stateName)
+        ;
 
         $shippingOrderAddress
             ->method('getSalutation')
-            ->willReturn($salutation);
+            ->willReturn($salutation)
+        ;
 
         $salutation
             ->method('getDisplayName')
-            ->willReturn($salutationDisplayName);
+            ->willReturn($salutationDisplayName)
+        ;
 
         $actual = $this->sut->create($order);
 
