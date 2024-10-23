@@ -87,5 +87,5 @@
         "require-shopware-core": "@php ./scripts/require_shopware_core.php",
         "set-version": "@php ./scripts/set_version.php"
     },
-    "minimum-stability": "RC"
+    "minimum-stability": "stable"
 }
