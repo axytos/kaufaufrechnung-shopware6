@@ -20,10 +20,10 @@
     },
     "require": {
         "php": ">=7.2.0",
-        "axytos/ecommerce-sdk": "1.7.0-alpha",
-        "axytos/kaufaufrechnung-core": "1.7.0-alpha",
-        "axytos/kaufaufrechnung-core-abstractions": "1.7.0-alpha",
-        "axytos/kaufaufrechnung-core-plugin-abstractions": "1.7.0-alpha"
+        "axytos/ecommerce-sdk": "1.7.1-alpha",
+        "axytos/kaufaufrechnung-core": "1.7.1-alpha",
+        "axytos/kaufaufrechnung-core-abstractions": "1.7.1-alpha",
+        "axytos/kaufaufrechnung-core-plugin-abstractions": "1.7.1-alpha"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5 || ^10.5 || ^11.1",
