@@ -223,9 +223,23 @@ class OrderEntityRepository
 
     public function payOrder(string $orderId, Context $context): void
     {
+        $criteria = new Criteria([$orderId]);
+        $criteria->addAssociation('transactions');
+
+        $orderTransactionId = '';
+
+        /** @var OrderEntity $orderEntity */
+        $orderEntity = $this->orderRepository->search($criteria, $context)->first();
+        $orderTransactions = $orderEntity->getTransactions();
+        if (!is_null($orderTransactions) && count($orderTransactions) > 0) {
+            $orderTransaction = $orderTransactions->first();
+            if (!is_null($orderTransaction)) {
+                $orderTransactionId = $orderTransaction->getId();
+            }
+        }
         $this->stateMachineRegistry->transition(new Transition(
-            OrderDefinition::ENTITY_NAME,
-            $orderId,
+            OrderTransactionDefinition::ENTITY_NAME,
+            $orderTransactionId,
             StateMachineTransitionActions::ACTION_PAID,
             'stateId'
         ), $context);
@@ -233,9 +247,24 @@ class OrderEntityRepository
 
     public function payOrderPartially(string $orderId, Context $context): void
     {
+        $criteria = new Criteria([$orderId]);
+        $criteria->addAssociation('transactions');
+
+        $orderTransactionId = '';
+
+        /** @var OrderEntity $orderEntity */
+        $orderEntity = $this->orderRepository->search($criteria, $context)->first();
+        $orderTransactions = $orderEntity->getTransactions();
+        if (!is_null($orderTransactions) && count($orderTransactions) > 0) {
+            $orderTransaction = $orderTransactions->first();
+            if (!is_null($orderTransaction)) {
+                $orderTransactionId = $orderTransaction->getId();
+            }
+        }
+
         $this->stateMachineRegistry->transition(new Transition(
-            OrderDefinition::ENTITY_NAME,
-            $orderId,
+            OrderTransactionDefinition::ENTITY_NAME,
+            $orderTransactionId,
             StateMachineTransitionActions::ACTION_PAID_PARTIALLY,
             'stateId'
         ), $context);
