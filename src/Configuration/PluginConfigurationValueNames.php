@@ -13,4 +13,5 @@ abstract class PluginConfigurationValueNames
     public const AFTER_CHECKOUT_PAYMENT_STATUS = 'AxytosKaufAufRechnung.config.afterCheckoutPaymentStatus';
     public const ERROR_MESSAGE = 'AxytosKaufAufRechnung.config.errorMessage';
     public const ORDER_SYNC_CRONJOB_INTERVAL = 'AxytosKaufAufRechnung.config.orderSyncCronJobInterval';
+    public const PRECHECK_CONTROL = 'AxytosKaufAufRechnung.config.precheckControl';
 }
