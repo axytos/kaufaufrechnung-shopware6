@@ -154,12 +154,22 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
             foreach ($documents as $document) {
                 $documentType = $document->getDocumentType();
                 if (!is_null($documentType) && 'invoice' === $documentType->getTechnicalName()) {
-                    return strval($document->getDocumentNumber());
+                    return strval($this->getDocumentNumber($document));
                 }
             }
         }
 
         return '';
+    }
+
+    /**
+     * @param DocumentEntity $document
+     *
+     * @return mixed
+     *      */
+    public function getDocumentNumber($document)
+    {
+        return $document->getConfig()['documentNumber'] ?? null;
     }
 
     /**
