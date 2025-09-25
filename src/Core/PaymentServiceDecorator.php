@@ -15,8 +15,10 @@ use Axytos\KaufAufRechnung\Shopware\PaymentMethod\PaymentMethodPredicates;
 use Axytos\KaufAufRechnung\Shopware\Routing\Router;
 use Shopware\Core\Checkout\Payment\Cart\Token\TokenStruct;
 use Shopware\Core\Checkout\Payment\PaymentService;
+use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -58,9 +60,14 @@ class PaymentServiceDecorator extends PaymentService
      * @var AxytosOrderFactory
      */
     private $axytosOrderFactory;
+    /**
+     * @var SystemConfigService
+     */
+    private $systemConfigService;
 
     public function __construct(
         PaymentService $decorated,
+        SystemConfigService $systemConfigService,
         PluginConfigurationValidator $pluginConfigurationValidator,
         OrderStateMachine $orderStateMachine,
         Router $router,
@@ -71,6 +78,7 @@ class PaymentServiceDecorator extends PaymentService
         AxytosOrderFactory $axytosOrderFactory
     ) {
         $this->decorated = $decorated;
+        $this->systemConfigService = $systemConfigService;
         $this->pluginConfigurationValidator = $pluginConfigurationValidator;
         $this->orderStateMachine = $orderStateMachine;
         $this->router = $router;
@@ -122,7 +130,8 @@ class PaymentServiceDecorator extends PaymentService
     ): ?RedirectResponse {
         $pluginOrder = $this->pluginOrderFactory->create($orderId, $context->getContext());
         $axytosOrder = $this->axytosOrderFactory->create($pluginOrder);
-        $axytosOrder->checkout();
+        $skipPrecheck = $this->getPrecheckCheckoutRule($context);
+        $axytosOrder->checkout($skipPrecheck);
 
         $action = $axytosOrder->getOrderCheckoutAction();
         if (ShopActions::CHANGE_PAYMENT_METHOD === $action) {
@@ -155,5 +164,16 @@ class PaymentServiceDecorator extends PaymentService
     public function finalizeTransaction(string $paymentToken, Request $request, SalesChannelContext $context): TokenStruct
     {
         return $this->decorated->finalizeTransaction($paymentToken, $request, $context);
+    }
+
+    public function getPrecheckCheckoutRule(SalesChannelContext $context): bool
+    {
+        /** @var string $ruleId */
+        $ruleId = $this->systemConfigService->get('AxytosKaufAufRechnung.config.precheckControl', $context->getSalesChannelId());
+        if (null === $ruleId || !Uuid::isValid($ruleId)) {
+            return false;
+        }
+
+        return in_array($ruleId, $context->getRuleIds(), true);
     }
 }

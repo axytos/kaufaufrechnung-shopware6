@@ -25,6 +25,7 @@ use Shopware\Core\Checkout\Payment\PaymentService;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -99,9 +100,13 @@ class PaymentServiceDecoratorTest extends TestCase
     /** @var AxytosOrder&MockObject */
     private $axytosOrder;
 
+    /** @var SystemConfigService&MockObject */
+    private $systemConfigService;
+
     public function setUp(): void
     {
         $this->decorated = $this->createMock(PaymentService::class);
+        $this->systemConfigService = $this->createMock(SystemConfigService::class);
         $this->pluginConfigurationValidator = $this->createMock(PluginConfigurationValidator::class);
         $this->orderStateMachine = $this->createMock(OrderStateMachine::class);
         $this->router = $this->createMock(Router::class);
@@ -113,6 +118,7 @@ class PaymentServiceDecoratorTest extends TestCase
 
         $this->sut = new PaymentServiceDecorator(
             $this->decorated,
+            $this->systemConfigService,
             $this->pluginConfigurationValidator,
             $this->orderStateMachine,
             $this->router,

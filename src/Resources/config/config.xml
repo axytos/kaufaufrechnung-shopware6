@@ -129,6 +129,15 @@
             <helpText lang="de-DE">Standardtext: Die Bezahlmethode Kauf auf Rechnung steht aktuell nicht zur Verfügung.</helpText>
         </input-field>
 
+        <component name="sw-entity-single-select">
+            <name>precheckControl</name>
+            <entity>rule</entity>
+            <label>Rule to control the precheck: </label>
+            <label lang="de-DE">Regel für Bonitätsprüfung</label>
+            <helpText>if rule is true precheck will be skipped/ if false it will be executed</helpText>
+            <helpText lang="de-DE">Wenn die Regel zutrifft wird die Bonitätsprüfung übersprungen ansonsten wird sie durchgeführt</helpText>
+        </component>
+
         <component name="credentials-validation-button">
             <name>CredentialsValidationButton</name>
         </component>
