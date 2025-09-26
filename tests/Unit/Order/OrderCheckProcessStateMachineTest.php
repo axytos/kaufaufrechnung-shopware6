@@ -122,7 +122,7 @@ class OrderCheckProcessStateMachineTest extends TestCase
             self::CUSTOM_FIELD_NAME => OrderCheckProcessStates::UNCHECKED,
         ]);
 
-        $this->sut->setUnchecked(self::ORDER_ID, $this->salesChannelContext);
+        $this->sut->setUnchecked(self::ORDER_ID, $this->context);
     }
 
     public function test_set_checked(): void
@@ -131,7 +131,7 @@ class OrderCheckProcessStateMachineTest extends TestCase
             self::CUSTOM_FIELD_NAME => OrderCheckProcessStates::CHECKED,
         ]);
 
-        $this->sut->setChecked(self::ORDER_ID, $this->salesChannelContext);
+        $this->sut->setChecked(self::ORDER_ID, $this->context);
     }
 
     public function test_set_confirmed(): void
@@ -140,7 +140,7 @@ class OrderCheckProcessStateMachineTest extends TestCase
             self::CUSTOM_FIELD_NAME => OrderCheckProcessStates::CONFIRMED,
         ]);
 
-        $this->sut->setConfirmed(self::ORDER_ID, $this->salesChannelContext);
+        $this->sut->setConfirmed(self::ORDER_ID, $this->context);
     }
 
     public function test_set_failed(): void
@@ -149,6 +149,6 @@ class OrderCheckProcessStateMachineTest extends TestCase
             self::CUSTOM_FIELD_NAME => OrderCheckProcessStates::FAILED,
         ]);
 
-        $this->sut->setFailed(self::ORDER_ID, $this->salesChannelContext);
+        $this->sut->setFailed(self::ORDER_ID, $this->context);
     }
 }

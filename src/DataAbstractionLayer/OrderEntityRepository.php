@@ -99,6 +99,9 @@ class OrderEntityRepository
 
     public function updateAxytosOrderAttributes(string $orderId, AxytosOrderAttributesEntity $axytosOrderAttributes, Context $context): void
     {
+        /**
+         * @var OrderEntity $orderEntity
+         */
         $orderEntity = $this->orderRepository->search(new Criteria([$orderId]), $context)->first();
 
         $orderEntityId = $orderId;
