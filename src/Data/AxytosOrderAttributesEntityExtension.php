@@ -14,6 +14,11 @@ use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
  */
 class AxytosOrderAttributesEntityExtension extends EntityExtension
 {
+    public function getEntityName(): string
+    {
+        return OrderDefinition::ENTITY_NAME;
+    }
+
     public function getDefinitionClass(): string
     {
         return OrderDefinition::class;
