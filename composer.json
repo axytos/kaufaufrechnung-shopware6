@@ -16,14 +16,14 @@
             "de-DE": "Kauf auf Rechnung",
             "en-GB": "Buy Now Pay Later"
         },
-        "shopware-core-version": ">=6.5.0"
+        "shopware-core-version": ">=6.7.0"
     },
     "require": {
         "php": ">=7.2.0",
-        "axytos/ecommerce-sdk": "1.7.3",
-        "axytos/kaufaufrechnung-core": "1.7.3",
-        "axytos/kaufaufrechnung-core-abstractions": "1.7.3",
-        "axytos/kaufaufrechnung-core-plugin-abstractions": "1.7.3"
+        "axytos/ecommerce-sdk": "1.8.0-rc",
+        "axytos/kaufaufrechnung-core": "1.8.0-rc",
+        "axytos/kaufaufrechnung-core-abstractions": "1.8.0-rc",
+        "axytos/kaufaufrechnung-core-plugin-abstractions": "1.8.0-rc"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5 || ^10.5 || ^11.1",

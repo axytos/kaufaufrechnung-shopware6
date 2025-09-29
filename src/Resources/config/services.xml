@@ -96,14 +96,8 @@
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoFactory"/>
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory"/>
 
-        <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Core\PaymentServiceDecorator"
-                 decorates="Shopware\Core\Checkout\Payment\PaymentService">      
-            <argument type="service" id=".inner"/>
-            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
-        </service>
-
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Core\AxytosInvoicePaymentHandler">
-            <tag name="shopware.payment.method.sync"/>
+            <tag name="shopware.payment.method"/>
         </service>
 
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory"/>

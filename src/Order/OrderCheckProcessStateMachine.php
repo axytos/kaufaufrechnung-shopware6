@@ -7,7 +7,6 @@ namespace Axytos\KaufAufRechnung\Shopware\Order;
 use Axytos\ECommerce\Order\OrderCheckProcessStates;
 use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\System\SalesChannel\SalesChannelContext;
 
 class OrderCheckProcessStateMachine
 {
@@ -34,32 +33,32 @@ class OrderCheckProcessStateMachine
         return $customFields[self::CUSTOM_FIELD_NAME];
     }
 
-    public function setUnchecked(string $orderId, SalesChannelContext $context): void
+    public function setUnchecked(string $orderId, Context $context): void
     {
         $this->updateState($orderId, OrderCheckProcessStates::UNCHECKED, $context);
     }
 
-    public function setChecked(string $orderId, SalesChannelContext $context): void
+    public function setChecked(string $orderId, Context $context): void
     {
         $this->updateState($orderId, OrderCheckProcessStates::CHECKED, $context);
     }
 
-    public function setConfirmed(string $orderId, SalesChannelContext $context): void
+    public function setConfirmed(string $orderId, Context $context): void
     {
         $this->updateState($orderId, OrderCheckProcessStates::CONFIRMED, $context);
     }
 
-    public function setFailed(string $orderId, SalesChannelContext $context): void
+    public function setFailed(string $orderId, Context $context): void
     {
         $this->updateState($orderId, OrderCheckProcessStates::FAILED, $context);
     }
 
-    private function updateState(string $orderId, string $orderCheckProcessState, SalesChannelContext $context): void
+    private function updateState(string $orderId, string $orderCheckProcessState, Context $context): void
     {
         $customFields = [
             self::CUSTOM_FIELD_NAME => $orderCheckProcessState,
         ];
 
-        $this->orderEntityRepository->updateCustomFields($orderId, $customFields, $context->getContext());
+        $this->orderEntityRepository->updateCustomFields($orderId, $customFields, $context);
     }
 }
