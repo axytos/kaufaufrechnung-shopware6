@@ -45,6 +45,16 @@ class OrderStateMachine
         $this->orderEntityRepository->payOrderPartially($orderId, $context);
     }
 
+    public function refundOrder(string $orderId, Context $context): void
+    {
+        $this->orderEntityRepository->refundOrder($orderId, $context);
+    }
+
+    public function refundOrderPartially(string $orderId, Context $context): void
+    {
+        $this->orderEntityRepository->refundOrderPartially($orderId, $context);
+    }
+
     public function setConfiguredAfterCheckoutOrderStatus(string $orderId, Context $context): void
     {
         $afterCheckoutOrderStatus = $this->pluginConfiguration->getAfterCheckoutOrderStatus();

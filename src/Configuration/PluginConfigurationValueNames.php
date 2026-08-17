@@ -14,4 +14,6 @@ abstract class PluginConfigurationValueNames
     public const ERROR_MESSAGE = 'AxytosKaufAufRechnung.config.errorMessage';
     public const ORDER_SYNC_CRONJOB_INTERVAL = 'AxytosKaufAufRechnung.config.orderSyncCronJobInterval';
     public const PRECHECK_CONTROL = 'AxytosKaufAufRechnung.config.precheckControl';
+    public const REFUND_COLUMN = 'AxytosKaufAufRechnung.config.refundColumn';
+    public const ORDER_SYNC_LIMIT = 'AxytosKaufAufRechnung.config.orderSyncLimit';
 }

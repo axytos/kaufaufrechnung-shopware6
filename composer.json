@@ -20,10 +20,10 @@
     },
     "require": {
         "php": ">=7.2.0",
-        "axytos/ecommerce-sdk": "1.8.0",
-        "axytos/kaufaufrechnung-core": "1.8.0",
-        "axytos/kaufaufrechnung-core-abstractions": "1.8.0",
-        "axytos/kaufaufrechnung-core-plugin-abstractions": "1.8.0"
+        "axytos/ecommerce-sdk": "1.8.1-rc",
+        "axytos/kaufaufrechnung-core": "1.8.1-rc",
+        "axytos/kaufaufrechnung-core-abstractions": "1.8.1-rc",
+        "axytos/kaufaufrechnung-core-plugin-abstractions": "1.8.1-rc"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5 || ^10.5 || ^11.1",
@@ -87,5 +87,5 @@
         "require-shopware-core": "@php ./scripts/require_shopware_core.php",
         "set-version": "@php ./scripts/set_version.php"
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "RC"
 }

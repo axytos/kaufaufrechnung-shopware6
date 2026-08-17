@@ -4,6 +4,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <service id="Psr\Container\ContainerInterface" alias="service_container" public="true"/>
+
         <!-- Installer Integration-->
         <service id="Axytos\KaufAufRechnung\Shopware\AxytosKaufAufRechnung">
         </service>
@@ -20,9 +22,17 @@
 
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration"/>
 
+        <service id="Axytos\KaufAufRechnung\Shopware\Controller\RefreshOrderLineItemFieldsController" public="true" autowire="true">
+            <argument type="service" id="Axytos\KaufAufRechnung\Shopware\Configuration\OrderLineItemFieldService"/>
+            <tag name="controller.service_arguments"/>
+        </service>
+
+        <service id="Axytos\KaufAufRechnung\Shopware\Configuration\OrderLineItemFieldService" public="true">
+            <argument type="service" id="Doctrine\DBAL\Connection" />
+            <argument type="service" id="custom_field_set.repository" />
+        </service>
 
         <!-- ECommerce Client Integration =============================================================================================== -->
-
 
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Client\ApiHostProvider"/>
         <service id="Axytos\ECommerce\Abstractions\ApiHostProviderInterface" alias="Axytos\KaufAufRechnung\Shopware\Client\ApiHostProvider"/>
@@ -89,6 +99,7 @@
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceTaxGroupDtoFactory"/>
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\CreateInvoiceTaxGroupDtoCollectionFactory"/>
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketDtoFactory"/>
+        <service autowire="true" autoconfigure="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\RefundPartialBasketDtoFactory"/>
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketPositionDtoCollectionFactory"/>
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketPositionDtoFactory"/>
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketTaxGroupDtoCollectionFactory"/>
@@ -182,7 +193,7 @@
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Data\AxytosOrderAttributesEntityExtension">
             <tag name="shopware.entity.extension"/>
         </service>
-
+      
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Adapter\HashCalculation\HashCalculator"/>
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\Adapter\HashCalculation\SHA256HashAlgorithm"/>
         <service id="Axytos\KaufAufRechnung\Shopware\Adapter\HashCalculation\HashAlgorithmInterface" alias="Axytos\KaufAufRechnung\Shopware\Adapter\HashCalculation\SHA256HashAlgorithm"/>
@@ -200,13 +211,12 @@
             <argument type="service" id="Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler" />
             <argument type="service" id="Axytos\KaufAufRechnung\Core\OrderSyncWorker" />
             <argument type="service" id="Axytos\KaufAufRechnung\Shopware\CronJob\OrderSyncCronJobScheduler" />
+            <argument type="service" id="Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration" />
             <tag name="messenger.message_handler" />
         </service>
         <service autowire="true" id="Axytos\KaufAufRechnung\Shopware\CronJob\OrderSyncCronJobConfigSubscriber">
             <tag name="kernel.event_subscriber"/>
         </service>
-
-
 
     </services>
 

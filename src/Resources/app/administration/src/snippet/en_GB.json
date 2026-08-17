@@ -6,5 +6,9 @@
   },
   "credentials-validation-button": {
       "text": "Test API connection"
+  },
+  "order-line-column-refresher": {
+      "title": "Refund Settings",
+      "text": "Fetch Order-Line fields"
   }
 }

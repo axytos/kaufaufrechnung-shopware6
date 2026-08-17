@@ -7,6 +7,7 @@ use Axytos\KaufAufRechnung\Shopware\Core\InvoiceOrderContextFactory;
 use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository;
 use Axytos\KaufAufRechnung\Shopware\Order\OrderStateMachine;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class PluginOrderFactory
 {
@@ -26,17 +27,23 @@ class PluginOrderFactory
      * @var HashCalculator
      */
     private $hashCalculator;
+    /**
+     * @var SystemConfigService
+     */
+    private $systemConfigService;
 
     public function __construct(
         InvoiceOrderContextFactory $invoiceOrderContextFactory,
         OrderEntityRepository $orderEntityRepository,
         OrderStateMachine $orderStateMachine,
-        HashCalculator $hashCalculator
+        HashCalculator $hashCalculator,
+        SystemConfigService $systemConfigService
     ) {
         $this->invoiceOrderContextFactory = $invoiceOrderContextFactory;
         $this->orderEntityRepository = $orderEntityRepository;
         $this->orderStateMachine = $orderStateMachine;
         $this->hashCalculator = $hashCalculator;
+        $this->systemConfigService = $systemConfigService;
     }
 
     /**
@@ -50,7 +57,8 @@ class PluginOrderFactory
             $invoiceOrderContext,
             $this->orderEntityRepository,
             $this->orderStateMachine,
-            $this->hashCalculator
+            $this->hashCalculator,
+            $this->systemConfigService
         );
     }
 

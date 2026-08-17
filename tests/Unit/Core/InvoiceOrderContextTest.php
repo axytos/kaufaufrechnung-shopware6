@@ -20,6 +20,7 @@ use Axytos\KaufAufRechnung\Shopware\DataMapping\CustomerDataDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\DeliveryAddressDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\InvoiceAddressDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\RefundPartialBasketDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\LogisticianCalculator;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\TrackingIdCalculator;
@@ -28,6 +29,7 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 /**
  * @internal
@@ -51,10 +53,14 @@ class InvoiceOrderContextTest extends TestCase
     private $createInvoiceBasketDtoFactory;
     /** @var RefundBasketDtoFactory&MockObject */
     private $refundBasketDtoFactory;
+    /** @var RefundPartialBasketDtoFactory&MockObject */
+    private $refundPartialBasketDtoFactory;
     /** @var DtoToDtoMapper&MockObject */
     private $dtoToDtoMapper;
     /** @var ReturnPositionModelDtoCollectionFactory&MockObject */
     private $returnPositionModelDtoCollectionFactory;
+    /** @var SystemConfigService */
+    private $systemConfigService;
 
     /**
      * @var InvoiceOrderContext
@@ -71,8 +77,10 @@ class InvoiceOrderContextTest extends TestCase
         $this->basketDtoFactory = $this->createMock(BasketDtoFactory::class);
         $this->createInvoiceBasketDtoFactory = $this->createMock(CreateInvoiceBasketDtoFactory::class);
         $this->refundBasketDtoFactory = $this->createMock(RefundBasketDtoFactory::class);
+        $this->refundPartialBasketDtoFactory = $this->createMock(RefundPartialBasketDtoFactory::class);
         $this->dtoToDtoMapper = $this->createMock(DtoToDtoMapper::class);
         $this->returnPositionModelDtoCollectionFactory = $this->createMock(ReturnPositionModelDtoCollectionFactory::class);
+        $this->systemConfigService = $this->createMock(SystemConfigService::class);
 
         $this->sut = new InvoiceOrderContext(
             self::ORDER_ID,
@@ -84,10 +92,12 @@ class InvoiceOrderContextTest extends TestCase
             $this->basketDtoFactory,
             $this->createInvoiceBasketDtoFactory,
             $this->refundBasketDtoFactory,
+            $this->refundPartialBasketDtoFactory,
             $this->dtoToDtoMapper,
             $this->returnPositionModelDtoCollectionFactory,
             $this->createMock(TrackingIdCalculator::class),
-            $this->createMock(LogisticianCalculator::class)
+            $this->createMock(LogisticianCalculator::class),
+            $this->systemConfigService
         );
     }
 

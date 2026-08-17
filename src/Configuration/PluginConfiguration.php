@@ -54,4 +54,11 @@ class PluginConfiguration
 
         return OrderSyncCronJobInterval::create($key);
     }
+
+    public function getOrderSyncLimit(): OrderSyncLimitInterface
+    {
+        $key = $this->systemConfigService->getString(PluginConfigurationValueNames::ORDER_SYNC_LIMIT);
+
+        return OrderSyncLimit::create($key);
+    }
 }
