@@ -12,10 +12,12 @@ use Axytos\KaufAufRechnung\Shopware\DataMapping\CustomerDataDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\DeliveryAddressDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\InvoiceAddressDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\RefundPartialBasketDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\LogisticianCalculator;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\TrackingIdCalculator;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class InvoiceOrderContextFactory
 {
@@ -48,6 +50,10 @@ class InvoiceOrderContextFactory
      */
     private $refundBasketDtoFactory;
     /**
+     * @var RefundPartialBasketDtoFactory
+     */
+    private $refundPartialBasketDtoFactory;
+    /**
      * @var DtoToDtoMapper
      */
     private $dtoToDtoMapper;
@@ -63,6 +69,10 @@ class InvoiceOrderContextFactory
      * @var LogisticianCalculator
      */
     private $logisticianCalculator;
+    /**
+     * @var SystemConfigService
+     */
+    private $systemConfigService;
 
     public function __construct(
         OrderEntityRepository $orderEntityRepository,
@@ -72,10 +82,12 @@ class InvoiceOrderContextFactory
         BasketDtoFactory $basketDtoFactory,
         CreateInvoiceBasketDtoFactory $createInvoiceBasketDtoFactory,
         RefundBasketDtoFactory $refundBasketDtoFactory,
+        RefundPartialBasketDtoFactory $refundPartialBasketDtoFactory,
         DtoToDtoMapper $dtoToDtoMapper,
         ReturnPositionModelDtoCollectionFactory $returnPositionModelDtoCollectionFactory,
         TrackingIdCalculator $trackingIdCalculator,
-        LogisticianCalculator $logisticianCalculator
+        LogisticianCalculator $logisticianCalculator,
+        SystemConfigService $systemConfigService
     ) {
         $this->orderEntityRepository = $orderEntityRepository;
         $this->customerDataDtoFactory = $customerDataDtoFactory;
@@ -84,14 +96,16 @@ class InvoiceOrderContextFactory
         $this->basketDtoFactory = $basketDtoFactory;
         $this->createInvoiceBasketDtoFactory = $createInvoiceBasketDtoFactory;
         $this->refundBasketDtoFactory = $refundBasketDtoFactory;
+        $this->refundPartialBasketDtoFactory = $refundPartialBasketDtoFactory;
         $this->dtoToDtoMapper = $dtoToDtoMapper;
         $this->returnPositionModelDtoCollectionFactory = $returnPositionModelDtoCollectionFactory;
         $this->trackingIdCalculator = $trackingIdCalculator;
         $this->logisticianCalculator = $logisticianCalculator;
+        $this->systemConfigService = $systemConfigService;
     }
 
     public function getInvoiceOrderContext(string $orderId, Context $context): InvoiceOrderContext
     {
-        return new InvoiceOrderContext($orderId, $context, $this->orderEntityRepository, $this->customerDataDtoFactory, $this->deliveryAddressDtoFactory, $this->invoiceAddressDtoFactory, $this->basketDtoFactory, $this->createInvoiceBasketDtoFactory, $this->refundBasketDtoFactory, $this->dtoToDtoMapper, $this->returnPositionModelDtoCollectionFactory, $this->trackingIdCalculator, $this->logisticianCalculator);
+        return new InvoiceOrderContext($orderId, $context, $this->orderEntityRepository, $this->customerDataDtoFactory, $this->deliveryAddressDtoFactory, $this->invoiceAddressDtoFactory, $this->basketDtoFactory, $this->createInvoiceBasketDtoFactory, $this->refundBasketDtoFactory, $this->refundPartialBasketDtoFactory, $this->dtoToDtoMapper, $this->returnPositionModelDtoCollectionFactory, $this->trackingIdCalculator, $this->logisticianCalculator, $this->systemConfigService);
     }
 }

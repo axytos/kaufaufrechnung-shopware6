@@ -14,11 +14,13 @@ use Axytos\KaufAufRechnung\Shopware\DataMapping\CustomerDataDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\DeliveryAddressDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\InvoiceAddressDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\RefundPartialBasketDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\LogisticianCalculator;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\TrackingIdCalculator;
 use PHPUnit\Framework\TestCase;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 /**
  * @internal
@@ -40,10 +42,12 @@ class InvoiceOrderContextFactoryTest extends TestCase
             $this->createMock(BasketDtoFactory::class),
             $this->createMock(CreateInvoiceBasketDtoFactory::class),
             $this->createMock(RefundBasketDtoFactory::class),
+            $this->createMock(RefundPartialBasketDtoFactory::class),
             $this->createMock(DtoToDtoMapper::class),
             $this->createMock(ReturnPositionModelDtoCollectionFactory::class),
             $this->createMock(TrackingIdCalculator::class),
-            $this->createMock(LogisticianCalculator::class)
+            $this->createMock(LogisticianCalculator::class),
+            $this->createMock(SystemConfigService::class)
         );
     }
 

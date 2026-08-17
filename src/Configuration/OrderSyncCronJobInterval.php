@@ -10,6 +10,8 @@ class OrderSyncCronJobInterval implements OrderSyncCronJobIntervalInterface
 {
     const KEY_ONCE_NEVER = 'ORDER_SYNC_CRONJOB_INTERVAL_NEVER';
     const KEY_ONCE_EVERY_10_SECONDS = 'ORDER_SYNC_CRONJOB_INTERVAL_ONCE_EVERY_10_SECONDS';
+    const KEY_ONCE_EVERY_1_MINUTE = 'ORDER_SYNC_CRONJOB_INTERVAL_ONCE_EVERY_1_MINUTE';
+    const KEY_ONCE_EVERY_10_MINUTES = 'ORDER_SYNC_CRONJOB_INTERVAL_ONCE_EVERY_10_MINUTES';
     const KEY_ONCE_EVERY_24_HOURS_AT_MIDNIGHT = 'ORDER_SYNC_CRONJOB_INTERVAL_ONCE_EVERY_24_HOURS_AT_MIDNIGHT';
 
     /**
@@ -18,6 +20,8 @@ class OrderSyncCronJobInterval implements OrderSyncCronJobIntervalInterface
     private static $runIntervalSeconds = [
         self::KEY_ONCE_NEVER => 1, // must be greater than 0
         self::KEY_ONCE_EVERY_10_SECONDS => 10,
+        self::KEY_ONCE_EVERY_1_MINUTE => 60,
+        self::KEY_ONCE_EVERY_10_MINUTES => 10 * 60,
         self::KEY_ONCE_EVERY_24_HOURS_AT_MIDNIGHT => 24 * 60 * 60,
     ];
 
@@ -71,6 +75,10 @@ class OrderSyncCronJobInterval implements OrderSyncCronJobIntervalInterface
             case self::KEY_ONCE_NEVER:
                 return self::getNextExecutionTimeYesterday();
             case self::KEY_ONCE_EVERY_10_SECONDS:
+                return self::getNextExecutionTimeFromNow($this->getRunIntervalSeconds());
+            case self::KEY_ONCE_EVERY_1_MINUTE:
+                return self::getNextExecutionTimeFromNow($this->getRunIntervalSeconds());
+            case self::KEY_ONCE_EVERY_10_MINUTES:
                 return self::getNextExecutionTimeFromNow($this->getRunIntervalSeconds());
             case self::KEY_ONCE_EVERY_24_HOURS_AT_MIDNIGHT:
                 return self::getNextExecutionTimeTomorrowAtMidnight();

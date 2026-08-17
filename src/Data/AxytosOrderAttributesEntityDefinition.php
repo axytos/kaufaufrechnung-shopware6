@@ -7,6 +7,7 @@ namespace Axytos\KaufAufRechnung\Shopware\Data;
 use Shopware\Core\Checkout\Order\OrderDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\BoolField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\DateTimeField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
@@ -60,6 +61,9 @@ class AxytosOrderAttributesEntityDefinition extends EntityDefinition
                 OrderDefinition::class,
                 false
             ),
+            new BoolField('refund_reported', 'refundReported'),
+            new JsonField('partial_refund_positions', 'partialRefundPositions'),
+            new DateTimeField('partial_refund_last_reported_at', 'partialRefundLastReportedAt'),
         ]);
     }
 }
