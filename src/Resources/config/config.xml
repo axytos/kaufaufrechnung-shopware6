@@ -114,9 +114,56 @@
                     <name>Once Every 24 Hours at Midnight</name>
                 </option>
                 <option>
+                    <id>ORDER_SYNC_CRONJOB_INTERVAL_ONCE_EVERY_10_MINUTES</id>
+                    <name lang="de-DE">Einmal Alle 10 Minuten</name>
+                    <name>Once Every 10 Minutes</name>
+                </option>
+                <option>
+                    <id>ORDER_SYNC_CRONJOB_INTERVAL_ONCE_EVERY_1_MINUTE</id>
+                    <name lang="de-DE">Einmal Alle 1 Minute</name>
+                    <name>Once Every 1 Minute</name>
+                </option>
+                <option>
                     <id>ORDER_SYNC_CRONJOB_INTERVAL_ONCE_EVERY_10_SECONDS</id>
                     <name lang="de-DE">Einmal Alle 10 Sekunden</name>
                     <name>Once Every 10 Seconds</name>
+                </option>
+            </options>
+        </input-field>
+
+        
+        <input-field type="single-select">
+            <name>orderSyncLimit</name>
+            <label>Limit for OrderSync since last update</label>
+            <label lang="de-DE">Limit für den OrderSync seit dem letzten Update</label>
+            <helpText>Only orders updated within this time range will be synced</helpText>
+            <helpText lang="de-DE">Nur Bestellungen, die innerhalb dieses Zeitraums aktualisiert wurden, werden synchronisiert</helpText>
+            <defaultValue>ORDER_SYNC_LIMIT_THREE_MONTHS</defaultValue>
+            <options>
+                <option>
+                    <id>ORDER_SYNC_LIMIT_ONE_MONTH</id>
+                    <name lang="de-DE">1 Monat</name>
+                    <name>1 month</name>
+                </option>
+                <option>
+                    <id>ORDER_SYNC_LIMIT_TWO_MONTH</id>
+                    <name lang="de-DE">2 Monate</name>
+                    <name>2 months</name>
+                </option>
+                <option>
+                    <id>ORDER_SYNC_LIMIT_THREE_MONTHS</id>
+                    <name lang="de-DE">3 Monate</name>
+                    <name>3 months</name>
+                </option>
+                <option>
+                    <id>ORDER_SYNC_LIMIT_SIX_MONTHS</id>
+                    <name lang="de-DE">6 Monate</name>
+                    <name>6 Months</name>
+                </option>
+                <option>
+                    <id>ORDER_SYNC_LIMIT_ALL</id>
+                    <name lang="de-DE">Kein Limit</name>
+                    <name>Sync All</name>
                 </option>
             </options>
         </input-field>
@@ -141,6 +188,20 @@
         <component name="credentials-validation-button">
             <name>CredentialsValidationButton</name>
         </component>
+
+    </card>
+
+    <card>
+        <title>Refund Settings</title>
+        <title lang="de-DE">Gutschrift Einstellungen</title>
+
+            <component name="refresh-fields-button">
+                <name>RefreshOrderLineFields</name>
+                <label>Custom Field on Line Items for Refund: </label>
+                <label lang="de-DE">Custom Field an den Line Items für Gutschrift</label>
+                <helpText>Only select if a quantitative field should be used for refunds.</helpText>
+                <helpText lang="de-DE">Nur füllen wenn der Refund über ein Quantitatives Custom Field erfolgen soll.</helpText>
+            </component>
     </card>
 
 </config>

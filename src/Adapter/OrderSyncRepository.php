@@ -31,13 +31,14 @@ class OrderSyncRepository implements OrderSyncRepositoryInterface
      * @param string[]    $orderStates
      * @param int|null    $limit
      * @param string|null $startId
+     * @param string      $cutoffDate
      *
      * @return PluginOrderInterface[]
      */
-    public function getOrdersByStates($orderStates, $limit = null, $startId = null)
+    public function getOrdersByStates($orderStates, $limit = null, $startId = null, $cutoffDate = null)
     {
         $context = Context::createDefaultContext();
-        $orderIds = $this->orderEntityRepository->getOrderIdsByStates($orderStates, $context, $limit, $startId);
+        $orderIds = $this->orderEntityRepository->getOrderIdsByStates($orderStates, $context, $limit, $startId, $cutoffDate);
 
         return $this->pluginOrderFactory->createMany($orderIds, $context);
     }

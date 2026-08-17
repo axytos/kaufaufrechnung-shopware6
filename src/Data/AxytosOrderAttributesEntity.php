@@ -58,6 +58,21 @@ class AxytosOrderAttributesEntity extends Entity implements AxytosOrderAttribute
     protected $orderStateData = '';
 
     /**
+     * @var bool
+     */
+    protected $refundReported = false;
+
+    /**
+     * @var \DateTimeInterface|null
+     */
+    protected $partialRefundLastReportedAt;
+
+    /**
+     * @var array<int,array{sku:string,quantity:int}>|null
+     */
+    protected $partialRefundPositions;
+
+    /**
      * @return string|null
      */
     public function getShopwareOrderEntityId()
@@ -199,5 +214,50 @@ class AxytosOrderAttributesEntity extends Entity implements AxytosOrderAttribute
     public function setOrderStateData($orderStateData)
     {
         $this->orderStateData = $orderStateData;
+    }
+
+    public function isRefundReported(): bool
+    {
+        return (bool) $this->refundReported;
+    }
+
+    /**
+     * @return void
+     */
+    public function setRefundReported(bool $refundReported)
+    {
+        $this->refundReported = $refundReported;
+    }
+
+    /**
+     * @return ?\DateTimeInterface
+     */
+    public function getPartialRefundLastReportedAt()
+    {
+        return $this->partialRefundLastReportedAt;
+    }
+
+    /**
+     * @return void
+     */
+    public function setPartialRefundLastReportedAt(?\DateTimeInterface $partialRefundLastReportedAt)
+    {
+        $this->partialRefundLastReportedAt = $partialRefundLastReportedAt;
+    }
+
+    /**
+     * @param array<int,array{sku:string,quantity:int}> $positions
+     */
+    public function setPartialRefundPositions(array $positions): void
+    {
+        $this->partialRefundPositions = $positions;
+    }
+
+    /**
+     * @return array<int,array{sku:string,quantity:int}>
+     */
+    public function getPartialRefundPositions(): array
+    {
+        return $this->partialRefundPositions ?? [];
     }
 }

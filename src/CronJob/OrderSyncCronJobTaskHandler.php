@@ -6,6 +6,7 @@ namespace Axytos\KaufAufRechnung\Shopware\CronJob;
 
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
 use Axytos\KaufAufRechnung\Core\OrderSyncWorker;
+use Axytos\KaufAufRechnung\Shopware\Configuration\PluginConfiguration;
 use Axytos\KaufAufRechnung\Shopware\ErrorReporting\ErrorHandler;
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\Context;
@@ -42,6 +43,10 @@ class OrderSyncCronJobTaskHandler extends ScheduledTaskHandler
      * @var OrderSyncCronJobScheduler
      */
     private $orderSyncCronJobScheduler;
+    /**
+     * @var PluginConfiguration
+     */
+    private $pluginConfiguration;
 
     /**
      * NOTE: OrderSyncCronJobTaskHandler is EXPLICITLY wired in services.xml.
@@ -56,7 +61,8 @@ class OrderSyncCronJobTaskHandler extends ScheduledTaskHandler
         PluginConfigurationValidator $pluginConfigurationValidator,
         ErrorHandler $errorHandler,
         OrderSyncWorker $orderSyncWorker,
-        OrderSyncCronJobScheduler $orderSyncCronJobScheduler
+        OrderSyncCronJobScheduler $orderSyncCronJobScheduler,
+        PluginConfiguration $pluginConfiguration
     ) {
         parent::__construct($scheduledTaskRepository, $logger);
         $this->logger = $logger;
@@ -64,6 +70,7 @@ class OrderSyncCronJobTaskHandler extends ScheduledTaskHandler
         $this->errorHandler = $errorHandler;
         $this->orderSyncWorker = $orderSyncWorker;
         $this->orderSyncCronJobScheduler = $orderSyncCronJobScheduler;
+        $this->pluginConfiguration = $pluginConfiguration;
     }
 
     public function run(): void
@@ -76,8 +83,9 @@ class OrderSyncCronJobTaskHandler extends ScheduledTaskHandler
 
                 return;
             }
-
-            $this->orderSyncWorker->sync();
+            $orderSyncLimit = $this->pluginConfiguration->getOrderSyncLimit();
+            $cutoffDate = $orderSyncLimit->getOrderSyncCutoffDate();
+            $this->orderSyncWorker->sync($cutoffDate);
             $this->logger->info('CronJob Order Sync succeeded');
         } catch (\Throwable $th) {
             $this->logger->error('CronJob Order Sync failed');

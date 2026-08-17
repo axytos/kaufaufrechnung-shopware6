@@ -52,6 +52,11 @@ class AxytosKaufAufRechnung extends Plugin
         $installer->deactivate($deactivateContext);
     }
 
+    public function getMigrationNamespace(): string
+    {
+        return 'Axytos\KaufAufRechnung\Shopware\Migration';
+    }
+
     private function createPluginInstaller(): PluginInstaller
     {
         /** @var \Symfony\Component\DependencyInjection\ContainerInterface */

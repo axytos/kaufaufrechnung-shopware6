@@ -6,5 +6,9 @@
   },
   "credentials-validation-button": {
       "text": "API-Verbindung testen"
+  },
+  "order-line-column-refresher": {
+    "title": "Gutschrift Einstellungen",
+    "text": "Order-Line Felder aktualisieren"
   }
 }

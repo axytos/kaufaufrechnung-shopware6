@@ -6,6 +6,7 @@ namespace Axytos\KaufAufRechnung\Shopware\Core;
 
 use Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface;
 use Axytos\ECommerce\DataMapping\DtoToDtoMapper;
+use Axytos\ECommerce\DataTransferObjects\RefundBasketDto;
 use Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDtoCollection;
 use Axytos\KaufAufRechnung\Shopware\DataAbstractionLayer\OrderEntityRepository;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\BasketDtoFactory;
@@ -14,67 +15,55 @@ use Axytos\KaufAufRechnung\Shopware\DataMapping\CustomerDataDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\DeliveryAddressDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\InvoiceAddressDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\RefundBasketDtoFactory;
+use Axytos\KaufAufRechnung\Shopware\DataMapping\RefundPartialBasketDtoFactory;
 use Axytos\KaufAufRechnung\Shopware\DataMapping\ReturnPositionModelDtoCollectionFactory;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\LogisticianCalculator;
 use Axytos\KaufAufRechnung\Shopware\ValueCalculation\TrackingIdCalculator;
 use Shopware\Core\Checkout\Document\DocumentEntity;
+use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class InvoiceOrderContext implements InvoiceOrderContextInterface
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $orderId;
-    /**
-     * @var Context
-     */
+    /** @var Context */
     private $context;
-    /**
-     * @var OrderEntityRepository
-     */
+
+    /** @var OrderEntityRepository */
     private $orderEntityRepository;
-    /**
-     * @var CustomerDataDtoFactory
-     */
+
+    /** @var CustomerDataDtoFactory */
     private $customerDataDtoFactory;
-    /**
-     * @var DeliveryAddressDtoFactory
-     */
+    /** @var DeliveryAddressDtoFactory */
     private $deliveryAddressDtoFactory;
-    /**
-     * @var InvoiceAddressDtoFactory
-     */
+    /** @var InvoiceAddressDtoFactory */
     private $invoiceAddressDtoFactory;
-    /**
-     * @var BasketDtoFactory
-     */
+
+    /** @var BasketDtoFactory */
     private $basketDtoFactory;
-    /**
-     * @var CreateInvoiceBasketDtoFactory
-     */
+    /** @var CreateInvoiceBasketDtoFactory */
     private $createInvoiceBasketDtoFactory;
-    /**
-     * @var RefundBasketDtoFactory
-     */
+
+    /** @var RefundBasketDtoFactory */
     private $refundBasketDtoFactory;
-    /**
-     * @var DtoToDtoMapper
-     */
+    /** @var RefundPartialBasketDtoFactory */
+    private $refundPartialBasketDtoFactory;
+
+    /** @var DtoToDtoMapper */
     private $dtoToDtoMapper;
-    /**
-     * @var ReturnPositionModelDtoCollectionFactory
-     */
+    /** @var ReturnPositionModelDtoCollectionFactory */
     private $returnPositionModelDtoCollectionFactory;
-    /**
-     * @var TrackingIdCalculator
-     */
+
+    /** @var TrackingIdCalculator */
     private $trackingIdCalculator;
-    /**
-     * @var LogisticianCalculator
-     */
+    /** @var LogisticianCalculator */
     private $logisticianCalculator;
+
+    /** @var SystemConfigService */
+    private $systemConfigService;
 
     public function __construct(
         string $orderId,
@@ -86,38 +75,43 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
         BasketDtoFactory $basketDtoFactory,
         CreateInvoiceBasketDtoFactory $createInvoiceBasketDtoFactory,
         RefundBasketDtoFactory $refundBasketDtoFactory,
+        RefundPartialBasketDtoFactory $refundPartialBasketDtoFactory,
         DtoToDtoMapper $dtoToDtoMapper,
         ReturnPositionModelDtoCollectionFactory $returnPositionModelDtoCollectionFactory,
         TrackingIdCalculator $trackingIdCalculator,
-        LogisticianCalculator $logisticianCalculator
+        LogisticianCalculator $logisticianCalculator,
+        SystemConfigService $systemConfigService
     ) {
         $this->orderId = $orderId;
         $this->context = $context;
+
         $this->orderEntityRepository = $orderEntityRepository;
+
         $this->customerDataDtoFactory = $customerDataDtoFactory;
         $this->deliveryAddressDtoFactory = $deliveryAddressDtoFactory;
         $this->invoiceAddressDtoFactory = $invoiceAddressDtoFactory;
+
         $this->basketDtoFactory = $basketDtoFactory;
         $this->createInvoiceBasketDtoFactory = $createInvoiceBasketDtoFactory;
+
         $this->refundBasketDtoFactory = $refundBasketDtoFactory;
+        $this->refundPartialBasketDtoFactory = $refundPartialBasketDtoFactory;
+
         $this->dtoToDtoMapper = $dtoToDtoMapper;
         $this->returnPositionModelDtoCollectionFactory = $returnPositionModelDtoCollectionFactory;
+
         $this->trackingIdCalculator = $trackingIdCalculator;
         $this->logisticianCalculator = $logisticianCalculator;
+
+        $this->systemConfigService = $systemConfigService;
     }
 
-    /**
-     * @return string
-     */
-    public function getOrderId()
+    public function getOrderId(): string
     {
         return $this->orderId;
     }
 
-    /**
-     * @return Context
-     */
-    public function getContext()
+    public function getContext(): Context
     {
         return $this->context;
     }
@@ -127,192 +121,304 @@ class InvoiceOrderContext implements InvoiceOrderContextInterface
         return $this->orderEntityRepository->findOrder($this->orderId, $this->context);
     }
 
-    /**
-     * @return string
-     */
-    public function getOrderNumber()
+    public function getOrderNumber(): string
     {
-        $orderEntity = $this->getOrder();
-        $orderNumber = $orderEntity->getOrderNumber();
+        $order = $this->getOrder();
+        $orderNumber = $order->getOrderNumber();
 
-        if (is_null($orderNumber)) {
-            throw new \Exception("OrderNumber not defined for order with id '{$orderEntity->getId()}'.");
+        if (null === $orderNumber) {
+            throw new \RuntimeException("OrderNumber not defined for order with id '{$order->getId()}'.");
         }
 
         return $orderNumber;
     }
 
-    /**
-     * @return string
-     */
-    public function getOrderInvoiceNumber()
+    public function getOrderInvoiceNumber(): string
     {
-        $orderEntity = $this->getOrder();
-        $documents = $orderEntity->getDocuments();
-        if (!is_null($documents)) {
-            /** @var DocumentEntity $document */
-            foreach ($documents as $document) {
-                $documentType = $document->getDocumentType();
-                if (!is_null($documentType) && 'invoice' === $documentType->getTechnicalName()) {
-                    return strval($this->getDocumentNumber($document));
+        $order = $this->getOrder();
+        $documents = $order->getDocuments();
+
+        if (null === $documents) {
+            return '';
+        }
+
+        /** @var DocumentEntity $document */
+        foreach ($documents as $document) {
+            $documentType = $document->getDocumentType();
+            if (null !== $documentType && 'invoice' === $documentType->getTechnicalName()) {
+                $config = $document->getConfig();
+
+                if (is_array($config) && isset($config['documentNumber']) && is_scalar($config['documentNumber'])) {
+                    return (string) $config['documentNumber'];
                 }
+
+                return '';
             }
         }
 
         return '';
     }
 
-    /**
-     * @param DocumentEntity $document
-     *
-     * @return mixed
-     *      */
-    public function getDocumentNumber($document)
+    public function getOrderDateTime(): \DateTimeInterface
     {
-        return $document->getConfig()['documentNumber'] ?? null;
+        return $this->getOrder()->getOrderDateTime();
     }
 
-    /**
-     * @return \DateTimeInterface
-     */
-    public function getOrderDateTime()
-    {
-        $orderEntity = $this->getOrder();
-
-        return $orderEntity->getOrderDateTime();
-    }
-
-    /**
-     * @return \Axytos\ECommerce\DataTransferObjects\CustomerDataDto
-     */
     public function getPersonalData()
     {
-        $orderEntity = $this->getOrder();
-
-        return $this->customerDataDtoFactory->create($orderEntity);
+        return $this->customerDataDtoFactory->create($this->getOrder());
     }
 
-    /**
-     * @return \Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto
-     */
     public function getInvoiceAddress()
     {
-        $orderEntity = $this->getOrder();
-
-        return $this->invoiceAddressDtoFactory->create($orderEntity);
+        return $this->invoiceAddressDtoFactory->create($this->getOrder());
     }
 
-    /**
-     * @return \Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto
-     */
     public function getDeliveryAddress()
     {
-        $orderEntity = $this->getOrder();
-
-        return $this->deliveryAddressDtoFactory->create($orderEntity);
+        return $this->deliveryAddressDtoFactory->create($this->getOrder());
     }
 
-    /**
-     * @return \Axytos\ECommerce\DataTransferObjects\BasketDto
-     */
     public function getBasket()
     {
-        $orderEntity = $this->getOrder();
-
-        return $this->basketDtoFactory->create($orderEntity);
+        return $this->basketDtoFactory->create($this->getOrder());
     }
 
-    /**
-     * @return \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto
-     */
     public function getCreateInvoiceBasket()
     {
-        $orderEntity = $this->getOrder();
-
-        return $this->createInvoiceBasketDtoFactory->create($orderEntity);
+        return $this->createInvoiceBasketDtoFactory->create($this->getOrder());
     }
 
-    /**
-     * @return ShippingBasketPositionDtoCollection
-     */
-    public function getShippingBasketPositions()
+    public function getShippingBasketPositions(): ShippingBasketPositionDtoCollection
     {
         $basketPositions = $this->getBasket()->positions;
 
-        return $this->dtoToDtoMapper->mapDtoCollection($basketPositions, ShippingBasketPositionDtoCollection::class);
+        return $this->dtoToDtoMapper->mapDtoCollection(
+            $basketPositions,
+            ShippingBasketPositionDtoCollection::class
+        );
     }
 
-    /**
-     * @return array<mixed>
-     */
-    public function getPreCheckResponseData()
+    public function getPreCheckResponseData(): array
     {
         $attributes = $this->orderEntityRepository->getAxytosOrderAttributes($this->orderId, $this->context);
 
         return $attributes->getOrderPreCheckResult();
     }
 
-    /**
-     * @param array<mixed> $data
-     *
-     * @return void
-     */
-    public function setPreCheckResponseData($data)
+    public function setPreCheckResponseData($data): void
     {
         $attributes = $this->orderEntityRepository->getAxytosOrderAttributes($this->orderId, $this->context);
         $attributes->setOrderPreCheckResult($data);
+
         $this->orderEntityRepository->updateAxytosOrderAttributes($this->orderId, $attributes, $this->context);
     }
 
-    /**
-     * @return \Axytos\ECommerce\DataTransferObjects\RefundBasketDto
-     */
     public function getRefundBasket()
     {
-        $orderEntity = $this->getOrder();
+        $order = $this->getOrder();
 
-        return $this->refundBasketDtoFactory->create($orderEntity);
+        $refundColumn = $this->getRefundColumnName($order);
+
+        // Refund-Column aktiv -> Attributes ignorieren
+        if (null !== $refundColumn) {
+            $alreadyRefundedBySku = $this->buildAlreadyRefundedTotalsBySkuFromRefundColumn($order, $refundColumn);
+
+            return $this->refundBasketDtoFactory->create($order, $alreadyRefundedBySku);
+        }
+
+        // Fallback: klassische Attributes
+        $attributes = $this->orderEntityRepository->getAxytosOrderAttributes($this->orderId, $this->context);
+        $alreadyRefundedBySku = $this->buildAlreadyRefundedTotalsBySkuFromAttributes($attributes);
+
+        return $this->refundBasketDtoFactory->create($order, $alreadyRefundedBySku);
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection
+     * @return RefundBasketDto
      */
+    public function getPartialRefundBasket()
+    {
+        $order = $this->getOrder();
+
+        $refundColumn = $this->getRefundColumnName($order);
+
+        $alreadyRefundedBySku = [];
+        if (null !== $refundColumn) {
+            $alreadyRefundedBySku = $this->buildAlreadyRefundedTotalsBySkuFromRefundColumn($order, $refundColumn);
+        }
+
+        $attributes = $this->orderEntityRepository->getAxytosOrderAttributes($this->orderId, $this->context);
+        /** @var \DateTimeInterface|null $lastReportedAt */
+        $lastReportedAt = $attributes->getPartialRefundLastReportedAt();
+
+        return $this->refundPartialBasketDtoFactory->create(
+            $order,
+            $alreadyRefundedBySku,
+            $lastReportedAt
+        );
+    }
+
     public function getReturnPositions()
     {
-        $orderEntity = $this->getOrder();
+        return $this->returnPositionModelDtoCollectionFactory->create(
+            $this->getOrder()->getLineItems()
+        );
+    }
 
-        return $this->returnPositionModelDtoCollectionFactory->create($orderEntity->getLineItems());
+    public function getDeliveryWeight(): float
+    {
+        // (wie bei dir) aktuell nicht relevant
+        return 0.0;
+    }
+
+    public function getTrackingIds(): array
+    {
+        return $this->trackingIdCalculator->calculate($this->getOrder());
+    }
+
+    public function getLogistician(): string
+    {
+        return $this->logisticianCalculator->calculate($this->getOrder());
+    }
+
+    // --------------------
+    // Refund helpers
+    // --------------------
+
+    private function getRefundColumnName(OrderEntity $orderEntity): ?string
+    {
+        $salesChannelId = $orderEntity->getSalesChannelId();
+
+        $columnName = $this->systemConfigService->get(
+            'AxytosKaufAufRechnung.config.refundColumn',
+            $salesChannelId
+        );
+
+        if (!is_string($columnName)) {
+            return null;
+        }
+
+        $columnName = trim($columnName);
+
+        return '' !== $columnName ? $columnName : null;
     }
 
     /**
-     * @return float
+     * @param mixed $attributes
+     *
+     * @return array<string,int>
      */
-    public function getDeliveryWeight()
+    private function buildAlreadyRefundedTotalsBySkuFromAttributes($attributes): array
     {
-        // for now delivery weight is not important for risk evaluation
-        // because different shop systems don't always provide the necessary
-        // information to accurately the exact delivery weight for each delivery
-        // we decided to return 0 as constant delivery weight
-        return 0;
+        $map = [];
+
+        if (!is_object($attributes) || !method_exists($attributes, 'getPartialRefundPositions')) {
+            return $map;
+        }
+
+        /** @var mixed $positions */
+        $positions = $attributes->getPartialRefundPositions();
+
+        // falls JSON-String:
+        if (is_string($positions) && '' !== $positions) {
+            $decoded = json_decode($positions, true);
+            if (JSON_ERROR_NONE === json_last_error()) {
+                $positions = $decoded;
+            }
+        }
+
+        if (!is_array($positions)) {
+            return $map;
+        }
+
+        foreach ($positions as $p) {
+            if (!is_array($p)) {
+                continue;
+            }
+
+            $sku = $p['sku'] ?? null;
+            $qty = (int) ($p['quantity'] ?? 0);
+
+            if (is_string($sku) && '' !== $sku && $qty > 0) {
+                $map[$sku] = $qty;
+            }
+        }
+
+        return $map;
     }
 
     /**
-     * @return string[]
+     * @return array<string,int>
      */
-    public function getTrackingIds()
+    private function buildAlreadyRefundedTotalsBySkuFromRefundColumn(OrderEntity $orderEntity, string $refundColumn): array
     {
-        $orderEntity = $this->getOrder();
+        $totals = [];
 
-        return $this->trackingIdCalculator->calculate($orderEntity);
+        foreach ($this->buildQuantitiesFromRefundColumn($orderEntity, $refundColumn) as $row) {
+            $sku = $row['sku'] ?? null;
+            $qty = (int) ($row['quantity'] ?? 0);
+
+            if (!is_string($sku) || '' === $sku || $qty <= 0) {
+                continue;
+            }
+
+            $totals[$sku] = ($totals[$sku] ?? 0) + $qty;
+        }
+
+        return $totals;
     }
 
     /**
-     * @return string
+     * @return array<int,array{lineItemId:string,sku:string,quantity:int,source:string}>
      */
-    public function getLogistician()
+    private function buildQuantitiesFromRefundColumn(OrderEntity $orderEntity, string $refundColumn): array
     {
-        $orderEntity = $this->getOrder();
+        $result = [];
 
-        return $this->logisticianCalculator->calculate($orderEntity);
+        foreach ($orderEntity->getLineItems() ?? [] as $lineItem) {
+            /** @var OrderLineItemEntity $lineItem */
+            $customFields = $lineItem->getCustomFields() ?? [];
+            $payload = $lineItem->getPayload() ?? [];
+
+            // qty aus CustomField (mixed) -> int normalisieren
+            $qtyRaw = $customFields[$refundColumn] ?? null;
+
+            if (is_int($qtyRaw)) {
+                $qty = $qtyRaw;
+            } elseif (is_numeric($qtyRaw)) {
+                $qty = (int) $qtyRaw;
+            } else {
+                $qty = 0;
+            }
+
+            if ($qty <= 0) {
+                continue;
+            }
+
+            $orderedQty = $lineItem->getQuantity();
+            if ($orderedQty <= 0) {
+                continue;
+            }
+
+            $sku =
+                $payload['productNumber']
+                ?? $payload['product_number']
+                ?? $lineItem->getReferencedId()
+                ?? $lineItem->getIdentifier();
+
+            if (!is_string($sku) || '' === trim($sku)) {
+                continue;
+            }
+
+            $result[] = [
+                'lineItemId' => $lineItem->getId(),
+                'sku' => $sku,
+                'quantity' => min($qty, $orderedQty), // int
+                'source' => 'refund_column',
+            ];
+        }
+
+        return $result;
     }
 }

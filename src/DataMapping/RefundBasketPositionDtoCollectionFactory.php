@@ -87,25 +87,35 @@ class RefundBasketPositionDtoCollectionFactory
     }
 
     /**
-     * @return array<string,array<\Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity>>
+     * @return array<string, array<\Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity>>
      */
-    private function groupLineItemsByTaxRate(OrderLineItemCollection $orderLineItems)
+    private function groupLineItemsByTaxRate(OrderLineItemCollection $orderLineItems): array
     {
-        /** @var array<string,array<\Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity>> */
-        return $orderLineItems->reduce(function (array $carry, OrderLineItemEntity $orderLineItemEntity) {
-            $price = $orderLineItemEntity->getPrice();
-            if (!is_null($price)) {
-                $calculatedTax = $price->getCalculatedTaxes()->first();
-                if (!is_null($calculatedTax)) {
-                    $taxRate = $calculatedTax->getTaxRate();
-                    $taxKey = "{$taxRate}";
+        /** @var array<string, array<OrderLineItemEntity>> $grouped */
+        $grouped = [];
 
-                    $carry[$taxKey][] = $orderLineItemEntity;
-                }
+        foreach ($orderLineItems as $orderLineItemEntity) {
+            $price = $orderLineItemEntity->getPrice();
+            if (null === $price) {
+                continue;
             }
 
-            return $carry;
-        }, []);
+            $calculatedTax = $price->getCalculatedTaxes()->first();
+            if (null === $calculatedTax) {
+                continue;
+            }
+
+            /** @var string $taxKey */
+            $taxKey = (string) $calculatedTax->getTaxRate();
+
+            if (!isset($grouped[$taxKey])) {
+                $grouped[$taxKey] = [];
+            }
+
+            $grouped[$taxKey][] = $orderLineItemEntity;
+        }
+
+        return $grouped;
     }
 
     private function findProductNumberForTaxRate(OrderLineItemCollection $products, string $taxRate): string
